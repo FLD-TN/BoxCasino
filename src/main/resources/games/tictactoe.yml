@@ -1,6 +1,6 @@
-# Cờ Caro 3x3 1v1. Chỉ chơi trong sòng (menu /casino hoặc NPC). Bố cục khớp texture tictactoe_gui.
+# Cờ Caro 3x3 1v1, chơi ở mọi nơi (/caro). Bố cục khớp texture tictactoe_gui.
 # Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
-config-version: 4
+config-version: 5
 enabled: true
 title: '&f:offset_-48:&f{img:iavegasgui:tictactoe_gui}'
 fallback-title: '&#5EE7DFCờ Caro'
@@ -11,6 +11,19 @@ challenge-minutes: 5
 invite-seconds: 60
 # Thời gian mỗi nước đi; hết giờ thì đánh ô ngẫu nhiên.
 turn-seconds: 10
+
+# Quân biến mất: mỗi người chỉ giữ tối đa max-marks quân trên bàn, đặt quân mới thì quân cũ nhất tự mất
+# (quân sắp mất nhấp nháy trước). Bàn không bao giờ đầy nên phải tính nước, gần như không hoà.
+# 0 = luật cũ (đầy bàn là hoà ván).
+max-marks: 3
+# Thắng đủ games-to-win ván là ăn hũ (2 = Bo3). Mỗi ván đổi người cầm X (đi trước).
+games-to-win: 2
+# Đánh tối đa max-rounds ván (ván hoà cũng tính); hết mà chưa ai đủ thì ai thắng nhiều ván hơn ăn, bằng nhau = hoà.
+max-rounds: 5
+# Một ván quân biến mất kéo dài quá round-moves nước thì tính hoà ván.
+round-moves: 30
+# Giữ kết quả ván bao nhiêu giây trước khi sang ván mới.
+round-pause-seconds: 3
 
 bet:
   MONEY: {min: 1000, max: 1000000}

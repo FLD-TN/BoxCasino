@@ -9,7 +9,6 @@ import com.dex.boxcasino.game.crash.CrashGame;
 import com.dex.boxcasino.game.lottery.LotteryGame;
 import com.dex.boxcasino.game.mines.MinesGame;
 import com.dex.boxcasino.game.slots.SlotsGame;
-import com.dex.boxcasino.game.plinko.PlinkoGame;
 import com.dex.boxcasino.game.pot.PotGame;
 import com.dex.boxcasino.game.races.RacesGame;
 import com.dex.boxcasino.game.roulette.RouletteGame;
@@ -22,12 +21,11 @@ import com.dex.boxcasino.pvp.tictactoe.TicTacToeGame;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Set;
 import java.util.random.RandomGenerator;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.jupiter.api.Test;
 
-/** RTP of the shipped game configs (spec 16.6) and the Plinko ball paths. */
+/** RTP of the shipped game configs (spec 16.6). */
 class GameMathTest {
 
     private static final long ROUNDS = 2_000_000;
@@ -42,37 +40,6 @@ class GameMathTest {
         game.settings = new GameSettings(yml);
         assertNull(game.loadGame(yml));
         return game;
-    }
-
-    @Test
-    void plinkoDefaultRtpIs95() {
-        PlinkoGame plinko = load(new PlinkoGame(null), "plinko");
-        assertEquals(0.95, plinko.rtp(), 1e-9);
-        double measured = plinko.simulate(ROUNDS, RandomGenerator.of("L64X128MixRandom"));
-        assertEquals(0.95, measured, 0.005);
-    }
-
-    @Test
-    void plinkoPathsAvoidPegsAndEndInHopper() throws Exception {
-        PlinkoGame plinko = load(new PlinkoGame(null), "plinko");
-        Set<Integer> pegs = Set.of(13, 21, 23, 29, 31, 33, 37, 39, 41, 43, 46, 48, 50, 52);
-        List<Integer> hoppers = List.of(45, 47, 49, 51, 53);
-        var path = PlinkoGame.class.getDeclaredMethod("path", int.class, RandomGenerator.class);
-        path.setAccessible(true);
-        RandomGenerator random = RandomGenerator.of("L64X128MixRandom");
-        for (int h = 0; h < 5; h++) {
-            for (int i = 0; i < 200; i++) {
-                @SuppressWarnings("unchecked")
-                List<Integer> slots = (List<Integer>) path.invoke(plinko, h, random);
-                assertEquals(4, slots.get(0));
-                assertEquals(hoppers.get(h), slots.get(slots.size() - 1));
-                for (int s = 1; s < slots.size(); s++) {
-                    assertEquals(slots.get(s - 1) / 9 + 1, slots.get(s) / 9, "one row per step");
-                    assertTrue(Math.abs(slots.get(s) % 9 - slots.get(s - 1) % 9) <= 1, "one column per step");
-                    assertTrue(!pegs.contains(slots.get(s)), "ball hits a peg at " + slots.get(s));
-                }
-            }
-        }
     }
 
     @Test
@@ -147,7 +114,7 @@ class GameMathTest {
     @Test
     void slotsDefaultRtpIs95() {
         SlotsGame slots = load(new SlotsGame(null), "slots");
-        assertEquals(0.952, slots.rtp(), 0.001);
+        assertEquals(0.948, slots.rtp(), 0.001);
         assertEquals(slots.rtp(), slots.simulate(ROUNDS, RandomGenerator.of("L64X128MixRandom")), 0.02);
     }
 

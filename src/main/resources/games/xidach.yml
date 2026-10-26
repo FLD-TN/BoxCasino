@@ -1,6 +1,6 @@
 # Xì Dách - luật Việt Nam, tối đa 3 người / bàn đấu nhà cái (texture blackjack_gui có 3 ghế).
 # Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
-config-version: 4
+config-version: 5
 # Mở game là được xếp vào bàn còn ghế trống; hết ghế thì tự mở bàn mới.
 enabled: true
 title: '&f:offset_-48:&f{img:iavegasgui:blackjack_gui}'
@@ -28,12 +28,13 @@ dealer-min-stand: 17
 both-bust-draw: false
 
 # Tổng tiền nhận lại khi thắng (đã gồm tiền cược). Hòa trả lại tiền cược. Bỏ bài nhận lại 50%.
-# Mặc định (xì bàn x3, xì dách x2, ngũ linh x2, thắng x2; nhà cái rút tới 17; quắc là thua): hoàn trả ~93,7%.
+# Mặc định (xì bàn x3, xì dách x2, ngũ linh x3, thắng x2; nhà cái rút tới 17; quắc là thua): hoàn trả ~95,4%.
+# (Ngũ linh x2 như bản cũ: ~93,6%.)
 # Đổi xong hãy kiểm tra hoàn trả bằng: /casino admin simulate xidach 2000000
 payouts:
   xi-ban: 3
   xi-dach: 2
-  ngu-linh: 2
+  ngu-linh: 3
   win: 2
   surrender: 0.5
 

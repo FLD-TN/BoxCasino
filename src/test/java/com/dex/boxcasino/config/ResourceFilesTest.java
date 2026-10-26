@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Set;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +25,9 @@ class ResourceFilesTest {
             try (InputStream in = getClass().getResourceAsStream("/" + f)) {
                 assertNotNull(in, f);
                 YamlConfiguration yml = YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8));
-                int expected = f.equals("config.yml") ? 2 : f.equals("messages.yml") ? 8 : f.equals("games/lottery.yml") ? 5 : 4;
+                int expected = f.equals("config.yml") ? 2 : f.equals("messages.yml") ? 9
+                        : Set.of("games/lottery.yml", "games/plinko.yml", "games/slots.yml", "games/xidach.yml",
+                                "games/tictactoe.yml").contains(f) ? 5 : 4;
                 assertEquals(expected, yml.getInt("config-version"), f);
                 assertFalse(yml.getKeys(false).isEmpty(), f);
             }

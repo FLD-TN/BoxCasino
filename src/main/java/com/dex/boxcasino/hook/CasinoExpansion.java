@@ -10,7 +10,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
 /**
- * %boxcasino_...%: won_/lost_/net_/biggest_win_/loss_left_ + money|gem, playtime_left, rest_left. Numbers only, in
+ * %boxcasino_...%: won_/lost_/net_/biggest_win_/profit_left_ + money|gem, playtime_left, rest_left. Numbers only, in
  * the server's dot format. Leaderboards and jackpot come with 0.5.0.
  */
 public final class CasinoExpansion extends PlaceholderExpansion {
@@ -44,13 +44,22 @@ public final class CasinoExpansion extends PlaceholderExpansion {
     @Override
     public String onPlaceholderRequest(Player player, String params) {
         String p = params.toLowerCase(Locale.ROOT);
-        // player-independent: jackpot_<money|gem>, top_net_<money|gem>_<1-10>_<name|value>
+        // player-independent: jackpot_<money|gem>, top_net_ / top_loss_<money|gem>_<1-10>_<name|value>,
+        // giovang (time left, empty when off), giovang_percent
         if (p.startsWith("jackpot_")) {
             Currency c = Currency.parse(p.substring(8));
             return c == null ? null : Format.number(plugin.jackpot().pot(c));
         }
-        if (p.startsWith("top_net_")) {
-            String[] parts = p.substring(8).split("_");
+        if (p.equals("giovang")) {
+            long s = plugin.goldenHour().secondsLeft();
+            return s <= 0 ? "" : Format.duration(s);
+        }
+        if (p.equals("giovang_percent")) {
+            return plugin.goldenHour().active() ? Format.decimal(plugin.goldenHour().percent()) : "0";
+        }
+        if (p.startsWith("top_net_") || p.startsWith("top_loss_")) {
+            boolean loss = p.startsWith("top_loss_");
+            String[] parts = p.substring(loss ? 9 : 8).split("_");
             if (parts.length != 3) return null;
             Currency c = Currency.parse(parts[0]);
             int rank;
@@ -60,7 +69,7 @@ public final class CasinoExpansion extends PlaceholderExpansion {
                 return null;
             }
             if (c == null || rank < 1 || rank > LeaderboardService.SIZE) return null;
-            var top = plugin.leaderboard().top(c);
+            var top = plugin.leaderboard().top(loss ? LeaderboardService.Board.LOSERS : LeaderboardService.Board.WINNERS, c);
             if (rank > top.size()) return parts[2].equals("name") ? "-" : "0";
             var e = top.get(rank - 1);
             return parts[2].equals("name") ? e.name() : Format.number(e.net());
@@ -82,8 +91,8 @@ public final class CasinoExpansion extends PlaceholderExpansion {
         Currency currency = Currency.parse(p.substring(cut + 1));
         if (currency == null) return null;
         String key = p.substring(0, cut);
-        if (key.equals("loss_left")) {
-            long left = plugin.access().lossLeft(player, currency);
+        if (key.equals("profit_left")) {
+            long left = plugin.access().profitLeft(player, currency);
             return left < 0 ? plugin.messages().raw("menu.unlimited") : Format.number(left);
         }
         Profile profile = plugin.profiles().get(player.getUniqueId());

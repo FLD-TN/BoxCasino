@@ -15,14 +15,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-/** Top 10 net winners as a pyramid: #1 on top, then 2, 3 and 4 per row. Switch currency at the bottom. */
+/**
+ * Top 10 net winners (or losers) as a pyramid: #1 on top, then 2, 3 and 4 per row. Switch currency and winners /
+ * losers at the bottom.
+ */
 public final class LeaderboardMenu extends CasinoView {
 
     private static final int[] PLACES = {13, 21, 23, 29, 31, 33, 37, 39, 41, 43};
     private static final int BACK = 45;
     private static final int SWITCH = 49;
+    private static final int BOARD = 51;
 
     private Currency currency;
+    private LeaderboardService.Board board = LeaderboardService.Board.WINNERS;
 
     public LeaderboardMenu(BoxCasinoPlugin plugin, Player player, Currency currency) {
         super(plugin, player);
@@ -37,9 +42,11 @@ public final class LeaderboardMenu extends CasinoView {
         ItemStack filler = item(Material.BLACK_STAINED_GLASS_PANE, m.line("leaderboard.filler"), List.of());
         for (int i = 0; i < 9; i++) inventory.setItem(i, filler);
         for (int i = 45; i < 54; i++) inventory.setItem(i, filler);
+        boolean winners = board == LeaderboardService.Board.WINNERS;
+        String kind = winners ? "leaderboard.winners" : "leaderboard.losers";
         inventory.setItem(4, item(currency == Currency.MONEY ? Material.EMERALD : Material.AMETHYST_SHARD,
-                m.line("leaderboard.header.name", "currency", plugin.wallet().name(currency)), m.lines("leaderboard.header.lore")));
-        List<LeaderboardService.Entry> top = plugin.leaderboard().top(currency);
+                m.line(kind + ".header.name", "currency", plugin.wallet().name(currency)), m.lines(kind + ".header.lore")));
+        List<LeaderboardService.Entry> top = plugin.leaderboard().top(board, currency);
         for (int i = 0; i < PLACES.length; i++) {
             if (i >= top.size()) {
                 inventory.setItem(PLACES[i], item(Material.GRAY_STAINED_GLASS_PANE,
@@ -54,7 +61,7 @@ public final class LeaderboardMenu extends CasinoView {
                         : i == 2 ? "leaderboard.rank-3" : "leaderboard.rank-other");
                 skull.displayName(m.line("leaderboard.entry.name", "color", rankColor, "rank", String.valueOf(i + 1),
                         "player", e.name()));
-                skull.lore(m.lines("leaderboard.entry.lore", "net", plugin.wallet().format(currency, e.net())));
+                skull.lore(m.lines(kind + ".entry-lore", "net", plugin.wallet().format(currency, e.net())));
                 head.setItemMeta(skull);
             }
             inventory.setItem(PLACES[i], head);
@@ -63,6 +70,8 @@ public final class LeaderboardMenu extends CasinoView {
         inventory.setItem(SWITCH, item(currency == Currency.MONEY ? Material.AMETHYST_SHARD : Material.EMERALD,
                 m.line("leaderboard.switch.name", "currency", plugin.wallet().name(currency.other())),
                 m.lines("leaderboard.switch.lore")));
+        inventory.setItem(BOARD, item(winners ? Material.REDSTONE : Material.GOLD_INGOT,
+                m.line(winners ? "leaderboard.board.losers" : "leaderboard.board.winners"), m.lines("leaderboard.board.lore")));
     }
 
     private static ItemStack item(Material material, net.kyori.adventure.text.Component name,
@@ -81,6 +90,9 @@ public final class LeaderboardMenu extends CasinoView {
             new MainMenu(plugin, player, false).open();
         } else if (slot == SWITCH) {
             currency = currency.other();
+            render();
+        } else if (slot == BOARD) {
+            board = board == LeaderboardService.Board.WINNERS ? LeaderboardService.Board.LOSERS : LeaderboardService.Board.WINNERS;
             render();
         }
     }

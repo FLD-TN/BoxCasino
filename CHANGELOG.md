@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.17.0 - 2026-10-26
+
+- **Kim Tự Tháp** thành Plinko thật: bóng nảy trái / phải 50-50 ở mỗi hàng chốt, rơi đâu ăn đó (không bốc phễu trước
+  rồi vẽ đường nữa). Tỉ lệ 5 phễu: 6,25% / 25% / 37,5% / 25% / 6,25%, biên thưởng to, giữa thấp.
+  - 3 mức rủi ro (nút ô 5-6-7, hình nút Dễ / Vừa / Khó của Dò Mìn), nhớ theo người chơi, đều hoàn trả 95%:
+    Dễ x2 / x1.1 / x0.4, Vừa x3 / x0.85 / x0.4, Khó x5 / x0.5 / x0.2.
+  - `games/plinko.yml` lên config-version 5 (`hoppers.weights/multipliers` thay bằng `risks`).
+- **Máy Xèng**: màn hình chỉ hiện đúng 1 hình trúng (hết cảnh 2 hình mà chỉ trả 1). Hình nào cũng ăn từ x1.2 trở lên
+  (bỏ ô vuông 2x2 x0.5 và chữ X nhỏ x1). Bảng mới: 2x2 x1.2, X nhỏ x1.5, còn lại giữ hệ số, chỉnh lại tỉ lệ; hoàn trả
+  94,8%, trúng 35,9% số lần quay. `games/slots.yml` lên config-version 5.
+- **Cờ Caro**: quân biến mất + Bo3. Mỗi người giữ tối đa 3 quân, đặt quân thứ 4 thì quân cũ nhất mất (nhấp nháy trước),
+  nên gần như không còn hoà. Thắng 2 ván là ăn hũ, mỗi ván đổi người cầm X đi trước, tỉ số hiện trên đầu người chơi và
+  báo trong chat. Quá `round-moves` nước thì hoà ván; tối đa `max-rounds` ván. `max-marks: 0` = luật cũ.
+  `games/tictactoe.yml` lên config-version 5.
+- **Xì Dách**: Ngũ Linh ăn x3 (hoàn trả ~95,4%). `games/xidach.yml` lên config-version 5.
+- **Bỏ giới hạn lỗ, thay bằng giới hạn lời trong ngày** (`daily-profit-limit`, mặc định 20.000.000$ / 5.000 Gem):
+  lời ròng hôm nay chạm mức thì không đặt ván mới tới 0h, ván đang chơi vẫn trả đủ. Menu hồ sơ hiện "Hôm nay còn được
+  lời". Placeholder `loss_left_<money|gem>` đổi thành `profit_left_<money|gem>`.
+- **Bảng xếp hạng thua nhiều nhất**: nút ô 51 đổi giữa Top thắng / Top thua. Placeholder `top_loss_<money|gem>_<1-10>_<name|value>`.
+- **Giờ Vàng**: `/casino giovang <phút> [%]` (console / CommandTimer / quyền `boxcasino.giovang`), `/casino giovang tat`,
+  `/casino giovang` xem còn bao lâu. Trong Giờ Vàng, ván thắng đấu Nhà Cái được cộng thêm % tiền lời (mặc định 5%),
+  báo toàn server lúc bắt đầu / kết thúc. Placeholder `giovang`, `giovang_percent`. Khởi động lại server thì Giờ Vàng tắt.
+- **Đếm ngược trong chat** (`countdown` trong config.yml): 5 giây cuối trước khi Xì Dách chia bài, Đua Ngựa xuất phát,
+  Tên Lửa cất cánh, Góp Hũ quay, Xúc Xắc lắc; 3 giây cuối lượt của người chưa đi ở Xì Dách, Oẳn Tù Tì, Cờ Caro.
+- `messages.yml` lên config-version 9 (file cũ chuyển vào `old-configs/`): luật chơi Kim Tự Tháp / Máy Xèng / Cờ Caro /
+  Xì Dách, bỏ ghi chú ghế cũ trong luật Xúc Xắc / Oẳn Tù Tì, chữ đếm ngược, Giờ Vàng, bảng xếp hạng, giới hạn lời.
+- `config.yml` không đổi config-version: `daily-profit-limit`, `countdown`, `golden-hour` tự lấy từ jar nếu thiếu
+  (`daily-loss-limit` cũ không còn dùng, xoá được).
+
 ## 0.16.1 - 2026-10-26
 
 - Menu `/casino`: bấm một game chơi trong sòng thì **dịch chuyển tới máy của game đó** thay vì mở GUI tại chỗ.

@@ -3,6 +3,7 @@ package com.dex.boxcasino.game.xidach;
 import com.dex.boxcasino.BoxCasinoPlugin;
 import com.dex.boxcasino.chat.ChatRoom;
 import com.dex.boxcasino.economy.Currency;
+import com.dex.boxcasino.extra.Countdown;
 import com.dex.boxcasino.game.Bet;
 import com.dex.boxcasino.util.Payouts;
 import java.util.ArrayList;
@@ -269,12 +270,23 @@ final class XiDachTable implements ChatRoom {
         secondsLeft--;
         switch (phase) {
             case BETTING -> {
-                if (secondsLeft <= 0) startHand();
-                else refreshTimers();
+                if (secondsLeft <= 0) {
+                    startHand();
+                } else {
+                    Countdown.start(plugin, members(), secondsLeft, "games.xidach.countdown-deal",
+                            "table", String.valueOf(number));
+                    refreshTimers();
+                }
             }
             case PLAYING -> {
-                if (secondsLeft <= 0) resolveRound();
-                else refreshTimers();
+                if (secondsLeft <= 0) {
+                    resolveRound();
+                } else {
+                    List<UUID> undecided = new ArrayList<>();
+                    for (Seat s : seats) if (s != null && s.playing() && s.pending == null) undecided.add(s.player);
+                    Countdown.turn(plugin, undecided, secondsLeft, "games.xidach.countdown-turn");
+                    refreshTimers();
+                }
             }
             case RESULT -> {
                 if (secondsLeft <= 0) reset();

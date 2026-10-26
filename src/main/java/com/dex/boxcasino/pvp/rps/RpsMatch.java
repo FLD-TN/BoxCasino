@@ -2,11 +2,13 @@ package com.dex.boxcasino.pvp.rps;
 
 import com.dex.boxcasino.BoxCasinoPlugin;
 import com.dex.boxcasino.config.Messages;
+import com.dex.boxcasino.extra.Countdown;
 import com.dex.boxcasino.game.Bet;
 import com.dex.boxcasino.pvp.Match;
 import com.dex.boxcasino.pvp.MatchView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -38,8 +40,14 @@ final class RpsMatch extends Match {
     private void tick() {
         secondsLeft--;
         if (!showing) {
-            if (secondsLeft <= 0) reveal();
-            else renderAll();
+            if (secondsLeft <= 0) {
+                reveal();
+            } else {
+                List<UUID> waiting = new ArrayList<>();
+                for (int s = 0; s < 2; s++) if (picks[s] < 0) waiting.add(ids[s]);
+                Countdown.turn(plugin, waiting, secondsLeft, "games.rps.countdown");
+                renderAll();
+            }
             return;
         }
         if (secondsLeft <= 0) {

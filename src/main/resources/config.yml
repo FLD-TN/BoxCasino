@@ -17,10 +17,29 @@ play-limit:
   play-minutes: 180
   rest-minutes: 60
 
-# Lỗ ròng tối đa mỗi ngày (tiền cược - tiền nhận lại). 0 = tắt. Qua ngày mới (theo timezone) thì tính lại.
-daily-loss-limit:
-  MONEY: 5000000
-  GEM: 2000
+# Lời ròng tối đa mỗi ngày (tiền nhận - tiền cược). Lời tới mức này thì không đặt ván mới được tới 0h;
+# ván đang chơi vẫn trả đủ. 0 = tắt. Qua ngày mới (theo timezone) thì tính lại. Không còn giới hạn lỗ.
+daily-profit-limit:
+  MONEY: 20000000
+  GEM: 5000
+
+# Đếm ngược trong chat (mỗi giây 1 dòng + tiếng tích).
+countdown:
+  # Mấy giây cuối trước khi ván bắt đầu: Xì Dách chia bài, Đua Ngựa xuất phát, Tên Lửa cất cánh, Góp Hũ quay,
+  # Xúc Xắc lắc. Báo cho người đang ngồi / đã cược. 0 = tắt.
+  start-seconds: 5
+  # Mấy giây cuối của lượt mình (Xì Dách, Oẳn Tù Tì, Cờ Caro), chỉ báo người chưa đi. 0 = tắt.
+  turn-seconds: 3
+  sound: true
+
+# Giờ Vàng: /casino giovang <phút> [%] (console, CommandTimer hoặc người có quyền boxcasino.giovang).
+# Trong Giờ Vàng, ván thắng đấu Nhà Cái được cộng thêm % tiền lời (PvP và Góp Hũ không tính).
+golden-hour:
+  # % tiền lời cộng thêm khi lệnh không ghi %.
+  percent: 5
+  # Giới hạn để gõ nhầm không bật quá lâu / quá cao.
+  max-minutes: 240
+  max-percent: 50
 
 timezone: Asia/Ho_Chi_Minh
 

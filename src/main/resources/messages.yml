@@ -12,7 +12,7 @@
 # Để trống ('') một tin nhắn chat = không gửi tin đó.
 
 # Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
-config-version: 8
+config-version: 9
 
 prefix: '&#6E151A[&#B32E33&lC&#B8453D&lA&#BD5B47&lS&#C37251&lI&#C8885B&lN&#CD9F65&lO&#6E151A] &r'
 
@@ -33,7 +33,7 @@ access:
   alt-blocked: '&#FF6B6B✘ Mỗi IP chỉ một tài khoản được vào sòng, tài khoản này không được chơi'
   resting: '&#FFD166(!) Bạn đã chơi đủ giờ &7- nghỉ thêm &f{time} &7rồi quay lại nhé'
   limit-reached: '&#FFD166(!) Đủ giờ chơi rồi &7- sòng tạm khóa với bạn trong &f{time}'
-  daily-loss: '&#FF6B6B✘ Đã chạm giới hạn lỗ hôm nay &7- còn cược được tối đa {left}'
+  daily-profit: '&#FF6B6B✘ Hôm nay bạn đã lời đủ {limit} &7- quay lại sau 0h nhé'
 
 bet:
   storage-error: '&#FF6B6B✘ Lỗi lưu dữ liệu, ván này không được tính &7- báo admin giúp nhé'
@@ -212,11 +212,13 @@ games:
       lore:
         - '&#BFC7D5Thả bóng, rơi phễu nào ăn phễu đó'
         - ''
-        - '&#FFD1661. &7Bấm ô trên cùng để thả bóng'
-        - '&#FFD1662. &7Bóng rơi vào 1 trong 5 phễu'
+        - '&#FFD1661. &7Chọn mức Dễ / Vừa / Khó'
+        - '&#FFD1662. &7Bấm ô trên cùng để thả bóng'
+        - '&#FFD1663. &7Mỗi chốt bóng nảy trái / phải'
         - ''
-        - '&#7CFC9A✔ &7Phễu giữa: hệ số cao nhất'
-        - '&7  Hai bên thấp dần'
+        - '&#7CFC9A✔ &7Phễu biên: hiếm, thưởng to'
+        - '&#FF6B6B✘ &7Phễu giữa: hay rơi, thưởng thấp'
+        - '&7Khó = biên càng to, giữa càng thấp'
         - ''
         - '&8Rê chuột lên phễu để xem hệ số'
         - '&8ESC: bảng tự mở lại tới khi rơi xong'
@@ -229,6 +231,21 @@ games:
         - '&8[&#7CFC9AChuột trái để thả bóng&8]'
     spot-running:
       name: '&#FFD166Đang cược &8[{bet}&8]'
+    risk:
+      name: '&#F9D56EMức {name}'
+      low: 'Dễ'
+      medium: 'Vừa'
+      high: 'Khó'
+      lore:
+        - '&7• Biên: &#FFD166x{edge}'
+        - '&7• Giữa: &#FFD166x{middle}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để chọn&8]'
+      lore-active:
+        - '&7• Biên: &#FFD166x{edge}'
+        - '&7• Giữa: &#FFD166x{middle}'
+        - ''
+        - '&#7CFC9A✔ Đang chọn'
     ball:
       name: '&#F9D56EBóng'
     hopper:
@@ -439,6 +456,7 @@ games:
     won: '&#7CFC9A✔ Ngựa số {winner} về nhất &#7CFC9A- bạn nhận {payout}'
     lost: '&#FF6B6B✘ Ngựa số {winner} về nhất &7- ngựa {horse} của bạn thua, mất {bet}'
     broadcast-start: '&#7BED9FĐua Ngựa &7sẽ xuất phát sau &f{seconds} giây &8→ &f{player} &7vừa đặt cược'
+    countdown: '&#7BED9FĐua Ngựa &7xuất phát sau &f{seconds}...'
   xidach:
     name: '&#70A1FFXì Dách'
     description: '&#BFC7D5Tối đa 3 người đấu Nhà Cái'
@@ -452,7 +470,7 @@ games:
         - '&#FFD1663. &7Nhà Cái rút tới khi đủ 17'
         - ''
         - '&#FFD166Xì bàn x3 &8- &#FFD166Xì dách x2'
-        - '&#FFD166Ngũ linh x2 &8- &#FFD166Thắng x2'
+        - '&#FFD166Ngũ linh x3 &8- &#FFD166Thắng x2'
         - '&7Bỏ bài: nhận lại 50%'
         - ''
         - '&#FF6B6B✘ &7Quá 21 (quắc): thua,'
@@ -570,6 +588,8 @@ games:
     cancelled: '&7Đã huỷ cược, tiền được hoàn lại'
     cancelled-shutdown: '&7Ván Xì Dách bị dừng do bảo trì, tiền cược đã được hoàn'
     broadcast-start: '&#70A1FFXì Dách &8- &fbàn {table} &7sẽ chia bài sau &f{seconds} giây &8→ &7Ghế trống còn {seats}'
+    countdown-deal: '&#70A1FFXì Dách &8- &fbàn {table} &7chia bài sau &f{seconds}...'
+    countdown-turn: '&#FFD166(!) Lượt bạn còn &f{seconds}s &7- hết giờ đủ 16 tự dằn, chưa đủ tự rút'
   dice:
     name: '&#FFDD59Xúc Xắc'
     description: '&#BFC7D5Đấu 1v1, tổng 2 xúc xắc cao hơn thắng'
@@ -584,15 +604,8 @@ games:
         - ''
         - '&8Thuế {tax}% tiền thắng'
         - '&8ESC: game vẫn tự chơi'
-
-        - ''
-        - '&#FFD166Lưu ý:'
-        - '&7• Ở bàn trong sòng: &fđang chơi'
-        - '&f  không thoát được (ESC tự mở lại)'
-        - '&7• Đứng dậy (Shift) giữa ván: &#FF8A8Athua'
-        - '&7• Chơi từ xa: &fESC thoải mái,'
-        - '&f  game tự chơi, kết quả báo ở chat'
     tie: '&7Hòa &f{sum} điểm &7- tung lại'
+    countdown: '&#FFDD59Xúc Xắc &7lắc sau &f{seconds}...'
     face:
       name: '&f{value}'
     sum:
@@ -621,14 +634,6 @@ games:
         - ''
         - '&8Thuế {tax}% tiền thắng'
         - '&8ESC: game vẫn tự chơi'
-
-        - ''
-        - '&#FFD166Lưu ý:'
-        - '&7• Ở bàn trong sòng: &fđang chơi'
-        - '&f  không thoát được (ESC tự mở lại)'
-        - '&7• Đứng dậy (Shift) giữa ván: &#FF8A8Athua'
-        - '&7• Chơi từ xa: &fESC thoải mái,'
-        - '&f  game tự chơi, kết quả báo ở chat'
     figure:
       rock: '&fBúa'
       paper: '&fBao'
@@ -653,28 +658,39 @@ games:
       name: '&#CF9FFFLật bài'
     lever-end:
       name: '&7Trận đã kết thúc'
+    countdown: '&#FFD166(!) Lượt bạn còn &f{seconds}s &7- hết giờ chọn ngẫu nhiên'
   tictactoe:
     name: '&#5EE7DFCờ Caro'
-    description: '&#BFC7D5Đấu 1v1, 3 ô thẳng hàng là thắng'
+    description: '&#BFC7D5Đấu 1v1, 3 quân thẳng hàng là thắng'
     info:
       name: '&#5EE7DFCờ Caro &8[&fLuật chơi&8]'
       lore:
         - '&#BFC7D5Đấu 1v1, chơi ở mọi nơi'
         - ''
-        - '&7Bàn 3x3, người cầm X đi trước'
-        - '&#7CFC9A✔ &73 ô thẳng hàng: thắng'
-        - '&7Đầy bàn: hoà, hoàn tiền cả hai'
-        - '&7Hết giờ: đánh ngẫu nhiên 1 ô'
+        - '&#FFD1661. &7Bàn 3x3, cầm X đi trước'
+        - '&#FFD1662. &7Mỗi người giữ tối đa 3 quân'
+        - '&#FFD1663. &7Đặt quân thứ 4: quân cũ nhất mất'
         - ''
+        - '&#7CFC9A✔ &73 quân thẳng hàng: thắng ván'
+        - '&#7CFC9A✔ &7Thắng 2 ván: ăn hũ'
+        - ''
+        - '&8Quân sắp mất sẽ nhấp nháy'
+        - '&8Mỗi ván đổi người đi trước'
+        - '&8Hết giờ: đánh ngẫu nhiên 1 ô'
         - '&8Thuế {tax}% tiền thắng'
-    first: '&f{player} &7cầm &#5EE7DFX &7và đi trước'
+    first: '&#5EE7DFVán {round} &8- &f{player} &7cầm &#5EE7DFX &7và đi trước'
+    round-won: '&#7CFC9A✔ Ván {round}: &f{player} &7thắng &8- &f{player0} &#FFD166{score0} - {score1} &f{player1}'
+    round-draw: '&#FFD166(!) Ván {round} hoà &7- đánh ván mới'
+    turn-countdown: '&#FFD166(!) Lượt bạn còn &f{seconds}s &7- hết giờ đánh ngẫu nhiên'
     mark-x: 'X'
     mark-o: 'O'
     head:
       lore:
         - '&7• Cầm: &#5EE7DF{mark}'
+        - '&7• Thắng: &f{score}/{need} ván'
       lore-turn:
         - '&7• Cầm: &#5EE7DF{mark}'
+        - '&7• Thắng: &f{score}/{need} ván'
         - '&#7CFC9A• Đến lượt &8- &fcòn {seconds}s'
     cell-free:
       name: '&#7CFC9AĐánh vào ô này'
@@ -682,6 +698,8 @@ games:
       name: '&8Chờ lượt'
     cell-marked:
       name: '&#5EE7DF{mark} &8[&7{player}&8]'
+    cell-vanishing:
+      name: '&#FF8A8AQuân sắp mất &8[&7nước sau&8]'
 
   lottery:
     name: '&#FF9F9FVé Số'
@@ -754,8 +772,8 @@ games:
         - '&#FFD1662. &71 biểu tượng xếp thành hình'
         - '&7  = trúng thưởng'
         - ''
-        - '&7Ô vuông 2x2: &#FFD166x0,5'
-        - '&7Chữ X nhỏ: &#FFD166x1'
+        - '&7Ô vuông 2x2: &#FFD166x1,2'
+        - '&7Chữ X nhỏ: &#FFD166x1,5'
         - '&7Hàng ngang, cột dọc: &#FFD166x3'
         - '&7Hàng ngang giữa: &#FFD166x5'
         - '&7Đường chéo: &#FFD166x6'
@@ -765,7 +783,7 @@ games:
         - '&7Kín cả màn: &#FFD166x200'
         - ''
         - '&#FFD166Hình chữ W: &7thưởng x2'
-        - '&8Chỉ tính 1 hình lớn nhất'
+        - '&8Mỗi lần quay tối đa 1 hình'
     pattern:
       square2: 'Ô vuông 2x2'
       cross3: 'Chữ X nhỏ'
@@ -969,6 +987,7 @@ games:
     cashed: '&#7CFC9A✔ Rút ở &#FFD166x{multiplier} &#7CFC9A- bạn nhận {payout}'
     lost: '&#FF6B6B✘ Tên lửa nổ ở &#FFD166x{multiplier} &7- mất {bet}'
     broadcast-start: '&#FF6F91Tên Lửa &7sẽ cất cánh sau &f{seconds} giây &8- &f{player} &7vừa đặt cược'
+    countdown: '&#FF6F91Tên Lửa &7cất cánh sau &f{seconds}...'
 
   pot:
     name: '&#A8E063Góp Hũ'
@@ -1071,6 +1090,7 @@ games:
     won: '&#7CFC9A✔ Bạn thắng hũ {pot} &7(cơ hội {chance}) &#7CFC9A- nhận {payout}'
     lost: '&#FF6B6B✘ &f{player} &#FF6B6Bthắng hũ &7({payout}) &7- bạn mất {bet}'
     broadcast-start: '&#A8E063Góp Hũ {currency} &7sẽ quay sau &f{seconds} giây &8- hũ đang có {pot}'
+    countdown: '&#A8E063Góp Hũ &7quay sau &f{seconds}... &8- hũ {pot}'
 
 pvp:
   usage: '&7Dùng: &f/{label} &8(xem kèo) &7| &f/{label} <tien|gem> <mức cược> &7| &f/{label} <người> <tien|gem> <mức cược>'
@@ -1161,10 +1181,10 @@ pvp:
       lore:
         - '&#BFC7D5Đấu 1v1, chơi ở mọi nơi'
         - ''
-        - '&7Bàn 3x3, người cầm X đi trước'
-        - '&#7CFC9A✔ &73 ô thẳng hàng: thắng'
-        - '&7Đầy bàn: hoà, hoàn tiền cả hai'
-        - '&7Hết giờ: đánh ngẫu nhiên 1 ô'
+        - '&#FFD1661. &7Bàn 3x3, cầm X đi trước'
+        - '&#FFD1662. &7Mỗi người giữ tối đa 3 quân'
+        - '&#FFD1663. &7Đặt quân thứ 4: quân cũ nhất mất'
+        - '&#7CFC9A✔ &7Thắng 2 ván: ăn hũ'
         - ''
         - '&7Tiền: &f{min} &7- &f{max}'
         - '&7Gem: &f{gemmin} &7- &f{gemmax}'
@@ -1323,7 +1343,7 @@ menu:
   leaderboard:
     name: '&#FFD166Bảng xếp hạng'
     lore:
-      - '&#BFC7D5Top 10 người lời nhiều nhất'
+      - '&#BFC7D5Top 10 thắng / thua nhiều nhất'
       - ''
       - '&8[&#7CFC9AChuột trái để xem&8]'
   jackpot:
@@ -1359,9 +1379,9 @@ menu:
       - ''
       - '&#FFD166Giới hạn:'
       - '&7• Giờ chơi còn: &f{playtime}'
-      - '&7• Hôm nay còn được lỗ:'
-      - '&7  {loss_money}'
-      - '&7  {loss_gem}'
+      - '&7• Hôm nay còn được lời:'
+      - '&7  {profit_money}'
+      - '&7  {profit_gem}'
 
 stats:
   title: '&8Thống kê sòng bạc'
@@ -1384,19 +1404,33 @@ stats:
 leaderboard:
   title: '&8Bảng xếp hạng sòng bạc'
   filler: '&e'
-  header:
-    name: '&#FFD166Top lời nhiều nhất &8[{currency}&8]'
+  winners:
+    header:
+      name: '&#FFD166Top thắng nhiều nhất &8[{currency}&8]'
+      lore:
+        - '&#BFC7D5Lời = tổng nhận - tổng cược'
+        - '&8Cập nhật mỗi 5 phút'
+    entry-lore:
+      - '&7• Lời: {net}'
+  losers:
+    header:
+      name: '&#FF8A8ATop thua nhiều nhất &8[{currency}&8]'
+      lore:
+        - '&#BFC7D5Lỗ = tổng cược - tổng nhận'
+        - '&8Cập nhật mỗi 5 phút'
+    entry-lore:
+      - '&7• Lỗ: {net}'
+  board:
+    winners: '&#FFD166Xem top thắng nhiều nhất'
+    losers: '&#FF8A8AXem top thua nhiều nhất'
     lore:
-      - '&#BFC7D5Lời = tổng nhận - tổng cược'
-      - '&8Cập nhật mỗi 5 phút'
+      - '&8[&#7CFC9AChuột trái để đổi bảng&8]'
   rank-1: '&#FFD166'
   rank-2: '&#E0E0E0'
   rank-3: '&#E2A16F'
   rank-other: '&7'
   entry:
     name: '{color}#{rank} &f{player}'
-    lore:
-      - '&7• Lời: {net}'
   empty: '&8#{rank} - chưa có ai'
   back: '&#FF8A8AQuay lại'
   switch:
@@ -1463,7 +1497,7 @@ machine:
   refit-none: '&#FFD166(!) Không có máy nào trong {radius} khối quanh bạn'
 
 command:
-  usage: '&7Dùng: &f/casino &8| &f/casino thongke &8| &f/casino tieptuc &8| &f/casino nhac &8| &f/casino nghi <1h|1d|7d|30d>'
+  usage: '&7Dùng: &f/casino &8| &f/casino thongke &8| &f/casino tieptuc &8| &f/casino nhac &8| &f/casino nghi <1h|1d|7d|30d> &8| &f/casino giovang'
   usage-nghi: '&#FF6B6B✘ Dùng: &f/casino nghi <1h|1d|7d|30d>'
   usage-open: '&#FF6B6B✘ Dùng: &f/casino open <người chơi> <menu|tên game>'
   player-only: '&#FF6B6B✘ Lệnh này chỉ dùng trong game'
@@ -1471,6 +1505,15 @@ command:
   player-not-found: '&#FF6B6B✘ Không tìm thấy người chơi &f{player}'
   game-not-found: '&#FF6B6B✘ Không có game &f{game}'
   nothing-running: '&7Bạn không có ván nào đang chạy'
+
+golden-hour:
+  started: '&#FFD166Giờ Vàng &7đã bắt đầu &8- &7thắng đấu Nhà Cái được cộng thêm &#FFD166{percent}% &7tiền lời trong &f{minutes} phút'
+  ended: '&#FFD166Giờ Vàng &7đã kết thúc'
+  bonus: '&#FFD166Giờ Vàng &7+{percent}% lời &8- &7bạn nhận thêm {amount}'
+  status-on: '&#FFD166Giờ Vàng &7đang diễn ra &8- &7+{percent}% tiền lời, còn &f{time}'
+  status-off: '&7Hiện không có Giờ Vàng'
+  stopped: '&#7CFC9A✔ Đã tắt Giờ Vàng'
+  usage: '&#FF6B6B✘ Dùng: &f/casino giovang <phút> [%] &8| &f/casino giovang tat &8- &7tối đa {max_minutes} phút, {max_percent}%'
 
 admin:
   usage: '&7/casino admin <reload|toggle|stats|simulate|log|refund|alt|unban|jackpot|machine|dealer|debug> ...'

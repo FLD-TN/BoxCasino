@@ -33,6 +33,7 @@ import org.bukkit.entity.Player;
 public final class CasinoCommand implements TabExecutor {
 
     private static final String ADMIN = "boxcasino.admin";
+    private static final String GOLDEN_HOUR = "boxcasino.giovang";
     private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern("dd/MM HH:mm");
 
     private final BoxCasinoPlugin plugin;
@@ -67,6 +68,7 @@ public final class CasinoCommand implements TabExecutor {
                 else msg().send(sender, "command.player-only");
             }
             case "open" -> openFor(sender, args);
+            case "giovang" -> goldenHour(sender, args);
             case "admin" -> admin(sender, args);
             default -> msg().send(sender, "command.usage");
         }
@@ -100,6 +102,50 @@ public final class CasinoCommand implements TabExecutor {
             case "decline" -> plugin.pvp().decline(player, id);
             case "cancel" -> plugin.pvp().cancel(player, id);
             default -> msg().send(sender, "pvp.not-found");
+        }
+    }
+
+    /**
+     * /casino giovang: time left. /casino giovang <phút> [%]: start (replaces a running one). /casino giovang tat: stop.
+     * Starting and stopping need boxcasino.giovang (console always may: CommandTimer, shops).
+     */
+    private void goldenHour(CommandSender sender, String[] args) {
+        var gh = plugin.goldenHour();
+        if (args.length < 2) {
+            if (gh.active()) {
+                msg().send(sender, "golden-hour.status-on", "time", Format.duration(gh.secondsLeft()),
+                        "percent", Format.decimal(gh.percent()));
+            } else {
+                msg().send(sender, "golden-hour.status-off");
+            }
+            return;
+        }
+        if (!(sender instanceof ConsoleCommandSender) && !sender.hasPermission(GOLDEN_HOUR)) {
+            msg().send(sender, "command.no-permission");
+            return;
+        }
+        if (args[1].equalsIgnoreCase("tat") || args[1].equalsIgnoreCase("off")) {
+            msg().send(sender, gh.stop() ? "golden-hour.stopped" : "golden-hour.status-off");
+            return;
+        }
+        long maxMinutes = Math.max(1, plugin.getConfig().getLong("golden-hour.max-minutes", 240));
+        double maxPercent = Math.max(1, plugin.getConfig().getDouble("golden-hour.max-percent", 50));
+        long minutes;
+        double percent = plugin.getConfig().getDouble("golden-hour.percent", 5);
+        try {
+            minutes = Long.parseLong(args[1]);
+            if (args.length >= 3) percent = Double.parseDouble(args[2].replace("%", "").replace(',', '.'));
+        } catch (NumberFormatException ex) {
+            msg().send(sender, "golden-hour.usage", "max_minutes", String.valueOf(maxMinutes), "max_percent", Format.decimal(maxPercent));
+            return;
+        }
+        if (minutes < 1 || minutes > maxMinutes || percent <= 0 || percent > maxPercent) {
+            msg().send(sender, "golden-hour.usage", "max_minutes", String.valueOf(maxMinutes), "max_percent", Format.decimal(maxPercent));
+            return;
+        }
+        gh.start(minutes, percent);
+        if (!(sender instanceof Player)) {
+            plugin.getLogger().info("Golden hour started: " + minutes + " min, +" + percent + "% profit");
         }
     }
 
@@ -418,10 +464,14 @@ public final class CasinoCommand implements TabExecutor {
         List<String> options = new ArrayList<>();
         boolean admin = sender.hasPermission(ADMIN);
         if (args.length == 1) {
-            options.addAll(List.of("tieptuc", "nhac", "nghi", "thongke"));
+            options.addAll(List.of("tieptuc", "nhac", "nghi", "thongke", "giovang"));
             if (admin) options.addAll(List.of("open", "admin"));
         } else if (args.length == 2 && args[0].equalsIgnoreCase("nghi")) {
             options.addAll(ExcludeMenu.DURATIONS.keySet());
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("giovang") && sender.hasPermission(GOLDEN_HOUR)) {
+            options.addAll(List.of("30", "60", "120", "tat"));
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("giovang") && sender.hasPermission(GOLDEN_HOUR)) {
+            options.addAll(List.of("5", "10", "20"));
         } else if (admin && args.length == 2 && args[0].equalsIgnoreCase("admin")) {
             options.addAll(List.of("reload", "toggle", "stats", "simulate", "log", "refund", "alt", "unban", "debug", "jackpot", "machine", "dealer"));
         } else if (admin && args.length == 2 && args[0].equalsIgnoreCase("open")) {

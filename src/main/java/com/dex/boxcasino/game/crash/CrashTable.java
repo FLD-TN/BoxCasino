@@ -3,6 +3,7 @@ package com.dex.boxcasino.game.crash;
 import com.dex.boxcasino.BoxCasinoPlugin;
 import com.dex.boxcasino.chat.ChatRoom;
 import com.dex.boxcasino.economy.Currency;
+import com.dex.boxcasino.extra.Countdown;
 import com.dex.boxcasino.game.Bet;
 import com.dex.boxcasino.util.Format;
 import com.dex.boxcasino.util.Payouts;
@@ -188,8 +189,12 @@ final class CrashTable implements ChatRoom {
             case BETTING -> {
                 if (ticks % 20 != 0) return;
                 secondsLeft--;
-                if (secondsLeft <= 0) takeOff();
-                else refreshStatus();
+                if (secondsLeft <= 0) {
+                    takeOff();
+                } else {
+                    Countdown.start(plugin, entries.keySet(), secondsLeft, "games.crash.countdown");
+                    refreshStatus();
+                }
             }
             case FLYING -> {
                 if (ticks % game.stepTicks != 0) return;

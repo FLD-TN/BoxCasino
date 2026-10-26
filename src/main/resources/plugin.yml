@@ -54,11 +54,14 @@ permissions:
   boxcasino.game.pot:
     default: true
   boxcasino.bypass.limits:
-    description: Bỏ qua giới hạn giờ chơi, giới hạn lỗ và tự khóa
+    description: Bỏ qua giới hạn giờ chơi, giới hạn lời trong ngày và tự khóa
     default: false
   boxcasino.bypass.ip:
     description: Bỏ qua luật một tài khoản mỗi IP
     default: false
+  boxcasino.giovang:
+    description: Bật / tắt Giờ Vàng (/casino giovang <phút> [%] | tat). Console luôn được.
+    default: op
   boxcasino.admin:
     description: Lệnh quản trị /casino admin và /casino open
     default: op

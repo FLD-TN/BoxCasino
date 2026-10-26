@@ -3,6 +3,7 @@ package com.dex.boxcasino.game.races;
 import com.dex.boxcasino.BoxCasinoPlugin;
 import com.dex.boxcasino.chat.ChatRoom;
 import com.dex.boxcasino.economy.Currency;
+import com.dex.boxcasino.extra.Countdown;
 import com.dex.boxcasino.game.Bet;
 import com.dex.boxcasino.util.Payouts;
 import java.util.ArrayList;
@@ -142,8 +143,12 @@ final class RaceTable implements ChatRoom {
             case BETTING -> {
                 if (ticks % 20 != 0) return;
                 secondsLeft--;
-                if (secondsLeft <= 0) startRace();
-                else refreshLever();
+                if (secondsLeft <= 0) {
+                    startRace();
+                } else {
+                    Countdown.start(plugin, bets.keySet(), secondsLeft, "games.races.countdown");
+                    refreshLever();
+                }
             }
             case RACING -> {
                 if (ticks % game.stepTicks != 0) return;

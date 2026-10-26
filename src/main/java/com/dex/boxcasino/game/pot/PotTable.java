@@ -3,6 +3,7 @@ package com.dex.boxcasino.game.pot;
 import com.dex.boxcasino.BoxCasinoPlugin;
 import com.dex.boxcasino.chat.ChatRoom;
 import com.dex.boxcasino.economy.Currency;
+import com.dex.boxcasino.extra.Countdown;
 import com.dex.boxcasino.game.Bet;
 import com.dex.boxcasino.game.GameSettings;
 import com.dex.boxcasino.util.Format;
@@ -197,8 +198,13 @@ final class PotTable implements ChatRoom {
             }
             case COUNTDOWN -> {
                 secondsLeft--;
-                if (secondsLeft <= 0) roll();
-                else refreshStatus();
+                if (secondsLeft <= 0) {
+                    roll();
+                } else {
+                    Countdown.start(plugin, entries.keySet(), secondsLeft, "games.pot.countdown",
+                            "pot", plugin.wallet().format(currency, pot()));
+                    refreshStatus();
+                }
             }
             case RESULT -> {
                 secondsLeft--;

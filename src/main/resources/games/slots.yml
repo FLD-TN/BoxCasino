@@ -1,25 +1,26 @@
 # Máy Xèng (Drums của Vegas). Bố cục khớp texture drums_gui của pack iavegasgui: màn hình 5x5 ở giữa.
 # Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
-config-version: 4
+config-version: 5
 enabled: true
 title: '&f:offset_-48:&f{img:iavegasgui:drums_gui}'
 fallback-title: '&#E6B980Máy Xèng'
 rows: 5
 
 # Mỗi lần quay: bốc trúng hình nào (hoặc không trúng) theo chance (%), rồi vẽ màn hình đúng hình đó.
-# Chỉ tính 1 hình lớn nhất. Tổng chance không quá 100; phần còn lại = không trúng.
+# Màn hình chỉ hiện đúng 1 hình trúng, không có hình thứ hai. Tổng chance không quá 100; phần còn lại = không trúng.
+# Hình nào cũng ăn từ x1.2 trở lên: đã trúng là có lãi (không còn kiểu "trúng" mà vẫn mất tiền).
 # RTP = tổng (chance x multiplier) x trung bình bonus của biểu tượng.
-# Mặc định: 84,6% x 1,125 = 95,2%. Có trúng 44%, có lãi khoảng 13,5%.
+# Mặc định: 84,3% x 1,125 = 94,8%. Trúng (và có lãi) 35,9% số lần quay.
 patterns:
-  square2: {chance: 20, multiplier: 0.5}        # ô vuông 2x2
-  cross3: {chance: 12, multiplier: 1}           # chữ X nhỏ trong ô 3x3
-  hline: {chance: 4.2, multiplier: 3}           # hàng ngang (trừ hàng giữa)
-  vline: {chance: 3.5, multiplier: 3}           # cột dọc
-  hline-center: {chance: 1.5, multiplier: 5}    # hàng ngang giữa
-  diagonal: {chance: 1.5, multiplier: 6}        # đường chéo
-  square3: {chance: 0.8, multiplier: 10}        # ô vuông 3x3
-  cross5: {chance: 0.4, multiplier: 20}         # chữ X lớn
-  square4: {chance: 0.1, multiplier: 50}        # ô vuông 4x4
+  square2: {chance: 18, multiplier: 1.2}        # ô vuông 2x2
+  cross3: {chance: 8, multiplier: 1.5}          # chữ X nhỏ trong ô 3x3
+  hline: {chance: 3.5, multiplier: 3}           # hàng ngang (trừ hàng giữa)
+  vline: {chance: 3, multiplier: 3}             # cột dọc
+  hline-center: {chance: 1.2, multiplier: 5}    # hàng ngang giữa
+  diagonal: {chance: 1.2, multiplier: 6}        # đường chéo
+  square3: {chance: 0.6, multiplier: 10}        # ô vuông 3x3
+  cross5: {chance: 0.3, multiplier: 20}         # chữ X lớn
+  square4: {chance: 0.08, multiplier: 50}       # ô vuông 4x4
   full: {chance: 0.01, multiplier: 200}         # kín màn 5x5
 
 # Biểu tượng (ít nhất 8). Khi trúng, biểu tượng của hình được bốc theo weight; bonus nhân thêm tiền thưởng.

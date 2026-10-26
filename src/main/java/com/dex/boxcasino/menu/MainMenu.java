@@ -87,16 +87,16 @@ public final class MainMenu extends CasinoView {
         int profileSlot = c.getInt("profile.slot", -1);
         if (profileSlot >= 0) {
             long play = plugin.access().playLeft(player);
-            long lossMoney = plugin.access().lossLeft(player, Currency.MONEY);
-            long lossGem = plugin.access().lossLeft(player, Currency.GEM);
+            long profitMoney = plugin.access().profitLeft(player, Currency.MONEY);
+            long profitGem = plugin.access().profitLeft(player, Currency.GEM);
             ItemStack head = plugin.items().make(ItemSpec.of(c.get("profile"), new ItemSpec("", Material.PLAYER_HEAD, 0)),
                     m.line("menu.profile.name", "player", player.getName()),
                     m.lines("menu.profile.lore",
                             "money", plugin.wallet().format(Currency.MONEY, Math.max(0, plugin.wallet().balance(player, Currency.MONEY))),
                             "gem", plugin.wallet().format(Currency.GEM, Math.max(0, plugin.wallet().balance(player, Currency.GEM))),
                             "playtime", play < 0 ? m.raw("menu.unlimited") : Format.duration(play),
-                            "loss_money", lossMoney < 0 ? m.raw("menu.unlimited") : plugin.wallet().format(Currency.MONEY, lossMoney),
-                            "loss_gem", lossGem < 0 ? m.raw("menu.unlimited") : plugin.wallet().format(Currency.GEM, lossGem)));
+                            "profit_money", profitMoney < 0 ? m.raw("menu.unlimited") : plugin.wallet().format(Currency.MONEY, profitMoney),
+                            "profit_gem", profitGem < 0 ? m.raw("menu.unlimited") : plugin.wallet().format(Currency.GEM, profitGem)));
             if (head.getItemMeta() instanceof SkullMeta skull) {
                 Heads.apply(skull, player.getUniqueId());
                 head.setItemMeta(skull);

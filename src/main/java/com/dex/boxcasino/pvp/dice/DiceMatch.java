@@ -2,6 +2,7 @@ package com.dex.boxcasino.pvp.dice;
 
 import com.dex.boxcasino.BoxCasinoPlugin;
 import com.dex.boxcasino.config.Messages;
+import com.dex.boxcasino.extra.Countdown;
 import com.dex.boxcasino.game.Bet;
 import com.dex.boxcasino.pvp.Match;
 import com.dex.boxcasino.pvp.MatchView;
@@ -68,6 +69,7 @@ final class DiceMatch extends Match {
 
     private void tick() {
         if (countdown > 0) {
+            Countdown.start(plugin, List.of(ids), countdown, "games.dice.countdown");
             countdown--;
             sound(Sound.BLOCK_NOTE_BLOCK_HAT);
             renderAll();

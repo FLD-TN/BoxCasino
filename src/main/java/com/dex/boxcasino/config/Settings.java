@@ -22,7 +22,8 @@ public final class Settings {
     public final boolean playLimitEnabled;
     public final long playSeconds;
     public final long restSeconds;
-    public final Map<Currency, Long> dailyLossLimit;
+    /** Net profit of one day (won − lost) after which no new bet is taken; 0 = no limit. */
+    public final Map<Currency, Long> dailyProfitLimit;
     public final ZoneId zone;
     public final int clickCooldownTicks;
     public final int logRetentionDays;
@@ -37,9 +38,9 @@ public final class Settings {
         playLimitEnabled = c.getBoolean("play-limit.enabled", true);
         playSeconds = Math.max(60, c.getLong("play-limit.play-minutes", 180) * 60);
         restSeconds = Math.max(60, c.getLong("play-limit.rest-minutes", 60) * 60);
-        Map<Currency, Long> loss = new EnumMap<>(Currency.class);
-        for (Currency cur : Currency.values()) loss.put(cur, Math.max(0, c.getLong("daily-loss-limit." + cur.name(), 0)));
-        dailyLossLimit = Map.copyOf(loss);
+        Map<Currency, Long> profit = new EnumMap<>(Currency.class);
+        for (Currency cur : Currency.values()) profit.put(cur, Math.max(0, c.getLong("daily-profit-limit." + cur.name(), 0)));
+        dailyProfitLimit = Map.copyOf(profit);
         ZoneId z;
         try {
             z = ZoneId.of(c.getString("timezone", "Asia/Ho_Chi_Minh"));

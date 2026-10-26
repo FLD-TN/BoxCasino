@@ -1,16 +1,35 @@
 # Kim Tự Tháp (Plinko). Bố cục khớp texture pyramid_gui của pack iavegasgui: bóng thả từ ô 4, 5 phễu ở hàng dưới.
 # Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
-config-version: 4
+config-version: 5
 enabled: true
 title: '&f:offset_-48:&f{img:iavegasgui:pyramid_gui}'
 fallback-title: '&#F9D56EKim Tự Tháp'
 rows: 6
 
-# 5 phễu từ trái sang phải. Trọng số = tỉ lệ rơi (không cần cộng đủ 100). RTP = tổng (tỉ lệ x hệ số).
-# Mặc định: 22.5% x0.4 + 20% x0.8 + 15% x3 + 20% x0.8 + 22.5% x0.4 = 95%.
-hoppers:
-  weights: [22.5, 20, 15, 20, 22.5]
-  multipliers: [0.4, 0.8, 3.0, 0.8, 0.4]
+# Bóng nảy trái / phải 50-50 ở mỗi hàng chốt (4 hàng), rơi vào phễu dưới cột cuối cùng, như Plinko thật.
+# Tỉ lệ rơi 5 phễu (trái -> phải): 6,25% / 25% / 37,5% / 25% / 6,25%. Biên hiếm nhưng thưởng to, giữa hay rơi nhưng thấp.
+# Mỗi mức rủi ro một bảng hệ số (5 phễu, trái -> phải). Hoàn trả = tổng (tỉ lệ x hệ số), mặc định đều 95%:
+#   low:    x2   / x1.1  / x0.4 -> 62,5% số lần có lãi
+#   medium: x3   / x0.85 / x0.4 -> 12,5% có lãi (biên x3)
+#   high:   x5   / x0.5  / x0.2 -> 12,5% có lãi (biên x5)
+# Đổi xong hãy kiểm tra bằng: /casino admin simulate plinko 2000000
+# slot = ô nút chọn mức trên hàng trên cùng; inactive / active = hình nút khi chưa chọn / đang chọn.
+risks:
+  low:
+    slot: 5
+    multipliers: [2.0, 1.1, 0.4, 1.1, 2.0]
+    inactive: {item: 'iavegasgui:minesweeper_button_easy_1', material: STICK, cmd: 5625106}
+    active: {item: 'iavegasgui:minesweeper_button_easy_2', material: STICK, cmd: 5625107}
+  medium:
+    slot: 6
+    multipliers: [3.0, 0.85, 0.4, 0.85, 3.0]
+    inactive: {item: 'iavegasgui:minesweeper_button_medium_1', material: STICK, cmd: 5625108}
+    active: {item: 'iavegasgui:minesweeper_button_medium_2', material: STICK, cmd: 5625109}
+  high:
+    slot: 7
+    multipliers: [5.0, 0.5, 0.2, 0.5, 5.0]
+    inactive: {item: 'iavegasgui:minesweeper_button_hard_1', material: STICK, cmd: 5625110}
+    active: {item: 'iavegasgui:minesweeper_button_hard_2', material: STICK, cmd: 5625111}
 
 # Tốc độ bóng (tick mỗi bước) và thời gian giữ kết quả.
 step-ticks: 5

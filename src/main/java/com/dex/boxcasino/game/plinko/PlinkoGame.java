@@ -5,27 +5,32 @@ import com.dex.boxcasino.config.ItemSpec;
 import com.dex.boxcasino.game.Game;
 import com.dex.boxcasino.util.Payouts;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.random.RandomGenerator;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 /**
- * Kim Tự Tháp / Plinko (spec 7.2). The hopper is drawn by weight when the ball is dropped; the ball then follows a
- * random zig-zag path through the pegs that ends in that hopper (rows of 9 slots, one column step per row).
+ * Kim Tự Tháp / Plinko (spec 7.2), real physics: the ball bounces left or right with even odds on every row of pegs
+ * and drops into the hopper under its last column. Hopper k (from the left) is reached with probability
+ * C(rows, k) / 2^rows, so the middle is the most likely and the edges the rarest. Each risk level has its own
+ * multipliers (edges pay the most).
  */
 public final class PlinkoGame extends Game {
 
-    double[] weights = new double[0];
-    double[] multipliers = new double[0];
+    final Map<String, Risk> risks = new LinkedHashMap<>();
     List<Integer> hopperSlots = List.of();
     int startSlot;
+    /** Rows of pegs between the start slot and the hoppers (one bounce each). */
+    int rows;
     int stepTicks;
     int resetTicks;
     ItemSpec ballItem;
     ItemSpec spotItem;
     ItemSpec hopperItem;
-    private double totalWeight;
 
     public PlinkoGame(BoxCasinoPlugin plugin) {
         super(plugin, "plinko");
@@ -33,79 +38,90 @@ public final class PlinkoGame extends Game {
 
     @Override
     protected String loadGame(YamlConfiguration yml) {
-        List<Double> w = yml.getDoubleList("hoppers.weights");
-        List<Double> m = yml.getDoubleList("hoppers.multipliers");
         hopperSlots = settings.slots("hoppers");
-        if (w.size() != 5 || m.size() != 5 || hopperSlots.size() != 5) {
-            return "hoppers.weights, hoppers.multipliers and slots.hoppers need exactly 5 values (texture has 5 hoppers)";
-        }
-        weights = w.stream().mapToDouble(Double::doubleValue).toArray();
-        multipliers = m.stream().mapToDouble(Double::doubleValue).toArray();
-        totalWeight = 0;
-        for (double d : weights) {
-            if (d < 0) return "negative weight";
-            totalWeight += d;
-        }
-        for (double d : multipliers) if (d < 0) return "negative multiplier";
-        if (totalWeight <= 0) return "weights sum to 0";
         startSlot = settings.slot("spot", 4);
-        stepTicks = Math.max(1, yml.getInt("step-ticks", 5));
-        resetTicks = Math.max(1, yml.getInt("reset-ticks", 20));
-        for (int slot : hopperSlots) {
-            int steps = slot / 9 - startSlot / 9 - 1;
-            int diff = slot % 9 - startSlot % 9;
-            if (steps < 1 || Math.abs(diff) > steps || (diff + steps) % 2 != 0) {
-                return "hopper slot " + slot + " cannot be reached from spot slot " + startSlot;
+        if (hopperSlots.size() < 2) return "slots.hoppers needs at least 2 slots";
+        rows = hopperSlots.size() - 1;
+        int startCol = startSlot % 9;
+        int lastRow = hopperSlots.get(0) / 9;
+        if (lastRow - startSlot / 9 - 1 != rows) {
+            return "slots.hoppers: " + hopperSlots.size() + " hoppers need " + rows + " rows of pegs between the spot and them";
+        }
+        for (int k = 0; k <= rows; k++) {
+            int slot = hopperSlots.get(k);
+            int col = startCol - rows + 2 * k;
+            if (slot / 9 != lastRow || slot % 9 != col) {
+                return "hopper " + (k + 1) + " must be at column " + col + " of row " + lastRow + " (slot " + (lastRow * 9 + col) + ")";
             }
         }
+        risks.clear();
+        ConfigurationSection rs = yml.getConfigurationSection("risks");
+        if (rs == null) return "risks missing";
+        for (String key : rs.getKeys(false)) {
+            ConfigurationSection r = rs.getConfigurationSection(key);
+            if (r == null) continue;
+            List<Double> m = r.getDoubleList("multipliers");
+            if (m.size() != hopperSlots.size()) return "risks." + key + ".multipliers needs " + hopperSlots.size() + " values";
+            double[] mul = m.stream().mapToDouble(Double::doubleValue).toArray();
+            for (double d : mul) if (d < 0) return "risks." + key + ": negative multiplier";
+            risks.put(key, new Risk(key, mul, r.getInt("slot", -1), ItemSpec.of(r, "inactive", ItemSpec.NONE),
+                    ItemSpec.of(r, "active", ItemSpec.NONE)));
+        }
+        if (risks.isEmpty()) return "no risk level";
+        stepTicks = Math.max(1, yml.getInt("step-ticks", 5));
+        resetTicks = Math.max(1, yml.getInt("reset-ticks", 20));
         ballItem = settings.item("ball");
         spotItem = settings.item("spot");
         hopperItem = settings.item("hopper");
         return null;
     }
 
-    @Override
-    public double rtp() {
+    /** Chance of hopper {@code k}: C(rows, k) / 2^rows. */
+    public double chance(int k) {
+        double c = 1;
+        for (int i = 1; i <= k; i++) c = c * (rows - k + i) / i;
+        return c / Math.pow(2, rows);
+    }
+
+    public double rtp(Risk risk) {
         double sum = 0;
-        for (int i = 0; i < weights.length; i++) sum += weights[i] / totalWeight * multipliers[i];
+        for (int k = 0; k < risk.multipliers().length; k++) sum += chance(k) * risk.multipliers()[k];
         return sum;
     }
 
-    public double chance(int hopper) {
-        return weights[hopper] / totalWeight;
+    /** Highest RTP of the risk levels (configured equal by default). */
+    @Override
+    public double rtp() {
+        double max = 0;
+        for (Risk r : risks.values()) max = Math.max(max, rtp(r));
+        return max;
     }
 
-    int draw(RandomGenerator random) {
-        double r = random.nextDouble() * totalWeight;
-        for (int i = 0; i < weights.length; i++) {
-            r -= weights[i];
-            if (r < 0) return i;
-        }
-        return weights.length - 1;
+    /** The risk level at {@code index} (remembered as a number), the first one when out of range. */
+    Risk risk(int index) {
+        List<Risk> list = new ArrayList<>(risks.values());
+        return list.get(index >= 0 && index < list.size() ? index : 0);
     }
 
-    /**
-     * Slots the ball visits, from the start slot down to the hopper. Rows 1-4 step one column left or right (the pegs
-     * sit on the other columns), the last row drops straight into hopper column {@code 2 × hopper}.
-     */
-    List<Integer> path(int hopper, RandomGenerator random) {
-        int startRow = startSlot / 9;
+    int indexOf(Risk risk) {
+        return new ArrayList<>(risks.values()).indexOf(risk);
+    }
+
+    /** One drop: a fair left / right bounce per row of pegs; the hopper is the number of right bounces. */
+    Drop drop(RandomGenerator random) {
+        int row = startSlot / 9;
         int col = startSlot % 9;
-        int target = hopperSlots.get(hopper) % 9;
-        int lastRow = hopperSlots.get(hopper) / 9;
-        int steps = lastRow - startRow - 1;
-        int rights = (target - col + steps) / 2;
-        List<Boolean> moves = new ArrayList<>();
-        for (int i = 0; i < steps; i++) moves.add(i < rights);
-        java.util.Collections.shuffle(moves, new java.util.Random(random.nextLong()));
-        List<Integer> out = new ArrayList<>();
-        out.add(startSlot);
-        for (int i = 0; i < steps; i++) {
-            col += moves.get(i) ? 1 : -1;
-            out.add((startRow + 1 + i) * 9 + col);
+        int rights = 0;
+        List<Integer> path = new ArrayList<>();
+        path.add(startSlot);
+        for (int i = 0; i < rows; i++) {
+            boolean right = random.nextBoolean();
+            if (right) rights++;
+            col += right ? 1 : -1;
+            path.add((row + 1 + i) * 9 + col);
         }
-        out.add(hopperSlots.get(hopper));
-        return out;
+        path.add(hopperSlots.get(rights));
+        return new Drop(rights, List.copyOf(path));
     }
 
     @Override
@@ -113,11 +129,22 @@ public final class PlinkoGame extends Game {
         new PlinkoView(plugin, player, this, npc).open();
     }
 
+    /** Every risk level in turn. */
     @Override
     public double simulate(long rounds, RandomGenerator random) {
+        List<Risk> list = new ArrayList<>(risks.values());
         long bet = 1000;
         double paid = 0;
-        for (long r = 0; r < rounds; r++) paid += Payouts.payout(bet, multipliers[draw(random)]);
+        for (long r = 0; r < rounds; r++) {
+            Risk risk = list.get((int) (r % list.size()));
+            paid += Payouts.payout(bet, risk.multipliers()[drop(random).hopper()]);
+        }
         return paid / (rounds * (double) bet);
+    }
+
+    public record Risk(String key, double[] multipliers, int slot, ItemSpec inactive, ItemSpec active) {
+    }
+
+    record Drop(int hopper, List<Integer> path) {
     }
 }

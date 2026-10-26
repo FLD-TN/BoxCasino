@@ -28,7 +28,7 @@ public final class BetService {
 
     /**
      * Takes a stake: ledger OPEN, then withdraw. Tells the player and returns {@code null} when it fails (not enough
-     * money, daily loss limit, storage error).
+     * money, daily profit limit reached, storage error).
      *
      * @param outcome JSON of the pre-generated result, stored on the round (may be null and set later)
      */
@@ -108,6 +108,14 @@ public final class BetService {
         if (!bet.isOpen()) return;
         bet.state = Bet.State.SETTLED;
         live.remove(bet.id);
+        // Giờ Vàng: extra share of the profit, paid with the round (the game's own message shows the base payout)
+        long bonus = plugin.goldenHour().bonus(bet, payout);
+        if (bonus > 0) {
+            payout += bonus;
+            Player p = org.bukkit.Bukkit.getPlayer(bet.player);
+            if (p != null) plugin.messages().send(p, "golden-hour.bonus", "amount", plugin.wallet().format(bet.currency, bonus),
+                    "percent", com.dex.boxcasino.util.Format.decimal(plugin.goldenHour().percent()));
+        }
         // nothing to pay on a loss: straight to DONE (one write instead of two)
         if (payout > 0) {
             try {

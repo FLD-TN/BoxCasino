@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.random.RandomGenerator;
 import org.junit.jupiter.api.Test;
 
-/** The screen of every spin shows exactly the drawn prize: the shape in its symbol, nothing that pays as much. */
+/** The screen of every spin shows exactly the drawn prize: the shape in its symbol and no other shape. */
 class SlotsScreenTest {
 
     @Test
@@ -25,6 +25,10 @@ class SlotsScreenTest {
                 for (boolean[] m : p.masks()) {
                     int s = SlotsGame.filledBy(spin.grid(), m);
                     if (s < 0) continue;
+                    if (spin.mask() != null) {
+                        assertTrue(SlotsGame.inside(m, spin.mask()), "a second shape " + p.key() + " shows next to "
+                                + spin.pattern().key());
+                    }
                     double pay = p.multiplier() * slots.symbols.get(s).bonus();
                     if (pay > best) {
                         best = pay;

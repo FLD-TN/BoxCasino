@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 
 /**
  * Máy Xèng (Vegas "Drums"): a 5x5 screen of symbols. The prize is drawn first (a shape from the table, or nothing),
- * then the screen is built so that exactly that shape shows in one symbol and no other shape pays more. The shapes are
+ * then the screen is built so that exactly that shape shows in one symbol and no other shape shows at all. The shapes are
  * fixed; their chance and prize come from {@code games/slots.yml}.
  */
 public final class SlotsGame extends Game {
@@ -141,10 +141,10 @@ public final class SlotsGame extends Game {
                 break;
             }
         }
-        if (pattern == null) return new Spin(screen(null, null, null, random), null, null, null, 0);
+        if (pattern == null) return new Spin(screen(null, null, random), null, null, null, 0);
         Symbol symbol = drawSymbol(random);
         boolean[] mask = pattern.masks().get(random.nextInt(pattern.masks().size()));
-        return new Spin(screen(pattern, symbol, mask, random), pattern, symbol, mask, pattern.multiplier() * symbol.bonus());
+        return new Spin(screen(symbol, mask, random), pattern, symbol, mask, pattern.multiplier() * symbol.bonus());
     }
 
     private Symbol drawSymbol(RandomGenerator random) {
@@ -157,16 +157,16 @@ public final class SlotsGame extends Game {
     }
 
     /**
-     * Random symbols outside the shape until the screen shows nothing better than the drawn prize (a few tries); if
-     * that keeps failing, a fixed spread of the other symbols that can never form a shape (see {@link #spread}).
+     * Random symbols outside the shape until the screen shows no other shape (a few tries); if that keeps failing, a
+     * fixed spread of the other symbols that can never form a shape (see {@link #spread}).
      */
-    private int[] screen(Pattern pattern, Symbol symbol, boolean[] mask, RandomGenerator random) {
+    private int[] screen(Symbol symbol, boolean[] mask, RandomGenerator random) {
         int[] g = new int[SIZE * SIZE];
         for (int attempt = 0; attempt < 200; attempt++) {
             for (int i = 0; i < g.length; i++) {
                 g[i] = mask != null && mask[i] ? symbol.index() : random.nextInt(symbols.size());
             }
-            if (showsOnly(g, pattern, symbol)) return g;
+            if (showsOnly(g, mask)) return g;
         }
         int offset = random.nextInt(7);
         for (int i = 0; i < g.length; i++) {
@@ -188,17 +188,23 @@ public final class SlotsGame extends Game {
         return Math.floorMod(2 * row + col + offset, 7);
     }
 
-    /** True when the best shape on the screen is the drawn one in the drawn symbol (or nothing, for a losing spin). */
-    private boolean showsOnly(int[] g, Pattern pattern, Symbol symbol) {
+    /**
+     * True when the screen shows the drawn shape and nothing else that looks like a win: every shape on it lies inside
+     * the drawn one (a 3x3 square holds 2x2 squares of its own symbol). A losing spin shows no shape at all, so the
+     * player never sees a second line or square that is not paid.
+     */
+    private boolean showsOnly(int[] g, boolean[] drawn) {
         for (Pattern p : patterns) {
             for (boolean[] m : p.masks()) {
-                int s = filledBy(g, m);
-                if (s < 0) continue;
-                if (pattern == null) return false;
-                boolean same = p == pattern && s == symbol.index();
-                if (!same && p.multiplier() * symbols.get(s).bonus() >= pattern.multiplier() * symbol.bonus()) return false;
+                if (filledBy(g, m) < 0) continue;
+                if (drawn == null || !inside(m, drawn)) return false;
             }
         }
+        return true;
+    }
+
+    static boolean inside(boolean[] mask, boolean[] outer) {
+        for (int i = 0; i < mask.length; i++) if (mask[i] && !outer[i]) return false;
         return true;
     }
 

@@ -74,6 +74,7 @@ public final class BoxCasinoPlugin extends JavaPlugin {
     private com.dex.boxcasino.extra.SeatService seats;
     private RoomService rooms;
     private com.dex.boxcasino.pvp.ChallengePrompt challengePrompt;
+    private com.dex.boxcasino.extra.GoldenHourService goldenHour;
 
     @Override
     public void onEnable() {
@@ -110,6 +111,7 @@ public final class BoxCasinoPlugin extends JavaPlugin {
         pvp = new PvpService(this);
         jackpot = new JackpotService(this, database);
         jackpot.load();
+        goldenHour = new com.dex.boxcasino.extra.GoldenHourService(this);
         bigWins = new BigWinService(this);
         bigWins.load();
         leaderboard = new LeaderboardService(this);
@@ -277,6 +279,10 @@ public final class BoxCasinoPlugin extends JavaPlugin {
 
     public BigWinService bigWins() {
         return bigWins;
+    }
+
+    public com.dex.boxcasino.extra.GoldenHourService goldenHour() {
+        return goldenHour;
     }
 
     public LeaderboardService leaderboard() {

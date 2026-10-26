@@ -56,6 +56,8 @@ NPC chạy lệnh console với `{player}`:
 | `/casino thongke` | mọi người | Thống kê thắng thua |
 | `/casino nghi <1h\|1d\|7d\|30d>` | mọi người | Tự khóa sòng (không tự mở lại được) |
 | `/casino tieptuc` | mọi người | Vào lại trận PvP hoặc bàn xì dách đang chơi |
+| `/casino giovang` | mọi người | Xem Giờ Vàng còn bao lâu |
+| `/casino giovang <phút> [%]` / `tat` | console / `boxcasino.giovang` | Bật / tắt Giờ Vàng: thắng đấu Nhà Cái + % tiền lời (CommandTimer gọi được) |
 | `/dice` (`/xucxac`), `/oantuti` (`/kbb`) | mọi người, mọi nơi | Mở bàn 1v1 (mở kèo / nhận kèo) |
 | `/dice <tiền> <tien\|gem>` | mọi người | Mở kèo cho ai cũng nhận được (`10k`, `2m`...) |
 | `/dice <người> <tiền> <tien\|gem>` | mọi người | Thách đấu trực tiếp một người |
@@ -73,14 +75,16 @@ NPC chạy lệnh console với `{player}`:
 | `/casino admin debug` | admin | Kiểm tra ItemsAdder, item, hình nền GUI |
 
 Quyền: `boxcasino.use`, `boxcasino.game.<game>` (mặc định có), `boxcasino.admin`,
-`boxcasino.bypass.limits` (bỏ qua giờ chơi, giới hạn lỗ, tự khóa), `boxcasino.bypass.ip`.
+`boxcasino.giovang` (bật / tắt Giờ Vàng, mặc định op),
+`boxcasino.bypass.limits` (bỏ qua giờ chơi, giới hạn lời trong ngày, tự khóa), `boxcasino.bypass.ip`.
 
 ## Placeholder
 
 `%boxcasino_won_money%`, `%boxcasino_lost_gem%`, `%boxcasino_net_money%`, `%boxcasino_biggest_win_gem%`,
-`%boxcasino_rounds_money%`, `%boxcasino_loss_left_money%`, `%boxcasino_playtime_left%`, `%boxcasino_rest_left%`,
+`%boxcasino_rounds_money%`, `%boxcasino_profit_left_money%`, `%boxcasino_playtime_left%`, `%boxcasino_rest_left%`,
 `%boxcasino_jackpot_money%`, `%boxcasino_jackpot_gem%`, `%boxcasino_top_net_money_1_name%`, `%boxcasino_top_net_money_1_value%`
-(1-10, money hoặc gem).
+(top thắng), `%boxcasino_top_loss_money_1_name%`, `%boxcasino_top_loss_money_1_value%` (top thua) (1-10, money hoặc gem),
+`%boxcasino_giovang%` (thời gian Giờ Vàng còn lại, rỗng khi tắt), `%boxcasino_giovang_percent%`.
 
 ## An toàn tiền
 

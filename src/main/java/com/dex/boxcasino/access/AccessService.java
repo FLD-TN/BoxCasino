@@ -95,26 +95,31 @@ public final class AccessService {
         return true;
     }
 
-    /** Daily loss allowance for a new bet (spec 4.4). */
+    /** Daily profit limit: once today's net profit reaches it, no new bet until midnight. Rounds in play still pay. */
     public boolean canBet(Player player, Currency currency, long amount) {
         if (player.hasPermission(BYPASS_LIMITS)) return true;
-        long limit = settings().dailyLossLimit.getOrDefault(currency, 0L);
+        long limit = settings().dailyProfitLimit.getOrDefault(currency, 0L);
         if (limit <= 0) return true;
         Profile p = plugin.profiles().get(player.getUniqueId());
         if (p == null) return false;
-        long left = limit - p.dailyNet.getOrDefault(currency, 0L);
-        if (amount > left) {
-            msg().send(player, "access.daily-loss", "left", plugin.wallet().format(currency, Math.max(0, left)));
+        if (profitToday(p, currency) >= limit) {
+            msg().send(player, "access.daily-profit", "limit", plugin.wallet().format(currency, limit));
             return false;
         }
         return true;
     }
 
-    public long lossLeft(Player player, Currency currency) {
-        long limit = settings().dailyLossLimit.getOrDefault(currency, 0L);
+    /** Profit still allowed today, or -1 when the limit is off. */
+    public long profitLeft(Player player, Currency currency) {
+        long limit = settings().dailyProfitLimit.getOrDefault(currency, 0L);
         if (limit <= 0) return -1;
         Profile p = plugin.profiles().get(player.getUniqueId());
-        return p == null ? 0 : Math.max(0, limit - p.dailyNet.getOrDefault(currency, 0L));
+        return p == null ? 0 : Math.max(0, limit - profitToday(p, currency));
+    }
+
+    /** {@code dailyNet} counts money lost, so profit is its negative. */
+    private static long profitToday(Profile p, Currency currency) {
+        return -p.dailyNet.getOrDefault(currency, 0L);
     }
 
     /**

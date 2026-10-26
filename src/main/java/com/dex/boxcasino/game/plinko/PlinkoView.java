@@ -18,6 +18,8 @@ final class PlinkoView extends GameView {
 
     private final PlinkoGame plinko;
     private Bet bet;
+    /** Risk level of the ball in play (the chosen one can change only between drops). */
+    private PlinkoGame.Risk playing;
     private int hopper = -1;
     private List<Integer> path = List.of();
     private int step;
@@ -39,12 +41,29 @@ final class PlinkoView extends GameView {
         return bet != null;
     }
 
+    /** The chosen risk level, remembered per player. */
+    private PlinkoGame.Risk risk() {
+        return plinko.risk((int) Math.round(memory.options.getOrDefault("plinko.risk", 0.0)));
+    }
+
     @Override
     public void onClick(int slot, ClickType click) {
         if (handlePanel(slot, click)) return;
         if (slot == plinko.startSlot) {
             if (bet != null) reject();
             else drop();
+            return;
+        }
+        for (PlinkoGame.Risk r : plinko.risks.values()) {
+            if (r.slot() != slot) continue;
+            if (bet != null || r == risk()) {
+                reject();
+            } else {
+                memory.options.put("plinko.risk", (double) plinko.indexOf(r));
+                sound(Sound.UI_BUTTON_CLICK);
+                render();
+            }
+            return;
         }
     }
 
@@ -57,16 +76,19 @@ final class PlinkoView extends GameView {
             reject();
             return;
         }
-        int drawn = plinko.draw(plugin.random());
+        PlinkoGame.Risk risk = risk();
+        PlinkoGame.Drop drop = plinko.drop(plugin.random());
         Bet placed = plugin.bets().place(player, game.id(), currency(), amount(),
-                "{\"hopper\":" + (drawn + 1) + ",\"multiplier\":" + plinko.multipliers[drawn] + "}");
+                "{\"risk\":\"" + risk.key() + "\",\"hopper\":" + (drop.hopper() + 1) + ",\"multiplier\":"
+                        + risk.multipliers()[drop.hopper()] + ",\"path\":" + drop.path() + "}");
         if (placed == null) {
             reject();
             return;
         }
         bet = placed;
-        hopper = drawn;
-        path = plinko.path(drawn, plugin.random());
+        playing = risk;
+        hopper = drop.hopper();
+        path = drop.path();
         step = 0;
         render();
         sound(Sound.UI_BUTTON_CLICK);
@@ -97,7 +119,7 @@ final class PlinkoView extends GameView {
     }
 
     private void finish(boolean visible) {
-        double multiplier = plinko.multipliers[hopper];
+        double multiplier = playing.multipliers()[hopper];
         long payout = Payouts.payout(bet.amount(), multiplier);
         plugin.bets().settle(bet, payout);
         plugin.messages().send(player, payout > bet.amount() ? "games.plinko.won" : payout == bet.amount()
@@ -142,7 +164,20 @@ final class PlinkoView extends GameView {
     private void render() {
         renderPanel();
         renderSpot();
+        renderRisks();
         for (int i = 0; i < plinko.hopperSlots.size(); i++) renderHopper(i);
+    }
+
+    private void renderRisks() {
+        Messages m = plugin.messages();
+        PlinkoGame.Risk chosen = risk();
+        for (PlinkoGame.Risk r : plinko.risks.values()) {
+            double[] mul = r.multipliers();
+            set(r.slot(), r == chosen ? r.active() : r.inactive(),
+                    m.line("games.plinko.risk.name", "name", m.raw("games.plinko.risk." + r.key())),
+                    m.lines(r == chosen ? "games.plinko.risk.lore-active" : "games.plinko.risk.lore",
+                            "edge", Format.decimal(mul[0]), "middle", Format.decimal(mul[mul.length / 2])));
+        }
     }
 
     private void renderSpot() {
@@ -158,8 +193,9 @@ final class PlinkoView extends GameView {
 
     private void renderHopper(int i) {
         Messages m = plugin.messages();
+        PlinkoGame.Risk r = bet != null ? playing : risk();
         set(plinko.hopperSlots.get(i), plinko.hopperItem,
-                m.line("games.plinko.hopper.name", "multiplier", Format.decimal(plinko.multipliers[i])),
+                m.line("games.plinko.hopper.name", "multiplier", Format.decimal(r.multipliers()[i])),
                 m.lines("games.plinko.hopper.lore", "chance", Format.percent(plinko.chance(i))));
     }
 }
