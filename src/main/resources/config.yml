@@ -257,7 +257,8 @@ machines:
       xidach: 'back 0.4'
       roulette: 'right 0.6'
   # Hộp bao model so với tâm của nó, ở scale 1 (khối): [minX, minY, minZ, maxX, maxY, maxZ].
-  # Đo từ file model của pack iavegastables (HEAD). Vùng bấm phủ đúng hộp này, bàn rộng có nhiều ô bấm.
+  # Đo từ file model của pack iavegastables (HEAD), có tính các phần tử xoay của model.
+  # Vùng bấm, barrier và vị trí ghế theo hộp này; sửa xong dùng /casino admin machine refit để đặt lại.
   bounds:
     mines: [-0.66, -2.7, -0.66, 0.66, 0.3, 0.71]
     plinko: [-0.76, -2.69, -0.85, 0.76, 0.33, 1.04]
@@ -268,11 +269,11 @@ machines:
     dice: [-0.76, -2.69, -0.88, 0.76, -1.38, 0.76]
     rps: [-0.75, -2.7, -0.38, 0.75, 0.3, 1.0]
     tictactoe: [-0.76, -2.69, -0.76, 0.76, -1.51, 0.76]
-    lottery: [-0.84, -2.7, -1.19, 0.75, 0.3, 0.8]
-    slots: [-0.76, -2.7, -1.01, 0.76, 0.28, 1.05]
-    chest: [-1.02, -2.7, -2.21, 2.01, 0.0, 1.97]
-    crash: [-0.75, -2.7, -1.78, 0.75, 0.3, 0.75]
-    pot: [-0.75, -2.7, -1.78, 0.75, 0.3, 0.75]
+    lottery: [-0.84, -2.7, -0.75, 0.75, 0.3, 0.75]
+    slots: [-0.76, -2.7, -0.84, 0.76, 0.49, 0.67]
+    chest: [-0.79, -2.7, -0.79, 0.79, 0.0, 0.79]
+    crash: [-0.75, -2.7, -0.75, 0.75, 0.3, 0.75]
+    pot: [-0.75, -2.7, -0.75, 0.75, 0.3, 0.75]
   items:
     mines: {item: 'iavegastables:minesweeper', material: BARRIER, cmd: 66616}
     plinko: {item: 'iavegastables:pyramid', material: BARRIER, cmd: 66605}
