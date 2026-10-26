@@ -9,7 +9,7 @@ import java.util.List;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-/** Cờ Caro 3x3 1v1 (spec 7.7). Casino only. */
+/** Cờ Caro 3x3 1v1 (spec 7.7). Playable anywhere, challenges in a lobby like Xúc Xắc / Oẳn Tù Tì. */
 public final class TicTacToeGame extends PvpGame {
 
     static final int[][] LINES = {
@@ -37,6 +37,16 @@ public final class TicTacToeGame extends PvpGame {
         finalCircle = settings.item("final-circle");
         emptyCell = settings.item("empty");
         return null;
+    }
+
+    @Override
+    public boolean casinoOnly() {
+        return false;
+    }
+
+    @Override
+    protected boolean lobby() {
+        return true;
     }
 
     /** The winning line (3 board indexes) of {@code seat}, or null. */

@@ -159,7 +159,7 @@ public final class BoxCasinoPlugin extends JavaPlugin {
             cmd.setExecutor(handler);
             cmd.setTabCompleter(handler);
         }
-        for (String[] pair : new String[][] {{"dice", "dice"}, {"oantuti", "rps"}}) {
+        for (String[] pair : new String[][] {{"dice", "dice"}, {"oantuti", "rps"}, {"caro", "tictactoe"}}) {
             PluginCommand pc = getCommand(pair[0]);
             if (pc == null) continue;
             PvpCommand handler = new PvpCommand(this, pair[1]);

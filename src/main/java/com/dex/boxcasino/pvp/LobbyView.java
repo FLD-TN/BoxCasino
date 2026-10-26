@@ -106,7 +106,7 @@ final class LobbyView extends CasinoView {
         }
         String[] ph = limits();
         if (all.isEmpty()) inventory.setItem(EMPTY, item(Material.LIGHT_GRAY_DYE, m.line("pvp.lobby.empty.name"), m.lines("pvp.lobby.empty.lore", ph)));
-        inventory.setItem(INFO, item(game.id().equals("dice") ? Material.BONE : Material.SHEARS,
+        inventory.setItem(INFO, item(infoMaterial(),
                 m.line("pvp.lobby.info.name", ph), m.lines("pvp.lobby.info-" + game.id() + ".lore", ph)));
         boolean hasOwn = plugin.pvp().ownChallenge(game, player.getUniqueId()) != null;
         inventory.setItem(CREATE, hasOwn
@@ -117,8 +117,21 @@ final class LobbyView extends CasinoView {
         if (page < pages - 1) inventory.setItem(NEXT, item(Material.ARROW, m.line("pvp.lobby.next", "page", String.valueOf(page + 2)), List.of()));
     }
 
+    private Material infoMaterial() {
+        return switch (game.id()) {
+            case "dice" -> Material.BONE;
+            case "tictactoe" -> Material.PAPER;
+            default -> Material.SHEARS;
+        };
+    }
+
+    /** Command shown in the rules: /xucxac, /kbb, /caro. */
     private String label() {
-        return game.id().equals("dice") ? "xucxac" : "kbb";
+        return switch (game.id()) {
+            case "dice" -> "xucxac";
+            case "tictactoe" -> "caro";
+            default -> "kbb";
+        };
     }
 
     private static ItemStack item(Material material, Component name, List<Component> lore) {

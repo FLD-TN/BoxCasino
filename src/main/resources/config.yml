@@ -213,10 +213,9 @@ machines:
       stairs: ['chair front 0']
       roulette: ['chair front 0']
       xidach: ['stool front 1.4', 'stool front 0', 'stool front -1.4']
-      tictactoe: ['stool front 0', 'stool back 0']
   # Game chơi nhiều người ở một bàn: chữ nổi / thông báo ghi "Bàn X"; các máy khác ghi "Máy X".
   # Số được đánh khi đặt máy (tăng dần theo từng game, lưu ở machines.yml).
-  table-games: [xidach, tictactoe]
+  table-games: [xidach]
   # Chữ nổi trên máy: tên game (in hoa, màu của game) và số ghế trống. Chữ ở messages.yml > machine.holo.
   hologram:
     enabled: true

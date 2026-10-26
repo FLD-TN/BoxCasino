@@ -96,10 +96,15 @@ public abstract class PvpGame extends Game {
         else new TableView(plugin, player, this, npc, null).open();
     }
 
-    /** Sat down on a stool of a machine: the match there, or the table of that machine. */
+    /**
+     * Sat down on a stool of a machine: the match there, or the table of that machine. A lobby game (an old config
+     * may still give it stools) opens its lobby instead.
+     */
     public void openAtMachine(Player player, String machine) {
         Match match = plugin.pvp().matchOf(player.getUniqueId());
-        if (match == null) {
+        if (lobby()) {
+            open(player, false);
+        } else if (match == null) {
             new TableView(plugin, player, this, false, machine).open();
         } else if (machine.equals(match.machine)) {
             match.open(player);

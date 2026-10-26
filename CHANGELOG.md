@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.13.5 - 2026-10-26
+
+- Cờ Caro chuyển sang sảnh kèo giống Xúc Xắc / Oẳn Tù Tì: GUI rương liệt kê kèo, nút Tạo kèo (chọn Tiền / Gem rồi
+  nhập mức cược vào chat), chơi ở mọi nơi, lệnh mới `/caro` (alias `/tictactoe`): `/caro`, `/caro <tien|gem> <mức cược>`,
+  `/caro <người> <tien|gem> <mức cược>`. Kèo mới báo toàn server kèm nút nhận như 2 game kia. Bàn cờ khi đấu giữ nguyên.
+- Máy Cờ Caro trong world không còn ghế: bấm máy mở sảnh kèo. Config cũ còn ghế Cờ Caro thì ngồi xuống cũng mở sảnh.
+- `config.yml`: bỏ `tictactoe` khỏi `machines.seats.layouts` và `machines.table-games` (chữ nổi thành "Máy X").
+- `messages.yml`: thêm `pvp.lobby.info-tictactoe`, sửa `games.tictactoe.info` (bỏ phần ghế). Không đổi config-version.
+
 ## 0.13.4 - 2026-10-26
 
 - Database: thêm index `bets(round_id)`, `bets(created_at)`, `rounds(created_at)` (tự tạo khi khởi động). Việc xoá

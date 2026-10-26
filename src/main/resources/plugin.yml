@@ -17,6 +17,10 @@ commands:
     description: Oẳn tù tì 1v1 (chơi ở mọi nơi)
     aliases: [kbb]
     permission: boxcasino.game.rps
+  caro:
+    description: Cờ caro 1v1 (chơi ở mọi nơi)
+    aliases: [tictactoe]
+    permission: boxcasino.game.tictactoe
 permissions:
   boxcasino.game.dice:
     default: true

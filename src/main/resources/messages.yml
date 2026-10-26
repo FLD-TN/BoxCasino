@@ -709,11 +709,9 @@ games:
     info:
       name: '&#5EE7DFCờ Caro &8[&fLuật chơi&8]'
       lore:
-        - '&#BFC7D5Đấu 1v1, chỉ chơi trong sòng'
+        - '&#BFC7D5Đấu 1v1, chơi ở mọi nơi'
         - ''
         - '&#FFD166Cách chơi:'
-        - '&7• Ghế trái: mở kèo của bạn'
-        - '&7• Ghế phải: nhận kèo người khác'
         - '&7• Bàn 3x3, X đi trước'
         - '&7• 3 ô thẳng hàng: &#7CFC9Athắng'
         - '&7• Hết giờ: đánh ô ngẫu nhiên'
@@ -721,14 +719,6 @@ games:
         - '&#FFD166Thông tin:'
         - '&7• Thuế: &f{tax}% &7tiền thắng'
         - '&7• Hòa: &fhoàn tiền, không thuế'
-
-        - ''
-        - '&#FFD166Lưu ý:'
-        - '&7• Ở bàn trong sòng: &fđang chơi'
-        - '&f  không thoát được (ESC tự mở lại)'
-        - '&7• Đứng dậy (Shift) giữa ván: &#FF8A8Athua'
-        - '&7• Ngoài máy: &fESC thoải mái,'
-        - '&f  game tự chơi, kết quả báo ở chat'
     first: '&f{player} &7cầm &#5EE7DFX &7và đi trước'
     mark-x: 'X'
     mark-o: 'O'
@@ -756,7 +746,7 @@ pvp:
   invite: '&f{player} &7thách bạn chơi {game} &8[{bet}&8] &7- hết hạn sau {seconds} giây'
   broadcast-open: '{game} &8- &fKèo của {player} &8[{bet}&8]'
   broadcast-casino: '&f{player} &7vừa mở kèo {game} &8[{bet}&8] &7trong sòng'
-  # Sảnh kèo Xúc Xắc / Oẳn Tù Tì (/xucxac, /kbb không kèm gì)
+  # Sảnh kèo Xúc Xắc / Oẳn Tù Tì / Cờ Caro (/xucxac, /kbb, /caro không kèm gì)
   lobby:
     title: '&8Sảnh kèo {game}'
     offer:
@@ -840,6 +830,29 @@ pvp:
         - '&#FFD166Lưu ý:'
         - '&7• Bấm ESC khi đang chơi:'
         - '&f  game tự chọn, kết quả báo ở chat'
+        - '&7• Lệnh: &f/{label} <tien|gem> <mức cược>'
+    info-tictactoe:
+      lore:
+        - '&#BFC7D5Đấu 1v1, chơi ở mọi nơi'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Bàn 3x3, X đi trước'
+        - '&7  (bốc ngẫu nhiên ai cầm X)'
+        - '&7• 3 ô thẳng hàng: &#7CFC9Athắng trận'
+        - '&7• Đầy bàn chưa ai thắng: hoà,'
+        - '&7  hoàn tiền, không thuế'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tiền: &f{min} &7- &f{max}'
+        - '&7• Gem: &f{gemmin} &7- &f{gemmax}'
+        - '&7• Thuế: &f{tax}% &7tiền thắng'
+        - '&7• Kèo tự huỷ sau &f{minutes} phút'
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Hết giờ mỗi lượt:'
+        - '&f  game đánh ô ngẫu nhiên'
+        - '&7• Bấm ESC khi đang chơi:'
+        - '&f  mở lại bằng &e/casino tieptuc'
         - '&7• Lệnh: &f/{label} <tien|gem> <mức cược>'
     create:
       name: '&#7CFC9ATạo kèo mới'
