@@ -146,6 +146,7 @@ public final class BoxCasinoPlugin extends JavaPlugin {
         games.register(new com.dex.boxcasino.game.slots.SlotsGame(this));
         games.register(new com.dex.boxcasino.game.chest.ChestGame(this));
         games.register(new com.dex.boxcasino.game.crash.CrashGame(this));
+        games.register(new com.dex.boxcasino.game.pot.PotGame(this));
         games.loadAll(getLogger());
 
         Bukkit.getPluginManager().registerEvents(new GuiListener(this), this);

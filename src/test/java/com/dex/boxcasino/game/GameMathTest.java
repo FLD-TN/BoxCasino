@@ -10,6 +10,7 @@ import com.dex.boxcasino.game.lottery.LotteryGame;
 import com.dex.boxcasino.game.mines.MinesGame;
 import com.dex.boxcasino.game.slots.SlotsGame;
 import com.dex.boxcasino.game.plinko.PlinkoGame;
+import com.dex.boxcasino.game.pot.PotGame;
 import com.dex.boxcasino.game.races.RacesGame;
 import com.dex.boxcasino.game.roulette.RouletteGame;
 import com.dex.boxcasino.game.stairs.StairsGame;
@@ -164,5 +165,12 @@ class GameMathTest {
         CrashGame crash = load(new CrashGame(null), "crash");
         assertEquals(0.96, crash.rtp(), 1e-9);
         assertEquals(0.96, crash.simulate(ROUNDS, RandomGenerator.of("L64X128MixRandom")), 0.01);
+    }
+
+    @Test
+    void potReturnsAllButTheTax() {
+        PotGame pot = load(new PotGame(null), "pot");
+        assertEquals(0.95, pot.rtp(), 1e-9);
+        assertEquals(0.95, pot.simulate(ROUNDS, RandomGenerator.of("L64X128MixRandom")), 0.001);
     }
 }

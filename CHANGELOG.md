@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.16.0 - 2026-10-26
+
+- Game mới **Góp Hũ** (`pot`, Classic của Vegas): người chơi góp tiền vào chung 1 hũ, cơ hội thắng = phần mình góp /
+  cả hũ, người thắng nhận cả hũ trừ thuế 5% (hoàn trả 95%). Người đấu người: không tính Hũ Jackpot.
+  - Mỗi loại tiền một hũ (nút tiền tệ chuyển xem hũ Tiền / Gem); mỗi người chỉ góp 1 hũ một lúc.
+  - 7 ô màu: bấm ô trống để vào, bấm ô của mình để góp thêm (tối đa = `bet.<TIỀN>.max` mỗi người).
+  - Đủ 2 người: đếm ngược 30 giây (báo trong sòng), vẫn vào / góp thêm được; rồi dải màu quay, dừng ở người thắng.
+  - Chỉ có 1 người: chuột phải ô của mình để rút lại tiền; chờ quá 5 phút không ai vào thì tự hoàn tiền.
+  - Thoát server / ESC: tiền vẫn trong hũ, thắng thì trả cả khi offline; `/casino tieptuc` mở lại hũ.
+  - Máy trong world (model classic, không ghế, chữ nổi "Bàn X"); permission `boxcasino.game.pot`.
+- Vé Số: kết quả ghi vào sổ dùng số chuẩn (0.05), trước đó dùng dấu phẩy làm JSON trong cột outcome không đọc được.
+- `config.yml` (bản mặc định): `menu.games.pot`, `machines.bounds.pot`, `machines.items.pot`, `table-games` thêm pot.
+- `messages.yml`: thêm `games.pot` (tự lấy từ jar nếu thiếu). Không đổi config-version.
+- `SPEC_GAMES_2.md`: ghi trạng thái và các lựa chọn đã chốt (Đỏ Đen bỏ).
+
 ## 0.15.0 - 2026-10-26
 
 - Game mới **Tên Lửa** (`crash`, Crash của Vegas): một chuyến bay chung cho cả server, Tiền và Gem.

@@ -153,6 +153,7 @@ menu:
     slots: {slot: 25, item: 'iavegasgui:main_gui_logo_drums', material: STICK, cmd: 5658153}
     chest: {slot: 38, item: 'iavegasgui:main_gui_logo_deadmanschest', material: STICK, cmd: 5658163}
     crash: {slot: 40, item: 'iavegasgui:main_gui_logo_crash', material: STICK, cmd: 5658158}
+    pot: {slot: 42, item: 'iavegasgui:main_gui_logo_classic', material: STICK, cmd: 5658159}
   # Ô 45 có hình rương vẽ sẵn trên texture: dùng nút trong suốt đè lên.
   stats: {slot: 45, item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
   leaderboard: {slot: 47, item: 'iavegasgui:main_gui_statistics_button', material: STICK, cmd: 5658113}
@@ -179,7 +180,7 @@ broadcast:
   min-multiplier: 10
   # Kèo 1v1 mới mở: Xúc Xắc / Oẳn Tù Tì báo cả server (có nút [Nhận kèo]), Cờ Caro chỉ báo người trong sòng.
   challenges: true
-  # Đua Ngựa / Xì Dách / Tên Lửa bắt đầu đếm ngược: báo mọi người trong vùng sòng, kể cả người đang ngồi (chỉ chữ).
+  # Đua Ngựa / Xì Dách / Tên Lửa / Góp Hũ bắt đầu đếm ngược: báo mọi người trong vùng sòng, kể cả người đang ngồi (chỉ chữ).
   tables: true
   # Cùng một bàn chỉ báo lại sau số giây này (đặt rồi huỷ cược liên tục không spam chat).
   table-cooldown: 30
@@ -210,7 +211,7 @@ machines:
     # Xoay thêm model ghế (độ) nếu ghế quay lưng vào máy.
     yaw-offset: 0
     # Mỗi dòng 1 ghế: '<chair|stool> <front|back> <lệch ngang>'. front = phía admin đứng khi đặt máy.
-    # Máy không có dòng nào (Đua Ngựa, Tên Lửa) = không ghế, bấm máy mở game như cũ.
+    # Máy không có dòng nào (Đua Ngựa, Tên Lửa, Góp Hũ) = không ghế, bấm máy mở game như cũ.
     layouts:
       mines: ['chair front 0']
       plinko: ['chair front 0']
@@ -222,7 +223,7 @@ machines:
       xidach: ['stool front 1.4', 'stool front 0', 'stool front -1.4']
   # Game chơi nhiều người ở một bàn: chữ nổi / thông báo ghi "Bàn X"; các máy khác ghi "Máy X".
   # Số được đánh khi đặt máy (tăng dần theo từng game, lưu ở machines.yml).
-  table-games: [xidach]
+  table-games: [xidach, pot]
   # Chữ nổi trên máy: tên game (in hoa, màu của game) và số ghế trống. Chữ ở messages.yml > machine.holo.
   hologram:
     enabled: true
@@ -267,6 +268,7 @@ machines:
     slots: [-0.76, -2.7, -1.01, 0.76, 0.28, 1.05]
     chest: [-1.02, -2.7, -2.21, 2.01, 0.0, 1.97]
     crash: [-0.75, -2.7, -1.78, 0.75, 0.3, 0.75]
+    pot: [-0.75, -2.7, -1.78, 0.75, 0.3, 0.75]
   items:
     mines: {item: 'iavegastables:minesweeper', material: BARRIER, cmd: 66616}
     plinko: {item: 'iavegastables:pyramid', material: BARRIER, cmd: 66605}
@@ -281,3 +283,4 @@ machines:
     slots: {item: 'iavegastables:drums', material: BARRIER, cmd: 66603}
     chest: {item: 'iavegastables:deadmanschest', material: BARRIER, cmd: 66613}
     crash: {item: 'iavegastables:crash', material: BARRIER, cmd: 66608}
+    pot: {item: 'iavegastables:classic', material: BARRIER, cmd: 66609}

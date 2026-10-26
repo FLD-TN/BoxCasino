@@ -1050,6 +1050,116 @@ games:
     lost: '&#FF6B6B✘ Tên lửa nổ ở &#FFD166x{multiplier} &7- mất {bet}'
     broadcast-start: '&#FF6F91Tên Lửa &7sẽ cất cánh sau &f{seconds} giây &8- &f{player} &7vừa đặt cược'
 
+  pot:
+    name: '&#A8E063Góp Hũ'
+    description: '&#BFC7D5Góp càng nhiều, càng dễ ôm hũ'
+    info:
+      name: '&#A8E063Góp Hũ &8[&fLuật chơi&8]'
+      lore:
+        - '&#BFC7D5Người chơi góp chung 1 hũ'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Bấm một ô màu trống để vào'
+        - '&7• Bấm ô của bạn để góp thêm'
+        - '&7• Đủ 2 người: đếm ngược rồi quay'
+        - '&7• Cơ hội thắng = tiền bạn góp'
+        - '&7  chia cho cả hũ'
+        - '&7• Người thắng: &#7CFC9Anhận cả hũ'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Thuế: &f{tax}% &7cả hũ'
+        - '&7• Tối đa 7 người mỗi hũ'
+        - '&7• Tiền và Gem: 2 hũ riêng'
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Bấm ESC: &fvẫn được trả thưởng'
+        - '&7• Đang chờ 1 mình: chuột phải'
+        - '&f  ô của bạn để rút lại tiền'
+    status-empty:
+      name: '&7Hũ {currency} đang trống'
+      lore:
+        - '&#BFC7D5Bấm một ô màu bên dưới'
+        - '&#BFC7D5để góp tiền vào hũ'
+    status-waiting:
+      name: '&#A8E063Chờ người chơi &8[&f{players}/{min}&8]'
+      lore:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Hũ: {pot}'
+        - '&7• Cần ít nhất &f{min} &7người'
+        - '&7• Tự hoàn tiền sau: &f{wait}'
+    status-countdown:
+      name: '&#A8E063Quay sau &f{seconds}s'
+      lore:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Hũ: {pot}'
+        - '&7• Người thắng nhận: {prize}'
+        - '&7• Người chơi: &f{players}/{max}'
+        - ''
+        - '&#7CFC9A✔ Vẫn vào / góp thêm được'
+    status-rolling:
+      name: '&#A8E063Đang quay...'
+      lore:
+        - '&7• Hũ: {pot}'
+        - '&7• Người thắng nhận: {prize}'
+    status-result:
+      name: '&#7CFC9A{winner} &#7CFC9Athắng hũ'
+      lore:
+        - '&7• Hũ: {pot}'
+        - '&7• Nhận: {payout}'
+    pointer:
+      name: '&8Mũi chỉ'
+    pointer-color:
+      name: '&#FFD166{player}'
+    strip:
+      name: '&f{player}'
+    strip-empty:
+      name: ' '
+    spot-free:
+      name: '&fÔ màu {number} &8[&7trống&8]'
+      lore:
+        - '&7• Góp: {bet}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để vào hũ&8]'
+      lore-closed:
+        - '&8Ô trống'
+    spot-taken:
+      name: '&f{player} &8[{bet}&8]'
+      lore:
+        - '&7• Cơ hội thắng: &#FFD166{chance}'
+    spot-own:
+      name: '&#7CFC9ACủa bạn &8[{bet}&8]'
+      lore:
+        - '&7• Cơ hội thắng: &#FFD166{chance}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để góp thêm {add}&8]'
+      lore-waiting:
+        - '&7• Cơ hội thắng: &#FFD166{chance}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để góp thêm {add}&8]'
+        - '&8[&#FF8A8AChuột phải để rút lại tiền&8]'
+      lore-closed:
+        - '&7• Cơ hội thắng: &#FFD166{chance}'
+    head-empty:
+      name: ' '
+    head:
+      name: '&f{player}'
+      lore:
+        - '&7• Góp: {bet}'
+        - '&7• Cơ hội thắng: &#FFD166{chance}'
+    color-taken: '&#FF6B6B✘ Ô này của &f{player} &#FF6B6Brồi, chọn ô khác'
+    wait: '&#FF6B6B✘ Hũ đang quay, đợi lượt sau nhé'
+    in-other: '&#FF6B6B✘ Bạn đang có tiền trong hũ {currency} &7- mỗi lần chỉ góp 1 hũ'
+    entered: '&#7CFC9A✔ Đã góp {bet} &#7CFC9Avào hũ'
+    added: '&#7CFC9A✔ Góp thêm {amount} &7- phần của bạn: {bet}'
+    withdrawn: '&7Đã rút lại tiền khỏi hũ'
+    max-reached: '&#FF6B6B✘ Mỗi người góp tối đa {max} &#FF6B6Bmột hũ'
+    timeout: '&7Chờ {minutes} phút không có ai vào hũ, tiền được hoàn lại'
+    won: '&#7CFC9A✔ Bạn thắng hũ {pot} &7(cơ hội {chance}) &#7CFC9A- nhận {payout}'
+    lost: '&#FF6B6B✘ &f{player} &#FF6B6Bthắng hũ &7({payout}) &7- bạn mất {bet}'
+    broadcast-start: '&#A8E063Góp Hũ {currency} &7sẽ quay sau &f{seconds} giây &8- hũ đang có {pot}'
+
 pvp:
   usage: '&7Dùng: &f/{label} &8(xem kèo) &7| &f/{label} <tien|gem> <mức cược> &7| &f/{label} <người> <tien|gem> <mức cược>'
   in-match: '&#FF6B6B✘ Bạn đang trong một trận &7- gõ &f/casino tieptuc &7để quay lại'

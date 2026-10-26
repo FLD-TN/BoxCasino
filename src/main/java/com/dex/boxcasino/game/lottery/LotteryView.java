@@ -78,7 +78,7 @@ final class LotteryView extends GameView {
         }
         List<LotteryGame.Prize> drawn = new ArrayList<>();
         for (int i = 0; i < lottery.cells.size(); i++) drawn.add(lottery.draw(plugin.random()));
-        String outcome = drawn.stream().map(p -> Format.decimal(p.multiplier()))
+        String outcome = drawn.stream().map(p -> String.valueOf(p.multiplier()))
                 .collect(Collectors.joining(",", "{\"cells\":[", "]}"));
         Bet placed = plugin.bets().place(player, game.id(), currency(), amount(), outcome);
         if (placed == null) {

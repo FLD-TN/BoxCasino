@@ -40,6 +40,10 @@ public final class RoomService {
             ChatRoom room = g.roomOf(player);
             if (room != null) return room;
         }
+        if (plugin.games().get("pot") instanceof com.dex.boxcasino.game.pot.PotGame g) {
+            ChatRoom room = g.roomOf(player);
+            if (room != null) return room;
+        }
         return null;
     }
 

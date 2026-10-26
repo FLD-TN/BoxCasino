@@ -1,0 +1,59 @@
+# Góp Hũ (Classic của Vegas) - người chơi góp tiền vào chung 1 hũ, cơ hội thắng = phần tiền của mình / cả hũ.
+# Người thắng nhận cả hũ trừ thuế. Mỗi loại tiền (Tiền / Gem) một hũ riêng. Bố cục khớp texture classic_gui.
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 4
+enabled: true
+title: '&f:offset_-48:&f{img:iavegasgui:classic_gui}'
+fallback-title: '&#A8E063Góp Hũ'
+rows: 6
+
+# Thuế trên cả hũ (5 = người thắng nhận 95% hũ). Hoàn trả = 100 - thuế.
+tax-percent: 5
+# Đủ số người này thì đếm ngược countdown-seconds giây rồi quay. Trong lúc đếm ngược vẫn vào / góp thêm được.
+min-players: 2
+countdown-seconds: 30
+# Chỉ có 1 người mà chờ quá số phút này: hoàn tiền.
+wait-minutes: 5
+# Dải màu chạy roll-steps bước (nhanh rồi chậm dần) rồi dừng ở màu người thắng; kết quả giữ result-seconds giây.
+roll-steps: 40
+result-seconds: 5
+
+# Mức góp mỗi lần bấm = mức cược đang chọn; max = tổng tối đa của một người trong 1 hũ.
+bet:
+  MONEY: {min: 1000, max: 1000000}
+  GEM: {min: 1, max: 1000}
+
+# Màu của từng ô người chơi (theo thứ tự slots.spots).
+colors:
+  - {item: 'iavegasgui:classic_color_lime', material: LIME_CONCRETE, cmd: 5618105}
+  - {item: 'iavegasgui:classic_color_light_blue', material: LIGHT_BLUE_CONCRETE, cmd: 5618106}
+  - {item: 'iavegasgui:classic_color_yellow', material: YELLOW_CONCRETE, cmd: 5618107}
+  - {item: 'iavegasgui:classic_color_orange', material: ORANGE_CONCRETE, cmd: 5618108}
+  - {item: 'iavegasgui:classic_color_pink', material: PINK_CONCRETE, cmd: 5618109}
+  - {item: 'iavegasgui:classic_color_purple', material: PURPLE_CONCRETE, cmd: 5618110}
+  - {item: 'iavegasgui:classic_color_red', material: RED_CONCRETE, cmd: 5618111}
+
+slots:
+  bet: 45
+  currency: 53
+  info: 44
+  # Ô trạng thái (chờ / đếm ngược / đang quay / người thắng)
+  status: [4]
+  # Dải màu quay, ô giữa là mũi chỉ (số ô lẻ)
+  strip: [10, 11, 12, 13, 14, 15, 16]
+  # Đầu người chơi phía trên ô màu của họ
+  heads: [19, 20, 21, 22, 23, 24, 25]
+  # 7 ô màu: bấm ô trống để vào hũ, bấm ô của mình để góp thêm
+  spots: [37, 38, 39, 40, 41, 42, 43]
+
+items:
+  bet: {item: 'iavegasgui:classic_money_bet', material: STICK, cmd: 5618102}
+  # Nút đổi tiền tệ: icon Tiền / Gem của server (item ItemsAdder treasure:money_item / treasure:gem_item).
+  currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
+  currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
+  info: {item: 'iavegasgui:classic_info', material: STICK, cmd: 5618101}
+  status-idle: {item: 'iavegasgui:classic_button_inactive', material: STICK, cmd: 5618121}
+  status-countdown: {item: 'iavegasgui:classic_button_active', material: STICK, cmd: 5618122}
+  status-rolling: {item: 'iavegasgui:classic_button_rolling', material: STICK, cmd: 5618123}
+  status-end: {item: 'iavegasgui:classic_button_end', material: STICK, cmd: 5618124}
+  empty: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
