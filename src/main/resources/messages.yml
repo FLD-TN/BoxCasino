@@ -1,0 +1,1164 @@
+# Toàn bộ chữ hiển thị của BoxCasino. Mã màu '&' và hex '&#rrggbb'.
+# Viết theo chuẩn BoxCore / BoxClans:
+#   - Tên game viết hoa từng chữ, mỗi game một màu riêng. Tên khác viết hoa chữ đầu. Không in đậm.
+#   - Thẻ phụ trong ngoặc tối: &8[...&8]
+#   - Lore: dòng mô tả (&#BFC7D5), mục "Thông tin:" / "Lưu ý:" (&#FFD166), dòng "&7• Nhãn: giá trị",
+#     cuối cùng là các thao tác dạng &8[&#7CFC9AChuột trái để ...&8]
+#   - Tin nhắn: ✔ thành công (&#7CFC9A), ✘ lỗi (&#FF6B6B), (!) chú ý (&#FFD166), không chấm cuối câu
+#   - Tiền &#55FF55, Gem &#8245F8, hệ số &#FFD166, giá trị &f
+# Màu riêng: Dò Mìn #FF8A65, Kim Tự Tháp #F9D56E, Leo Thang #FFB86B, Vòng Quay #F78FB3, Đua Ngựa #7BED9F,
+#            Xì Dách #70A1FF, Nhà Cái #E056FD, Xúc Xắc #FFDD59, Oẳn Tù Tì #CF9FFF, Cờ Caro #5EE7DF
+# %img_money% / %img_gem% = icon ItemsAdder (cần PlaceholderAPI). Đặt &f trước icon để icon giữ đúng màu.
+# Để trống ('') một tin nhắn chat = không gửi tin đó.
+
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 8
+
+prefix: '&#6E151A[&#B32E33&lC&#B8453D&lA&#BD5B47&lS&#C37251&lI&#C8885B&lN&#CD9F65&lO&#6E151A] &r'
+
+currency:
+  money: '&#55FF55{amount}$'
+  gem: '&#8245F8{amount} {gem}'
+currency-name:
+  money: '&f%img_money% &#55FF55Tiền'
+  gem: '&f%img_gem% &#8245F8{gem}'
+
+access:
+  busy-seated: '&#FF6B6B✘ Bạn đang ngồi ở một bàn &7- mỗi lần chỉ chơi 1 game, bấm Shift để đứng dậy'
+  busy-match: '&#FF6B6B✘ Bạn đang có ván chưa xong &7- mỗi lần chỉ chơi 1 game'
+  not-loaded: '&#FF6B6B✘ Dữ liệu của bạn đang tải, thử lại sau vài giây'
+  not-in-casino: '&#FF6B6B✘ Trò này chỉ chơi được trong &#FFD166sòng bạc'
+  excluded: '&#FF6B6B✘ Bạn đang tự khóa sòng bạc &8(còn &f{time}&8)'
+  alt-blocked: '&#FF6B6B✘ Mỗi IP chỉ một tài khoản được vào sòng, tài khoản này không được chơi'
+  resting: '&#FFD166(!) Bạn đã chơi đủ giờ &7- nghỉ thêm &f{time} &7rồi quay lại nhé'
+  limit-reached: '&#FFD166(!) Đủ giờ chơi rồi &7- sòng tạm khóa với bạn trong &f{time}'
+  daily-loss: '&#FF6B6B✘ Đã chạm giới hạn lỗ hôm nay &7- còn cược được tối đa {left}'
+
+bet:
+  storage-error: '&#FF6B6B✘ Lỗi lưu dữ liệu, ván này không được tính &7- báo admin giúp nhé'
+  not-enough: '&#FF6B6B✘ Không đủ {currency} &#FF6B6Bđể đặt cược'
+  pending-paid: '&#7CFC9A✔ Bạn nhận {amount} &7từ ván chơi trước đó'
+
+game:
+  disabled: '&#FF6B6B✘ Trò này đang tạm đóng'
+
+# Nút nhạc. Placeholder: {song} số bài đang chọn, {count} tổng số bài
+music:
+  toggled-on: '&#7CFC9A✔ Đã bật nhạc sòng'
+  toggled-off: '&#FFD166(!) Đã tắt nhạc sòng &7- gõ /casino nhac để bật lại'
+  unavailable: '&#FF6B6B✘ Sòng chưa có nhạc'
+
+# Menu chọn mức cược. Placeholder: {bet} {currency} {game} {balance} {min} {max}, nút: {amount}
+bet-menu:
+  fallback-title: '&#FFD166Chọn Mức Cược'
+  display:
+    name: '&#FFD166Mức cược &8[{bet}&8]'
+    lore:
+      - '&#BFC7D5Đang chọn cho {game}'
+      - ''
+      - '&#FFD166Thông tin:'
+      - '&7• Cược bằng: {currency}'
+      - '&7• Số dư: {balance}'
+      - '&7• Cược từ {min} &7đến {max}'
+  plus:
+    name: '&#7CFC9ACộng {amount}'
+    lore:
+      - '&8[&#7CFC9AChuột trái để cộng&8]'
+  minus:
+    name: '&#FF8A8ATrừ {amount}'
+    lore:
+      - '&8[&#FF8A8AChuột trái để trừ&8]'
+  preset:
+    name: '&fCược {amount}'
+    lore:
+      - '&8[&#7CFC9AChuột trái để chọn&8]'
+  preset-selected:
+    name: '&fCược {amount} &8[&#7CFC9Ađang chọn&8]'
+    lore: []
+  min:
+    name: '&#7FDBFFTối thiểu &8[{amount}&8]'
+    lore:
+      - '&8[&#7CFC9AChuột trái để chọn&8]'
+  half:
+    name: '&#FFB86BChia đôi &8[{amount}&8]'
+    lore:
+      - '&#BFC7D5Mức cược hiện tại chia 2'
+      - ''
+      - '&8[&#7CFC9AChuột trái để chọn&8]'
+  double:
+    name: '&#FFD166Gấp đôi &8[{amount}&8]'
+    lore:
+      - '&#BFC7D5Mức cược hiện tại nhân 2'
+      - ''
+      - '&8[&#7CFC9AChuột trái để chọn&8]'
+  max:
+    name: '&#CF9FFFTối đa &8[{amount}&8]'
+    lore:
+      - '&#BFC7D5Giới hạn của game,'
+      - '&#BFC7D5hoặc số dư nếu ít hơn'
+      - ''
+      - '&8[&#7CFC9AChuột trái để chọn&8]'
+  done:
+    name: '&#7CFC9AXong &8[{bet}&8]'
+    lore:
+      - '&#BFC7D5Quay lại {game}'
+      - ''
+      - '&8[&#7CFC9AChuột trái để xong&8]'
+      - '&8[&#BFC7D5Hoặc bấm ESC&8]'
+
+# Thanh cược dùng chung. Placeholder: {bet} {currency} {other} {balance} {min} {max}
+panel:
+  bet:
+    name: '&#FFD166Mức cược &8[{bet}&8]'
+    lore:
+      - '&#BFC7D5Số tiền bạn đặt cho ván tới'
+      - ''
+      - '&#FFD166Thông tin:'
+      - '&7• Số dư: {balance}'
+      - '&7• Cược từ {min} &7đến {max}'
+      - ''
+      - '&8[&#7CFC9AChuột trái để chọn mức cược&8]'
+  currency:
+    name: '&#FFD166Cược bằng {currency}'
+    lore:
+      - '&#BFC7D5Loại tiền dùng để đặt cược'
+      - ''
+      - '&8[&#7CFC9AChuột trái để đổi sang {other}&8]'
+  rtp-rules: 'theo luật bài'
+
+games:
+  mines:
+    name: '&#FF8A65Dò Mìn'
+    description: '&#BFC7D5Mở ô, né mìn, rút tiền khi muốn'
+    info:
+      name: '&#FF8A65Dò Mìn &8[&fLuật chơi&8]'
+      lore:
+        - '&#BFC7D528 ô, mìn giấu ngẫu nhiên'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Bấm ô giữa để bắt đầu'
+        - '&7• Mỗi ô an toàn: &#FFD166hệ số tăng'
+        - '&7• Trúng mìn: &#FF6B6Bmất tiền cược'
+        - '&7• Bấm nút rút để nhận tiền'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tỉ lệ hoàn trả: &f{rtp}'
+        - '&8  (trung bình cược 100 nhận lại'
+        - '&8  đúng số % này)'
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Bấm ESC: &ftự rút tiền theo'
+        - '&f  hệ số hiện tại'
+    spot:
+      name: '&#7CFC9ABắt đầu ván mới'
+      lore:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Cược: {bet}'
+        - '&7• Số mìn: &#FF8A65{mines}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để bắt đầu&8]'
+    spot-running:
+      name: '&#FFD166Đang cược &8[{bet}&8]'
+      lore:
+        - '&#BFC7D5Chọn một ô để mở'
+      lore-cancel:
+        - '&#BFC7D5Chọn một ô để mở'
+        - ''
+        - '&8[&#FF8A8AChuột phải để huỷ, hoàn tiền&8]'
+    cell:
+      name: '&fÔ bí mật &8[&7bấm để mở&8]'
+    cell-idle:
+      name: '&8Đặt cược để chơi'
+    safe:
+      name: '&#7CFC9AAn toàn'
+    mine:
+      name: '&#FF6B6BMìn'
+    difficulty:
+      name: '&#FF8A65Độ khó {name} &8[&f{mines} mìn&8]'
+      easy: 'Dễ'
+      medium: 'Vừa'
+      hard: 'Khó'
+      lore:
+        - '&#BFC7D5Càng nhiều mìn, hệ số càng cao'
+        - ''
+        - '&8[&#7CFC9AChuột trái để chọn&8]'
+      lore-active:
+        - '&#BFC7D5Càng nhiều mìn, hệ số càng cao'
+        - ''
+        - '&#7CFC9A✔ Đang chọn'
+    lever-idle:
+      name: '&7Rút tiền'
+      lore:
+        - '&7• Ô đầu tiên: &#FFD166x{next}'
+    lever-running:
+      name: '&#7CFC9ARút tiền &8[&#FFD166x{multiplier}&8]'
+      name-none: '&7Mở ít nhất 1 ô để rút'
+      lore:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Đã mở: &f{opened} ô'
+        - '&7• Nhận ngay: {payout}'
+        - '&7• Ô kế tiếp: &#FFD166x{next}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để rút tiền&8]'
+    lever-end:
+      name: '&7Ván đã kết thúc'
+    won: '&#7CFC9A✔ Rút ở &#FFD166x{multiplier} &#7CFC9A- bạn nhận {payout}'
+    lost: '&#FF6B6B✘ Bùm! Trúng mìn &7- mất {bet}'
+    cancelled: '&7Đã huỷ ván, tiền cược được hoàn lại'
+    closed-refund: '&7Bạn đóng bảng khi chưa mở ô nào, tiền cược được hoàn lại'
+  plinko:
+    name: '&#F9D56EKim Tự Tháp'
+    description: '&#BFC7D5Thả bóng, rơi phễu nào nhận phễu đó'
+    info:
+      name: '&#F9D56EKim Tự Tháp &8[&fLuật chơi&8]'
+      lore:
+        - '&#BFC7D5Bóng rơi qua các cọc xuống 5 phễu'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Bấm ô trên cùng để thả bóng'
+        - '&7• Phễu giữa: &#FFD166hệ số cao nhất'
+        - '&7• Rê chuột lên phễu để xem tỉ lệ'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tỉ lệ hoàn trả: &f{rtp}'
+        - '&8  (trung bình cược 100 nhận lại'
+        - '&8  đúng số % này)'
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Bóng đang rơi: &fkhông thoát được,'
+        - '&f  bấm ESC giao diện tự mở lại'
+        - '&7• Ngồi ở máy, đứng dậy (Shift):'
+        - '&f  bỏ qua, nhận kết quả ngay'
+    spot:
+      name: '&#7CFC9AThả bóng'
+      lore:
+        - ''
+        - '&7• Cược: {bet}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để thả bóng&8]'
+    spot-running:
+      name: '&#FFD166Đang cược &8[{bet}&8]'
+    ball:
+      name: '&#F9D56EBóng'
+    hopper:
+      name: '&#F9D56EPhễu &8[&#FFD166x{multiplier}&8]'
+      lore:
+        - '&7• Tỉ lệ rơi vào: &f{chance}'
+    won: '&#7CFC9A✔ Bóng rơi phễu &#FFD166x{multiplier} &#7CFC9A- bạn nhận {payout}'
+    even: '&7Bóng rơi phễu &#FFD166x{multiplier} &7- hoàn lại {payout}'
+    lost: '&#FF6B6B✘ Bóng rơi phễu &#FFD166x{multiplier} &7- chỉ nhận lại {payout} &8(cược {bet}&8)'
+  stairs:
+    name: '&#FFB86BLeo Thang'
+    description: '&#BFC7D5Leo từng bậc, né TNT, rút khi muốn'
+    info:
+      name: '&#FFB86BLeo Thang &8[&fLuật chơi&8]'
+      lore:
+        - '&#BFC7D56 bậc, mỗi bậc có TNT giấu'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Bấm ô bên phải để bắt đầu'
+        - '&7• Mỗi bậc chọn 1 ô, leo từ dưới lên'
+        - '&7• Càng cao: &#FFD166hệ số càng lớn'
+        - '&7• Trúng TNT: &#FF6B6Bmất tiền cược'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tỉ lệ hoàn trả: &f{rtp}'
+        - '&8  (trung bình cược 100 nhận lại'
+        - '&8  đúng số % này)'
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Bấm ESC: &ftự rút tiền theo'
+        - '&f  hệ số hiện tại'
+    spot:
+      name: '&#7CFC9ABắt đầu ván mới'
+      lore:
+        - ''
+        - '&7• Cược: {bet}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để bắt đầu&8]'
+    spot-running:
+      name: '&#FFD166Đang cược &8[{bet}&8]'
+      lore:
+        - '&#BFC7D5Chọn 1 ô ở bậc đang sáng'
+      lore-cancel:
+        - '&#BFC7D5Chọn 1 ô ở bậc đang sáng'
+        - ''
+        - '&8[&#FF8A8AChuột phải để huỷ, hoàn tiền&8]'
+    cell-current:
+      name: '&#7CFC9ALeo lên &8[&#FFD166x{multiplier}&8]'
+    cell-clicked:
+      name: '&#7CFC9AĐã qua'
+    cell-safe:
+      name: '&7An toàn'
+    cell-tnt:
+      name: '&#FF6B6BTNT'
+    cell-boom:
+      name: '&#FF6B6BBùm!'
+    cell-locked:
+      name: '&8Chưa tới'
+    cell-idle:
+      name: '&8Đặt cược để chơi'
+    label:
+      name: '&#FFB86BBậc {row} &8[&#FFD166x{multiplier}&8]'
+      lore:
+        - '&7• &#FF8A65{tnt} TNT &7trong {width} ô'
+    lever-idle:
+      name: '&7Rút tiền'
+    lever-running:
+      name: '&#7CFC9ARút tiền &8[&#FFD166x{multiplier}&8]'
+      name-none: '&7Leo ít nhất 1 bậc để rút'
+      lore:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Đã leo: &f{rows} bậc'
+        - '&7• Nhận ngay: {payout}'
+        - '&7• Bậc kế tiếp: &#FFD166x{next}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để rút tiền&8]'
+    lever-end:
+      name: '&7Ván đã kết thúc'
+    won: '&#7CFC9A✔ Leo {rows} bậc, rút ở &#FFD166x{multiplier} &#7CFC9A- bạn nhận {payout}'
+    lost: '&#FF6B6B✘ Bùm! Trúng TNT &7- mất {bet}'
+    cancelled: '&7Đã huỷ ván, tiền cược được hoàn lại'
+    closed-refund: '&7Bạn đóng bảng khi chưa leo bậc nào, tiền cược được hoàn lại'
+  roulette:
+    name: '&#F78FB3Vòng Quay'
+    description: '&#BFC7D5Quay vòng, dừng ô thắng là ăn lớn'
+    info:
+      name: '&#F78FB3Vòng Quay &8[&fLuật chơi&8]'
+      lore:
+        - '&#BFC7D5Vòng 16 ô, dừng ô nào nhận ô đó'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Chọn độ khó bên phải'
+        - '&7• Bấm giữa vòng để quay'
+        - '&7• Ô thắng: &#FFD166hệ số cao'
+        - '&7• Ô thưởng: &#FFD166hệ số nhỏ'
+        - '&7• Ô trống: &#FF6B6Bmất tiền cược'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tỉ lệ hoàn trả: &f{rtp}'
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Vòng đang quay: &fkhông thoát được,'
+        - '&f  bấm ESC giao diện tự mở lại'
+        - '&7• Ngồi ở máy, đứng dậy (Shift):'
+        - '&f  bỏ qua, nhận kết quả ngay'
+    spot:
+      name: '&#7CFC9AQuay ngay'
+      lore:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Cược: {bet}'
+        - '&7• Ô thắng: &#FFD166x{multiplier} &8({chance})'
+        - ''
+        - '&8[&#7CFC9AChuột trái để quay&8]'
+    spot-running:
+      name: '&#FFD166Đang cược &8[{bet}&8]'
+    lever-running:
+      name: '&#F78FB3Đang quay...'
+    marker:
+      name: '&#F78FB3Đang quay...'
+    marker-stop:
+      name: '&#F78FB3Dừng ở đây &8[&#FFD166x{multiplier}&8]'
+    cell-win:
+      name: '&#7CFC9AÔ thắng &8[&#FFD166x{multiplier}&8]'
+    cell-bonus:
+      name: '&#FFB86BÔ thưởng &8[&#FFD166x{multiplier}&8]'
+    cell-empty:
+      name: '&8Ô trống'
+    bonus-label:
+      name: '&#FFB86BÔ thưởng &8[&#FFD166x{multiplier}&8]'
+      lore:
+        - '&7• Tỉ lệ dừng: &f{chance}'
+    difficulty:
+      name: '&#F78FB3Độ khó {name} &8[&7ô thắng &#FFD166x{multiplier}&8]'
+      easy: 'Dễ'
+      medium: 'Vừa'
+      hard: 'Khó'
+      lore:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tỉ lệ ô thắng: &f{chance}'
+        - '&7• Tỉ lệ hoàn trả: &f{rtp}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để chọn&8]'
+      lore-active:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tỉ lệ ô thắng: &f{chance}'
+        - '&7• Tỉ lệ hoàn trả: &f{rtp}'
+        - ''
+        - '&#7CFC9A✔ Đang chọn'
+    won: '&#7CFC9A✔ Dừng ở ô thắng &#FFD166x{multiplier} &#7CFC9A- bạn nhận {payout}'
+    bonus: '&#FFB86B✔ Dừng ở ô thưởng &#FFD166x{multiplier} &7- bạn nhận {payout}'
+    lost: '&#FF6B6B✘ Dừng ở ô trống &7- mất {bet}'
+  races:
+    name: '&#7BED9FĐua Ngựa'
+    description: '&#BFC7D5Cả server cùng cược một cuộc đua'
+    info:
+      name: '&#7BED9FĐua Ngựa &8[&fLuật chơi&8]'
+      lore:
+        - '&#BFC7D5Một cuộc đua chung cho cả server'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Bấm một con ngựa bên trái'
+        - '&7• Bấm ô dưới để đặt cược'
+        - '&7• Ngựa của bạn về nhất: &#7CFC9Athắng'
+        - '&7• Cược đầu tiên bắt đầu đếm ngược'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tỉ lệ hoàn trả: &f{rtp}'
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Bấm ESC: &fvẫn được trả thưởng'
+    horse:
+      name: '&#7BED9FNgựa số {horse}'
+      lore:
+        - ''
+        - '&7• Người cược: &f{bettors}'
+        - '&7• Thắng nhận: &#FFD166x{multiplier}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để chọn ngựa này&8]'
+      lore-winner:
+        - '&#7CFC9A✔ Về nhất'
+        - '&7• Người cược: &f{bettors}'
+    finish:
+      name: '&fVạch đích'
+    spot-choose:
+      name: '&7Chưa chọn ngựa'
+      lore:
+        - '&#BFC7D5Bấm vào một con ngựa'
+        - '&#BFC7D5ở cột bên trái trước'
+    spot:
+      name: '&#7CFC9ACược ngựa số {horse}'
+      lore:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Cược: {bet}'
+        - '&7• Thắng nhận: &#FFD166x{multiplier}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để đặt cược&8]'
+    spot-bet:
+      name: '&#FFD166Đã cược ngựa {horse} &8[{bet}&8]'
+      lore:
+        - '&7• Thắng nhận: &#FFD166x{multiplier}'
+      lore-cancel:
+        - '&7• Thắng nhận: &#FFD166x{multiplier}'
+        - ''
+        - '&8[&#FF8A8AChuột phải để huỷ, hoàn tiền&8]'
+    lever-idle:
+      name: '&7Chưa ai cược'
+      lore:
+        - '&#BFC7D5Cược đầu tiên sẽ bắt đầu'
+        - '&#BFC7D5đếm ngược cuộc đua'
+    lever-betting:
+      name: '&#7BED9FXuất phát sau &f{seconds}s'
+      lore:
+        - '&#7CFC9A✔ Vẫn còn cược được'
+    lever-racing:
+      name: '&#7BED9FĐang đua...'
+      lore: []
+    lever-result:
+      name: '&#7CFC9ANgựa số {winner} về nhất'
+      lore: []
+    placed: '&#7CFC9A✔ Đã cược {bet} &#7CFC9Acho ngựa số &f{horse}'
+    cancelled: '&7Đã huỷ cược, tiền được hoàn lại'
+    wait: '&#FF6B6B✘ Cuộc đua đang chạy, đợi vòng sau nhé'
+    choose-first: '&#FF6B6B✘ Hãy chọn một con ngựa trước'
+    won: '&#7CFC9A✔ Ngựa số {winner} về nhất &#7CFC9A- bạn nhận {payout}'
+    lost: '&#FF6B6B✘ Ngựa số {winner} về nhất &7- ngựa {horse} của bạn thua, mất {bet}'
+    broadcast-start: '&#7BED9FĐua Ngựa &7sẽ xuất phát sau &f{seconds} giây &8→ &f{player} &7vừa đặt cược'
+  xidach:
+    name: '&#70A1FFXì Dách'
+    description: '&#BFC7D5Tối đa 3 người đấu Nhà Cái'
+    info:
+      name: '&#70A1FFXì Dách &8[&fLuật chơi&8]'
+      lore:
+        - '&#BFC7D5Luật Việt Nam, đấu với &#E056FDNhà Cái'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Bấm ghế nhấp nháy để cược'
+        - '&7• Đủ &f16 điểm &7mới được dằn'
+        - '&7• Quắc (trên 21): &#FF6B6Bthua'
+        - '&8  kể cả khi Nhà Cái cũng quắc'
+        - '&7• &#E056FDNhà Cái &7rút tới khi đủ 17'
+        - ''
+        - '&#FFD166Tiền thưởng:'
+        - '&7• Xì bàn: &#FFD166x3'
+        - '&7• Xì dách, ngũ linh: &#FFD166x2'
+        - '&7• Thắng thường: &#FFD166x2'
+        - '&7• Bỏ bài: &fnhận lại 50%'
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• ESC: &fthoát giao diện, nếu không'
+        - '&f  quay lại chơi, hệ thống sẽ tự'
+        - '&f  động chơi cho bạn'
+        - '&7• Ngồi ở máy, đứng dậy (Shift):'
+        - '&#FF8A8A  bỏ cuộc, mất tiền cược'
+        - '&8  (chưa chia bài thì được hoàn tiền)'
+    rank:
+      bust: '&#FF6B6BQuắc &8({total})'
+      non: '&#FF6B6BNon &8({total})'
+      normal: '&f{total} điểm'
+      ngu_linh: '&#FFD166Ngũ linh &8({total})'
+      xi_dach: '&#FFD166Xì dách'
+      xi_ban: '&#FFD166Xì bàn'
+    seat-free:
+      name: '&8Ghế trống'
+      lore:
+        - '&8Đang chờ người chơi'
+    seat-mine:
+      name: '&#7CFC9AGhế của bạn &8[&fbấm để cược&8]'
+      lore:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Cược: {bet}'
+        - '&7• Đổi mức cược ở nút bên dưới'
+        - ''
+        - '&8[&#7CFC9AChuột trái để đặt cược&8]'
+    busy-other: '&#FF6B6B✘ Bạn đang có ván Xì Dách ở bàn khác &7- chơi xong rồi hãy ngồi'
+    stood-refund: '&#FFD166(!) Bạn đã rời bàn trước khi chia bài &7- hoàn tiền cược'
+    stood-lost: '&#FF6B6B✘ Bạn đã rời bàn giữa ván &7- bỏ cuộc, mất {bet}'
+    hint-bet: '&#FFD166Bấm vào &#7CFC9Aghế đang nhấp nháy &#FFD166bên trái để đặt cược'
+    seat-other:
+      name: '&f{player} &8[&7chưa cược&8]'
+    seat-bet:
+      name: '&f{player} &8[{bet}&8]'
+      lore:
+        - ''
+        - '&7• Bài: {hand}'
+        - '&7• Trạng thái: {state}{doubled}'
+      lore-cancel:
+        - ''
+        - '&7• Bài: {hand}'
+        - ''
+        - '&8[&#FF8A8AChuột phải để huỷ, hoàn tiền&8]'
+    state:
+      thinking: '&fĐang suy nghĩ'
+      chosen: '&#7FDBFFĐã chọn'
+      done: '&#7CFC9AĐã xong'
+      surrendered: '&7Bỏ bài'
+      doubled: ' &#FFD166(x2)'
+    status:
+      win: '&#7CFC9A{player} thắng'
+      draw: '&7{player} hòa'
+      lose: '&#FF6B6B{player} thua'
+      surrendered: '&7{player} bỏ bài'
+      lore:
+        - ''
+        - '&7• Bài: {hand}'
+        - '&7• Cược: {bet}'
+        - '&7• Nhận: {payout}'
+    card:
+      name: ' '
+    card-hidden:
+      name: '&8Bài của {player}'
+    card-dealer-hidden:
+      name: '&8Lá úp của Nhà Cái'
+    dealer:
+      name: '&#E056FDNhà Cái'
+      lore:
+        - ''
+        - '&7• Bài: {hand}'
+        - '&7• Rút tới khi đủ &f{min} điểm'
+    button:
+      hit:
+        name: '&#7CFC9ARút bài'
+        name-off: '&8Rút bài'
+        lore:
+          - '&#BFC7D5Lấy thêm 1 lá (tối đa 5 lá)'
+      stand:
+        name: '&#7FDBFFDằn'
+        name-off: '&8Dằn'
+        lore:
+          - '&#BFC7D5Dừng lại, chờ so với Nhà Cái'
+        lore-low:
+          - '&#FF6B6B✘ Cần ít nhất {min} điểm để dằn'
+      double:
+        name: '&#FFD166Gấp đôi &8[&#FFD166x2&8]'
+        name-off: '&8Gấp đôi'
+        lore:
+          - '&#BFC7D5Cược x2, rút đúng 1 lá rồi dừng'
+          - ''
+          - '&#FFD166Lưu ý:'
+          - '&7• Chỉ dùng ở lượt đầu'
+          - '&7• Dưới 16 điểm: &#FF6B6Bnon, thua'
+      surrender:
+        name: '&#FF8A8ABỏ bài'
+        name-off: '&8Bỏ bài'
+        lore:
+          - '&#BFC7D5Nhận lại một nửa tiền cược'
+          - ''
+          - '&#FFD166Lưu ý:'
+          - '&7• Chỉ dùng ở lượt đầu'
+    timer:
+      waiting: '&7Bàn {table} &8- &7chờ người cược'
+      betting: '&#70A1FFBàn {table} &8- &7chia bài sau &f{seconds}s'
+      playing: '&#70A1FFLượt chọn &8- &7còn &f{seconds}s'
+      dealer: '&#E056FDNhà Cái đang rút bài...'
+      result: '&7Ván mới sau &f{seconds}s'
+    dealer-special: '&#E056FDNhà Cái &#FF6B6Bcó {hand} &#FF6B6B- ván kết thúc ngay'
+    won: '&#7CFC9A✔ Thắng {you} &7vs &#E056FDNhà Cái &7{dealer} &#7CFC9A- nhận {payout}'
+    draw: '&7Hòa {you} &7vs &#E056FDNhà Cái &7{dealer} &7- hoàn {payout}'
+    lost: '&#FF6B6B✘ Thua {you} &7vs &#E056FDNhà Cái &7{dealer} &7- mất {bet}'
+    surrendered: '&7Bạn bỏ bài, nhận lại {payout}'
+    wait: '&#FF6B6B✘ Ván đang chơi, đợi ván sau nhé'
+    cancelled: '&7Đã huỷ cược, tiền được hoàn lại'
+    cancelled-shutdown: '&7Ván Xì Dách bị dừng do bảo trì, tiền cược đã được hoàn'
+    broadcast-start: '&#70A1FFXì Dách &8- &fbàn {table} &7sẽ chia bài sau &f{seconds} giây &8→ &7Ghế trống còn {seats}'
+  dice:
+    name: '&#FFDD59Xúc Xắc'
+    description: '&#BFC7D5Đấu 1v1, tổng 2 xúc xắc cao hơn thắng'
+    info:
+      name: '&#FFDD59Xúc Xắc &8[&fLuật chơi&8]'
+      lore:
+        - '&#BFC7D5Đấu 1v1, chơi ở mọi nơi'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Ghế trái: mở kèo của bạn'
+        - '&7• Ghế phải: nhận kèo người khác'
+        - '&7• Mỗi bên tung 2 xúc xắc'
+        - '&7• Tổng cao hơn: &#7CFC9Aăn cả 2 phần'
+        - '&7• Hòa: tự tung lại'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Thuế: &f{tax}% &7tiền thắng'
+        - '&7• Lệnh: &f/dice <tiền> <tien|gem>'
+        - '&7• Thách: &f/dice <người> <tiền> <tien|gem>'
+
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Ở bàn trong sòng: &fđang chơi'
+        - '&f  không thoát được (ESC tự mở lại)'
+        - '&7• Đứng dậy (Shift) giữa ván: &#FF8A8Athua'
+        - '&7• Chơi từ xa: &fESC thoải mái,'
+        - '&f  game tự chơi, kết quả báo ở chat'
+    tie: '&7Hòa &f{sum} điểm &7- tung lại'
+    face:
+      name: '&f{value}'
+    sum:
+      name: '&f{player} &8[&#FFDD59{sum} điểm&8]'
+    compare:
+      name: '&#7CFC9A{player} cao hơn'
+    compare-draw:
+      name: '&7Hòa'
+    lever-wait:
+      name: '&#FFDD59Tung sau &f{seconds}'
+    lever-rolling:
+      name: '&#FFDD59Đang tung &8[&7lần {attempt}&8]'
+    lever-end:
+      name: '&7Trận đã kết thúc'
+  rps:
+    name: '&#CF9FFFOẳn Tù Tì'
+    description: '&#BFC7D5Đấu 1v1, thắng 2 ván trước là thắng'
+    info:
+      name: '&#CF9FFFOẳn Tù Tì &8[&fLuật chơi&8]'
+      lore:
+        - '&#BFC7D5Đấu 1v1, chơi ở mọi nơi'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Ghế trái: mở kèo của bạn'
+        - '&7• Ghế phải: nhận kèo người khác'
+        - '&7• Búa thắng Kéo, Kéo thắng Bao,'
+        - '&7  Bao thắng Búa'
+        - '&7• Thắng 2 ván trước: &#7CFC9Athắng trận'
+        - '&7• Hết giờ chưa chọn: chọn ngẫu nhiên'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Thuế: &f{tax}% &7tiền thắng'
+        - '&7• Lệnh: &f/kbb <tiền> <tien|gem>'
+
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Ở bàn trong sòng: &fđang chơi'
+        - '&f  không thoát được (ESC tự mở lại)'
+        - '&7• Đứng dậy (Shift) giữa ván: &#FF8A8Athua'
+        - '&7• Chơi từ xa: &fESC thoải mái,'
+        - '&f  game tự chơi, kết quả báo ở chat'
+    figure:
+      rock: '&fBúa'
+      paper: '&fBao'
+      scissors: '&fKéo'
+    hidden:
+      name: '&7{player} đã chọn'
+    score:
+      name: '&f{player} &8[&#CF9FFF{score}/{need}&8]'
+    compare:
+      name: '&#7CFC9A{player} thắng ván này'
+    compare-draw:
+      name: '&7Hòa, chơi lại'
+    button:
+      name: '&#CF9FFFRa {figure}'
+      lore:
+        - '&8[&#7CFC9AChuột trái để chọn&8]'
+    lever-pick:
+      name: '&#CF9FFFChọn đi &8[&fcòn {seconds}s&8]'
+    lever-wait:
+      name: '&7Chờ đối thủ &8[&f{seconds}s&8]'
+    lever-show:
+      name: '&#CF9FFFLật bài'
+    lever-end:
+      name: '&7Trận đã kết thúc'
+  tictactoe:
+    name: '&#5EE7DFCờ Caro'
+    description: '&#BFC7D5Đấu 1v1, 3 ô thẳng hàng là thắng'
+    info:
+      name: '&#5EE7DFCờ Caro &8[&fLuật chơi&8]'
+      lore:
+        - '&#BFC7D5Đấu 1v1, chỉ chơi trong sòng'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Ghế trái: mở kèo của bạn'
+        - '&7• Ghế phải: nhận kèo người khác'
+        - '&7• Bàn 3x3, X đi trước'
+        - '&7• 3 ô thẳng hàng: &#7CFC9Athắng'
+        - '&7• Hết giờ: đánh ô ngẫu nhiên'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Thuế: &f{tax}% &7tiền thắng'
+        - '&7• Hòa: &fhoàn tiền, không thuế'
+
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Ở bàn trong sòng: &fđang chơi'
+        - '&f  không thoát được (ESC tự mở lại)'
+        - '&7• Đứng dậy (Shift) giữa ván: &#FF8A8Athua'
+        - '&7• Ngoài máy: &fESC thoải mái,'
+        - '&f  game tự chơi, kết quả báo ở chat'
+    first: '&f{player} &7cầm &#5EE7DFX &7và đi trước'
+    mark-x: 'X'
+    mark-o: 'O'
+    head:
+      lore:
+        - '&7• Cầm: &#5EE7DF{mark}'
+      lore-turn:
+        - '&7• Cầm: &#5EE7DF{mark}'
+        - '&#7CFC9A• Đến lượt &8- &fcòn {seconds}s'
+    cell-free:
+      name: '&#7CFC9AĐánh vào ô này'
+    cell-wait:
+      name: '&8Chờ lượt'
+    cell-marked:
+      name: '&#5EE7DF{mark} &8[&7{player}&8]'
+
+pvp:
+  usage: '&7Dùng: &f/{label} &8(xem kèo) &7| &f/{label} <tien|gem> <mức cược> &7| &f/{label} <người> <tien|gem> <mức cược>'
+  in-match: '&#FF6B6B✘ Bạn đang trong một trận &7- gõ &f/casino tieptuc &7để quay lại'
+  already-open: '&#FF6B6B✘ Bạn đã có một kèo đang mở ở trò này'
+  self: '&#FF6B6B✘ Không tự đấu với chính mình được'
+  limits: '&#FF6B6B✘ Mức cược phải từ {min} &#FF6B6Bđến {max}'
+  created-open: '&#7CFC9A✔ Đã mở kèo {game} &8[{bet}&8] &7- tự huỷ sau {minutes} phút nếu không ai nhận'
+  created-direct: '&#7CFC9A✔ Đã gửi lời thách {game} &8[{bet}&8] &7cho &f{player}'
+  invite: '&f{player} &7thách bạn chơi {game} &8[{bet}&8] &7- hết hạn sau {seconds} giây'
+  broadcast-open: '{game} &8- &fKèo của {player} &8[{bet}&8]'
+  broadcast-casino: '&f{player} &7vừa mở kèo {game} &8[{bet}&8] &7trong sòng'
+  # Sảnh kèo Xúc Xắc / Oẳn Tù Tì (/xucxac, /kbb không kèm gì)
+  lobby:
+    title: '&8Sảnh kèo {game}'
+    offer:
+      name: '&fKèo của {player}'
+      lore:
+        - '&#BFC7D5Đang chờ đối thủ {game}'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Mức cược: &f{bet}'
+        - '&7• Thắng nhận: &f{prize}'
+        - '&7• Thuế: &f{tax}% &7tiền thắng'
+        - '&7• Hết hạn sau: &f{time}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để nhận kèo&8]'
+    invite:
+      name: '&fKèo của {player} &8[&#FFD166Thách bạn&8]'
+      lore:
+        - '&#BFC7D5Lời thách {game} dành riêng cho bạn'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Mức cược: &f{bet}'
+        - '&7• Thắng nhận: &f{prize}'
+        - '&7• Thuế: &f{tax}% &7tiền thắng'
+        - '&7• Hết hạn sau: &f{time}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để nhận kèo&8]'
+    own:
+      name: '&#7CFC9AKèo của bạn'
+      lore:
+        - '&#BFC7D5Đang chờ người nhận kèo'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Mức cược: &f{bet}'
+        - '&7• Thắng nhận: &f{prize}'
+        - '&7• Tự huỷ sau: &f{time}'
+        - ''
+        - '&8[&#FF8A8AChuột trái để huỷ kèo&8]'
+    empty:
+      name: '&7Chưa có kèo nào'
+      lore:
+        - '&#BFC7D5Hãy là người mở kèo đầu tiên'
+        - ''
+        - '&8[&#7FDBFFBấm nút Tạo kèo bên dưới&8]'
+    info:
+      name: '{game} &8[&fLuật chơi&8]'
+    info-dice:
+      lore:
+        - '&#BFC7D5Đấu 1v1, chơi ở mọi nơi'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Mỗi bên tung 2 xúc xắc'
+        - '&7• Tổng cao hơn: &#7CFC9Aăn cả 2 phần'
+        - '&7• Hoà: tự tung lại'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tiền: &f{min} &7- &f{max}'
+        - '&7• Gem: &f{gemmin} &7- &f{gemmax}'
+        - '&7• Thuế: &f{tax}% &7tiền thắng'
+        - '&7• Kèo tự huỷ sau &f{minutes} phút'
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Bấm ESC khi đang chơi:'
+        - '&f  game tự chơi, kết quả báo ở chat'
+        - '&7• Lệnh: &f/{label} <tien|gem> <mức cược>'
+    info-rps:
+      lore:
+        - '&#BFC7D5Đấu 1v1, chơi ở mọi nơi'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Búa thắng Kéo, Kéo thắng Bao,'
+        - '&7  Bao thắng Búa'
+        - '&7• Thắng 2 ván trước: &#7CFC9Athắng trận'
+        - '&7• Hết giờ chưa chọn: chọn ngẫu nhiên'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tiền: &f{min} &7- &f{max}'
+        - '&7• Gem: &f{gemmin} &7- &f{gemmax}'
+        - '&7• Thuế: &f{tax}% &7tiền thắng'
+        - '&7• Kèo tự huỷ sau &f{minutes} phút'
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Bấm ESC khi đang chơi:'
+        - '&f  game tự chọn, kết quả báo ở chat'
+        - '&7• Lệnh: &f/{label} <tien|gem> <mức cược>'
+    create:
+      name: '&#7CFC9ATạo kèo mới'
+      lore:
+        - '&#BFC7D5Mở kèo {game} để người khác nhận'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tiền: &f{min} &7- &f{max}'
+        - '&7• Gem: &f{gemmin} &7- &f{gemmax}'
+        - '&7• Chọn loại tiền, rồi nhập mức'
+        - '&7  cược vào khung chat'
+        - ''
+        - '&8[&#7CFC9AChuột trái để tạo kèo&8]'
+    create-waiting:
+      name: '&#FFD166Bạn đang có kèo'
+      lore:
+        - '&#BFC7D5Mỗi người chỉ mở 1 kèo một lúc'
+        - ''
+        - '&8[&#7FDBFFBấm vào kèo của bạn để huỷ&8]'
+    previous: '&#7FDBFFTrang trước &8[&f{page}&8]'
+    next: '&#7FDBFFTrang sau &8[&f{page}&8]'
+    pick:
+      title: '&8Chọn loại tiền'
+      currency:
+        name: '&fCược bằng {currency}'
+        lore:
+          - '&#FFD166Thông tin:'
+          - '&7• Số dư: &f{balance}'
+          - '&7• Cược từ &f{min} &7đến &f{max}'
+          - ''
+          - '&8[&#7CFC9AChuột trái để chọn&8]'
+      back:
+        name: '&#FF8A8AQuay lại'
+        lore:
+          - '&8[&#FF8A8AChuột trái để về sảnh kèo&8]'
+    prompt: '&#FFD166(!) Nhập mức cược {game} bằng {currency} vào chat &7({min} &7- {max}&7, ví dụ 10k) &8- &7gõ &fhuy &7để huỷ'
+    prompt-invalid: '&#FF6B6B✘ Mức cược không hợp lệ &7- nhập số như 10000, 10k, 2m hoặc gõ &fhuy'
+    prompt-cancelled: '&7Đã huỷ tạo kèo'
+  button-join: '&8[&#7CFC9ANhận kèo&8]'
+  # kèo ở máy (ghế trong sòng): chỉ báo người trong sòng
+  created-machine: '&#7CFC9A✔ Đã mở kèo {game} &8[{bet}&8] &7- chờ người ngồi ghế đối diện nhận'
+  broadcast-machine: '{game} &8- &fbàn {table} &7- &f{player} &7đang chờ đối thủ &8[{bet}&8] &8→ &7Ghế trống còn {seats}'
+  machine-only: '&#FF6B6B✘ Kèo này chỉ dành cho người ngồi ghế đối diện ở bàn'
+  seated-remote: '&#FF6B6B✘ Bạn đang ngồi ở bàn trong sòng &7- đứng dậy (Shift) để nhận kèo từ xa'
+  cancelled-stand: '&#FFD166(!) Bạn đã đứng dậy, kèo ở bàn được huỷ và hoàn tiền'
+  forfeit: '&#FF8A8A(!) &f{player} &#FF8A8Ađã rời ghế giữa ván {game} &7- xử thua'
+  button-accept: '&8[&#7CFC9AChấp nhận&8]'
+  button-decline: '&8[&#FF8A8ATừ chối&8]'
+  not-found: '&#FF6B6B✘ Kèo này không còn nữa'
+  not-for-you: '&#FF6B6B✘ Kèo này không dành cho bạn'
+  creator-offline: '&#FF6B6B✘ Người mở kèo đã thoát'
+  creator-busy: '&#FF6B6B✘ Người mở kèo đang trong trận khác'
+  accepted-resume: '&#7CFC9A✔ &f{player} &#7CFC9Ađã nhận kèo {game} &7- gõ &f/casino tieptuc &7để vào bàn'
+  declined: '&7Bạn đã từ chối lời thách'
+  declined-creator: '&f{player} &7đã từ chối, tiền cược được hoàn lại'
+  cancelled: '&7Đã huỷ kèo, tiền cược được hoàn lại'
+  expired: '&7Kèo {game} &7không ai nhận, tiền cược được hoàn lại'
+  won: '&#7CFC9A✔ Bạn thắng {game} &7trước &f{opponent} &#7CFC9A- nhận {payout}'
+  lost: '&#FF6B6B✘ Bạn thua {game} &7trước &f{opponent} &7- mất {bet}'
+  draw: '&7Hòa {game} &7- hoàn {bet} &7cho mỗi bên'
+  cancelled-shutdown: '&7Trận {game} &7bị dừng do bảo trì, tiền cược đã được hoàn'
+  head:
+    you: '&#7CFC9ABạn'
+    opponent: '&#FF8A8A{player}'
+  seat:
+    name: '&f{player} &8[{bet}&8]'
+    lore: '&7• Thắng nhận {prize} &8(thuế {tax}%)'
+  status:
+    won: '&#7CFC9A{player} thắng'
+    lost: '&#FF6B6B{player} thua'
+    draw: '&7Hòa'
+    lore:
+      - '&7• Cược: {bet}'
+  # Bàn trước khi có trận: ghế trái là bạn, ghế phải là kèo của người khác
+  table:
+    you: '&#7CFC9ABạn &8[&f{player}&8]'
+    opponent: '&#FF8A8A{player}'
+    mine:
+      name: '&#7CFC9AMở kèo &8[{bet}&8]'
+      lore:
+        - '&#BFC7D5Mở kèo để người khác nhận'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Cược: {bet}'
+        - '&7• Thắng nhận: {prize} &8(thuế {tax}%)'
+        - '&7• Đổi mức cược ở nút bên dưới'
+        - ''
+        - '&8[&#7CFC9AChuột trái để mở kèo&8]'
+    waiting:
+      name: '&#FFD166Đang chờ đối thủ &8[{bet}&8]'
+      lore:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Thắng nhận: {prize}'
+        - '&7• Tự huỷ sau: &f{time}'
+        - ''
+        - '&8[&#FF8A8AChuột phải để huỷ kèo, hoàn tiền&8]'
+    none:
+      name: '&8Chưa có ai mở kèo'
+      lore:
+        - '&#BFC7D5Mở kèo ở ghế bên trái'
+        - '&#BFC7D5để chờ người khác nhận'
+    none-machine:
+      name: '&7Chưa có kèo ở bàn này'
+      lore:
+        - '&#BFC7D5Chờ người ngồi ghế đối diện'
+        - '&#BFC7D5mở kèo, hoặc tự mở kèo'
+        - '&#BFC7D5ở ghế bên trái'
+
+    offer:
+      name: '&#FFD166Kèo của {player} &8[{bet}&8]'
+      name-invite: '&#FFB86B{player} thách bạn &8[{bet}&8]'
+      lore:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Cược: {bet}'
+        - '&7• Thắng nhận: {prize}'
+        - '&7• Hết hạn sau: &f{time}'
+        - '&7• Kèo &f{index}&7/&f{count}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để nhận kèo&8]'
+        - '&8[&#7FDBFFChuột phải để xem kèo khác&8]'
+
+# Trò chuyện trong bàn
+# Rời GUI bàn khi ván đang chạy
+chat:
+  left-room: '&7Bạn vừa rời bàn, ván vẫn đang chạy'
+  button-return: '&8[&#7CFC9AQuay lại bàn&8]'
+
+menu:
+  unlimited: 'không giới hạn'
+  game:
+    name: '{game}'
+    lore:
+      - '{description}'
+      - ''
+      - '&#FFD166Thông tin:'
+      - '&7• Tỉ lệ hoàn trả: &f{rtp}'
+      - ''
+      - '&8[&#7CFC9AChuột trái để chơi&8]'
+  game-disabled:
+    name: '{game} &8[&#FF6B6Bđang đóng&8]'
+    lore:
+      - '&#FF6B6B✘ Trò này đang tạm đóng'
+  stats:
+    name: '&#7FDBFFThống kê của bạn'
+    lore:
+      - '&#BFC7D5Thắng thua của bạn ở từng trò'
+      - ''
+      - '&8[&#7CFC9AChuột trái để xem&8]'
+  leaderboard:
+    name: '&#FFD166Bảng xếp hạng'
+    lore:
+      - '&#BFC7D5Top 10 người lời nhiều nhất'
+      - ''
+      - '&8[&#7CFC9AChuột trái để xem&8]'
+  jackpot:
+    name: '&#FFD166Hũ Jackpot'
+    lore:
+      - '&#BFC7D5Nổ hũ là nhận cả hũ'
+      - ''
+      - '&#FFD166Thông tin:'
+      - '&7• Hũ Tiền: {money}'
+      - '&7• Hũ Gem: {gem}'
+      - '&7• Cơ hội nổ mỗi ván: &f{chance}'
+      - ''
+      - '&#FFD166Lưu ý:'
+      - '&7• Chỉ các trò đấu Nhà Cái'
+      - '&7• Cược tối thiểu: {min_money}'
+      - '&7  hoặc {min_gem}'
+  exclude:
+    name: '&#FF8A8ATự khóa sòng bạc'
+    lore:
+      - '&#BFC7D5Tự cấm mình chơi một thời gian'
+      - ''
+      - '&#FFD166Lưu ý:'
+      - '&7• Không tự mở lại được'
+      - ''
+      - '&8[&#7CFC9AChuột trái để chọn thời gian&8]'
+  profile:
+    name: '&#7CFC9A{player}'
+    lore:
+      - ''
+      - '&#FFD166Ví của bạn:'
+      - '&7• Tiền: {money}'
+      - '&7• Gem: {gem}'
+      - ''
+      - '&#FFD166Giới hạn:'
+      - '&7• Giờ chơi còn: &f{playtime}'
+      - '&7• Hôm nay còn được lỗ:'
+      - '&7  {loss_money}'
+      - '&7  {loss_gem}'
+
+stats:
+  title: '&8Thống kê sòng bạc'
+  back: '&#FF8A8AQuay lại'
+  empty: '&7Bạn chưa chơi ván nào'
+  plus: '&#7CFC9A+'
+  minus: '&#FF6B6B-'
+  entry:
+    name: '{game} &8[{currency}&8]'
+    lore:
+      - ''
+      - '&#FFD166Thông tin:'
+      - '&7• Số ván: &f{rounds}'
+      - '&7• Thắng &#7CFC9A{wins} &8/ &7Thua &#FF6B6B{losses} &8/ &7Hòa &f{draws}'
+      - '&7• Đã cược: {wagered}'
+      - '&7• Đã nhận: {paid}'
+      - '&7• Lời lỗ: {net}'
+      - '&7• Thắng lớn nhất: {biggest}'
+
+leaderboard:
+  title: '&8Bảng xếp hạng sòng bạc'
+  filler: '&e'
+  header:
+    name: '&#FFD166Top lời nhiều nhất &8[{currency}&8]'
+    lore:
+      - '&#BFC7D5Lời = tổng nhận - tổng cược'
+      - '&8Cập nhật mỗi 5 phút'
+  rank-1: '&#FFD166'
+  rank-2: '&#E0E0E0'
+  rank-3: '&#E2A16F'
+  rank-other: '&7'
+  entry:
+    name: '{color}#{rank} &f{player}'
+    lore:
+      - '&7• Lời: {net}'
+  empty: '&8#{rank} - chưa có ai'
+  back: '&#FF8A8AQuay lại'
+  switch:
+    name: '&#7FDBFFXem bảng {currency}'
+    lore:
+      - '&8[&#7CFC9AChuột trái để đổi loại tiền&8]'
+
+jackpot:
+  title: '&#FFD166JACKPOT'
+  subtitle: '&f{player} &7nổ hũ {amount}'
+  broadcast: '&#FFD166✔ JACKPOT &8- &f{player} &7vừa nổ hũ {amount} &7ở {game}'
+
+broadcast:
+  big-win: '&#FFD166Thắng lớn &8- &f{player} &7thắng {payout} &7ở {game} &8[&#FFD166x{multiplier}&8]'
+
+exclude:
+  title: '&8Tự khóa sòng bạc'
+  choice:
+    name: '&#FFD166Khóa {time}'
+    lore:
+      - '&8[&#7CFC9AChuột trái để chọn&8]'
+  confirm:
+    name: '&#7CFC9AXác nhận khóa'
+    lore:
+      - ''
+      - '&7• Không vào sòng được trong &f{time}'
+      - '&#FF6B6B• Không tự mở lại được'
+      - ''
+      - '&8[&#7CFC9AChuột trái để xác nhận&8]'
+  cancel:
+    name: '&#FF8A8AHuỷ'
+  done: '&#FFD166(!) Đã khóa sòng bạc với bạn trong &f{time}'
+
+# Ghế quanh máy chơi
+seat:
+  hint: '&7Bấm &fShift &7để đứng dậy &8- &7chuột phải vào máy để mở lại game'
+  hint-pvp: '&7Bấm &fShift &7để đứng dậy &8- &#FF8A8Ađứng dậy giữa ván là thua'
+  busy: '&#FF6B6B✘ Máy đang có người chơi'
+  full: '&#FF6B6B✘ Bàn đã đủ người'
+  taken: '&#FF6B6B✘ Ghế này đã có người ngồi'
+  already: '&#FF6B6B✘ Bạn đang ngồi ở ghế khác &7- bấm Shift để đứng dậy'
+  riding: '&#FF6B6B✘ Hãy xuống thú cưỡi trước khi ngồi'
+  broken: '&#FF6B6B✘ Ghế bị lỗi &7- báo admin chạy /casino admin machine refit'
+
+machine:
+  placed: '&#7CFC9A✔ Đã đặt máy {game}'
+  removed: '&#7CFC9A✔ Đã gỡ máy'
+  not-found: '&#FF6B6B✘ Hãy nhìn vào một máy (trong 6 khối)'
+  no-target: '&#FF6B6B✘ Hãy nhìn vào khối muốn đặt máy lên (trong 6 khối)'
+  blocked: '&#FF6B6B✘ Ô phía trên khối đó không trống'
+  no-model: '&#FF6B6B✘ Chưa có model máy cho {game} trong config.yml (machines.items)'
+  # Chữ nổi trên máy. {name} = tên game in hoa (màu của game)
+  holo:
+    title-machine: '{name} &8- &fMáy {number}'
+    title-table: '{name} &8- &fBàn {number}'
+    seats: '&7Ghế trống: {seats}'
+    free: '{free}&7/&f{total}'
+    free-color: '&#7CFC9A'
+    full-color: '&#FF6B6B'
+    no-seats: '&7Chuột phải vào máy để chơi'
+  dealer-reskin: '&#7CFC9A✔ Đang đổi skin cho {count} nhà cái &7- vài giây sau sẽ thấy'
+  dealer-no-plugin: '&#FF6B6B✘ Chưa có plugin ZNPCsPlus'
+  refit: '&#7CFC9A✔ Đã làm lại vùng bấm và barrier cho {count} máy &7(trong {radius} khối)'
+  refit-none: '&#FFD166(!) Không có máy nào trong {radius} khối quanh bạn'
+
+command:
+  usage: '&7Dùng: &f/casino &8| &f/casino thongke &8| &f/casino tieptuc &8| &f/casino nhac &8| &f/casino nghi <1h|1d|7d|30d>'
+  usage-nghi: '&#FF6B6B✘ Dùng: &f/casino nghi <1h|1d|7d|30d>'
+  usage-open: '&#FF6B6B✘ Dùng: &f/casino open <người chơi> <menu|tên game>'
+  player-only: '&#FF6B6B✘ Lệnh này chỉ dùng trong game'
+  no-permission: '&#FF6B6B✘ Bạn không có quyền'
+  player-not-found: '&#FF6B6B✘ Không tìm thấy người chơi &f{player}'
+  game-not-found: '&#FF6B6B✘ Không có game &f{game}'
+  nothing-running: '&7Bạn không có ván nào đang chạy'
+
+admin:
+  usage: '&7/casino admin <reload|toggle|stats|simulate|log|refund|alt|unban|jackpot|machine|dealer|debug> ...'
+  usage-machine: '&7/casino admin machine place <game> &8| &7/casino admin machine remove &8| &7/casino admin machine refit [bán kính]'
+  reloaded: '&#7CFC9A✔ Đã nạp lại BoxCasino'
+  storage-error: '&#FF6B6B✘ Lỗi đọc/ghi data.db, xem console'
+  toggled-on: '&#7CFC9A✔ Đã mở {game}'
+  toggled-off: '&#FFD166(!) Đã đóng {game} &7(đến lần reload sau)'
+  stats-header: '&#FFD166Lời lỗ của sòng &8[{range}&8]'
+  stats-empty: '&7Chưa có dữ liệu'
+  stats-row: '{game}&7: cược {wagered}&7, trả {paid}&7, sòng {net}&7, hoàn trả &f{rtp}'
+  simulate-start: '&7Đang chạy thử {game} &8({rounds} ván)...'
+  simulate-result: '{game}&7: {rounds} ván, hoàn trả thực tế &f{measured}&7, cấu hình &f{expected}'
+  log-header: '&#FFD166Lịch sử cược của {player} &8[trang {page}&8]'
+  log-row: '&8#{id} &7{time} {game} &7cược {bet} &7nhận {payout} &8{state}'
+  refunded: '&#7CFC9A✔ Đã hoàn tiền cược #{id}'
+  refund-refused: '&#FF6B6B✘ Không hoàn được #{id} &7(không tồn tại, đã xong hoặc ván đang chạy)'
+  alt-info: '&f{player}&7: {ips} IP, ngoại lệ: &f{allowed}&7, tài khoản chính: &f{mains}'
+  alt-allowed: '&#7CFC9A✔ Đã cho phép {player} vào sòng (ngoại lệ IP)'
+  alt-reset: '&#7CFC9A✔ Đã gỡ {count} IP khỏi {player} &7- tài khoản kế tiếp vào sòng sẽ thành tài khoản chính'
+  unbanned: '&#7CFC9A✔ Đã gỡ tự khóa cho {player}'
+  jackpot-show: '&#FFD166Hũ {currency}&7: {pot}'

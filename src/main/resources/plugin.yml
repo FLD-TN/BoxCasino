@@ -1,0 +1,50 @@
+name: BoxCasino
+version: '${version}'
+main: com.dex.boxcasino.BoxCasinoPlugin
+api-version: '1.21'
+author: Dex
+description: Sòng bạc của server BoxPvP (Tiền và Gem trong game, không dùng tiền thật)
+depend: [Vault, BoxCore]
+softdepend: [PlaceholderAPI, WorldGuard, ItemsAdder, DiscordSRV, Boombox, ZNPCsPlus]
+commands:
+  casino:
+    description: Mở sòng bạc
+  dice:
+    description: Xúc xắc 1v1 (chơi ở mọi nơi)
+    aliases: [xucxac]
+    permission: boxcasino.game.dice
+  oantuti:
+    description: Oẳn tù tì 1v1 (chơi ở mọi nơi)
+    aliases: [kbb]
+    permission: boxcasino.game.rps
+permissions:
+  boxcasino.game.dice:
+    default: true
+  boxcasino.game.rps:
+    default: true
+  boxcasino.game.tictactoe:
+    default: true
+  boxcasino.game.xidach:
+    default: true
+  boxcasino.use:
+    description: Dùng /casino
+    default: true
+  boxcasino.game.mines:
+    default: true
+  boxcasino.game.plinko:
+    default: true
+  boxcasino.game.stairs:
+    default: true
+  boxcasino.game.roulette:
+    default: true
+  boxcasino.game.races:
+    default: true
+  boxcasino.bypass.limits:
+    description: Bỏ qua giới hạn giờ chơi, giới hạn lỗ và tự khóa
+    default: false
+  boxcasino.bypass.ip:
+    description: Bỏ qua luật một tài khoản mỗi IP
+    default: false
+  boxcasino.admin:
+    description: Lệnh quản trị /casino admin và /casino open
+    default: op

@@ -1,0 +1,41 @@
+# Cờ Caro 3x3 1v1. Chỉ chơi trong sòng (menu /casino hoặc NPC). Bố cục khớp texture tictactoe_gui.
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 4
+enabled: true
+title: '&f:offset_-48:&f{img:iavegasgui:tictactoe_gui}'
+fallback-title: '&#5EE7DFCờ Caro'
+rows: 5
+
+tax-percent: 5
+challenge-minutes: 5
+invite-seconds: 60
+# Thời gian mỗi nước đi; hết giờ thì đánh ô ngẫu nhiên.
+turn-seconds: 10
+
+bet:
+  MONEY: {min: 1000, max: 1000000}
+  GEM: {min: 1, max: 1000}
+
+slots:
+  # Thanh cược: mức cược, đổi tiền tệ (góc dưới trái), luật chơi (góc dưới phải)
+  bet: 36
+  currency: 37
+  info: 44
+  seats: [19, 25]
+  heads: [10, 16]
+  board: [12, 13, 14, 21, 22, 23, 30, 31, 32]
+
+items:
+  bet: {item: 'iavegasgui:tictactoe_money_bet', material: STICK, cmd: 5621102}
+  # Nút đổi tiền tệ: icon Tiền / Gem của server (item ItemsAdder treasure:money_item / treasure:gem_item).
+  currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
+  currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
+  info: {item: 'iavegasgui:tictactoe_info', material: STICK, cmd: 5621101}
+  victory: {item: 'iavegasgui:tictactoe_victory', material: STICK, cmd: 5621105}
+  defeat: {item: 'iavegasgui:tictactoe_defeat', material: STICK, cmd: 5621106}
+  draw: {item: 'iavegasgui:tictactoe_draw', material: STICK, cmd: 5621107}
+  empty: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  cross: {item: 'iavegasgui:tictactoe_cross', material: STICK, cmd: 5621109}
+  circle: {item: 'iavegasgui:tictactoe_circle', material: STICK, cmd: 5621110}
+  final-cross: {item: 'iavegasgui:tictactoe_final_cross', material: STICK, cmd: 5621111}
+  final-circle: {item: 'iavegasgui:tictactoe_final_circle', material: STICK, cmd: 5621112}

@@ -1,0 +1,81 @@
+# Xì Dách - luật Việt Nam, tối đa 3 người / bàn đấu nhà cái (texture blackjack_gui có 3 ghế).
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 4
+# Mở game là được xếp vào bàn còn ghế trống; hết ghế thì tự mở bàn mới.
+enabled: true
+title: '&f:offset_-48:&f{img:iavegasgui:blackjack_gui}'
+fallback-title: '&#70A1FFXì Dách'
+rows: 6
+
+# Có người cược đầu tiên thì đếm ngược betting-seconds rồi chia bài.
+betting-seconds: 15
+# Mỗi vòng hành động (Rút / Dằn / x2 / Bỏ bài). Hết giờ: đủ min-stand thì tự dằn, chưa đủ thì tự rút.
+turn-seconds: 15
+dealer-step-ticks: 20
+result-seconds: 5
+
+# Phải đủ điểm này mới được dằn.
+min-stand: 16
+# Nhà cái rút tới khi đủ điểm này (hoặc đủ 5 lá).
+# CẢNH BÁO LẠM PHÁT - hoàn trả đo bằng mô phỏng 3 triệu ván (chiến lược cơ bản, chưa tính x2 / bỏ bài):
+#   dealer-min-stand 16 + both-bust-draw true  -> 106%  (nhà cái LỖ, in thêm tiền)
+#   dealer-min-stand 16 + both-bust-draw false -> 101,7% (nhà cái vẫn lỗ)
+#   dealer-min-stand 17 + both-bust-draw true  -> 104,1% (nhà cái lỗ)
+#   dealer-min-stand 17 + both-bust-draw false -> 97,7%  (khi xì dách x2,5, ngũ linh x3)
+# Đổi xong hãy kiểm tra bằng: /casino admin simulate xidach 2000000
+dealer-min-stand: 17
+# true: người chơi và nhà cái cùng quắc thì hòa. Rất có lợi cho người chơi (xem cảnh báo trên).
+both-bust-draw: false
+
+# Tổng tiền nhận lại khi thắng (đã gồm tiền cược). Hòa trả lại tiền cược. Bỏ bài nhận lại 50%.
+# Mặc định (xì bàn x3, xì dách x2, ngũ linh x2, thắng x2; nhà cái rút tới 17; quắc là thua): hoàn trả ~93,7%.
+# Đổi xong hãy kiểm tra hoàn trả bằng: /casino admin simulate xidach 2000000
+payouts:
+  xi-ban: 3
+  xi-dach: 2
+  ngu-linh: 2
+  win: 2
+  surrender: 0.5
+
+bet:
+  MONEY: {min: 1000, max: 1000000}
+  GEM: {min: 1, max: 1000}
+
+slots:
+  bet: 45
+  currency: 36
+  info: 53
+  # Ô ghế của từng người (bài nằm ở 5 ô bên phải).
+  seats: [0, 9, 18]
+  dealer: 27
+  hit: 47
+  stand: 48
+  timer: 49
+  double: 50
+  surrender: 51
+
+# Lá bài: id ItemsAdder theo mẫu {rank} = ace,2..10,jack,queen,king; {suit} = buba,chervi,pika,kresti.
+# Không có ItemsAdder: PAPER + custom model data = cmd-base + chất x cmd-suit-step + thứ tự (2..10, J, Q, K, A).
+cards:
+  item: 'iavegasgui:poker_card_{rank}_{suit}'
+  cmd-base: 5606102
+  cmd-suit-step: 1000
+
+items:
+  bet: {item: 'iavegasgui:blackjack_money_bet', material: STICK, cmd: 5619102}
+  # Nút đổi tiền tệ: icon Tiền / Gem của server (item ItemsAdder treasure:money_item / treasure:gem_item).
+  currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
+  currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
+  info: {item: 'iavegasgui:blackjack_info', material: STICK, cmd: 5619101}
+  # Ghế của bạn khi chưa cược: nhấp nháy giữa chip (phát sáng) và hình này.
+  seat: {item: 'iavegasgui:blackjack_bet', material: STICK, cmd: 5619109}
+  # Ghế trống của người khác: trong suốt để ghế của bạn nổi bật.
+  seat-free: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  dealer: {item: 'iavegasgui:blackjack_dealer', material: STICK, cmd: 5619110}
+  victory: {item: 'iavegasgui:blackjack_victory', material: STICK, cmd: 5619105}
+  defeat: {item: 'iavegasgui:blackjack_defeat', material: STICK, cmd: 5619106}
+  draw: {item: 'iavegasgui:blackjack_draw', material: STICK, cmd: 5619107}
+  left: {item: 'iavegasgui:blackjack_left', material: STICK, cmd: 5619108}
+  closed-card: {item: 'iavegasgui:poker_closed_card', material: PAPER, cmd: 5606101}
+  # Nút trong suốt đặt lên hình nút vẽ sẵn trên texture.
+  button: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}

@@ -1,0 +1,66 @@
+# Xúc Xắc 1v1 (thay Coinflip). Chơi ở mọi nơi: /dice, /dice <số tiền> <tien|gem>, /dice <người> <số tiền> <tien|gem>.
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 4
+# Bố cục bàn khớp texture dice_gui của pack iavegasgui.
+enabled: true
+title: '&f:offset_-48:&f{img:iavegasgui:dice_gui}'
+fallback-title: '&#FFDD59Xúc Xắc'
+rows: 6
+
+# Thuế trên tổng tiền 2 bên. Người thắng nhận 2 x cược x (1 - thuế). Hòa không thu thuế.
+tax-percent: 5
+# Kèo mở tự huỷ (hoàn tiền) sau challenge-minutes phút; lời mời trực tiếp sau invite-seconds giây.
+challenge-minutes: 5
+invite-seconds: 60
+# Hòa thì tung lại, tối đa max-rolls lần (vẫn hòa thì hoàn tiền). step-ticks: tốc độ hiện từng con xúc xắc.
+max-rolls: 10
+step-ticks: 15
+
+bet:
+  MONEY: {min: 1000, max: 1000000}
+  GEM: {min: 1, max: 1000}
+
+slots:
+  seats: [19, 25]
+  heads: [10, 16]
+  dice-left: [28, 37]
+  dice-right: [34, 43]
+  score: [21, 23]
+  compare: 22
+  lever: 13
+
+items:
+  bet: {item: 'iavegasgui:dice_money_bet', material: STICK, cmd: 5624102}
+  # Nút đổi tiền tệ: icon Tiền / Gem của server (item ItemsAdder treasure:money_item / treasure:gem_item).
+  currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
+  currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
+  info: {item: 'iavegasgui:dice_info', material: STICK, cmd: 5624101}
+  victory: {item: 'iavegasgui:dice_victory', material: STICK, cmd: 5624105}
+  defeat: {item: 'iavegasgui:dice_defeat', material: STICK, cmd: 5624106}
+  draw: {item: 'iavegasgui:dice_draw', material: STICK, cmd: 5624107}
+  compare-left: {item: 'iavegasgui:dice_round_more_left', material: STICK, cmd: 5624109}
+  compare-right: {item: 'iavegasgui:dice_round_more_right', material: STICK, cmd: 5624110}
+  compare-draw: {item: 'iavegasgui:dice_round_draw', material: STICK, cmd: 5624111}
+  lever-wait: {item: 'iavegasgui:dice_button_active', material: STICK, cmd: 5624152}
+  lever-rolling: {item: 'iavegasgui:dice_button_rolling', material: STICK, cmd: 5624153}
+  lever-end: {item: 'iavegasgui:dice_button_end', material: STICK, cmd: 5624154}
+  faces:
+    - {item: 'iavegasgui:dice_dice_cube_1', material: STICK, cmd: 5624121}
+    - {item: 'iavegasgui:dice_dice_cube_2', material: STICK, cmd: 5624122}
+    - {item: 'iavegasgui:dice_dice_cube_3', material: STICK, cmd: 5624123}
+    - {item: 'iavegasgui:dice_dice_cube_4', material: STICK, cmd: 5624124}
+    - {item: 'iavegasgui:dice_dice_cube_5', material: STICK, cmd: 5624125}
+    - {item: 'iavegasgui:dice_dice_cube_6', material: STICK, cmd: 5624126}
+  # Tổng điểm 2 đến 12.
+  sums:
+    - {item: 'iavegasgui:dice_number_2', material: STICK, cmd: 5624132}
+    - {item: 'iavegasgui:dice_number_3', material: STICK, cmd: 5624133}
+    - {item: 'iavegasgui:dice_number_4', material: STICK, cmd: 5624134}
+    - {item: 'iavegasgui:dice_number_5', material: STICK, cmd: 5624135}
+    - {item: 'iavegasgui:dice_number_6', material: STICK, cmd: 5624136}
+    - {item: 'iavegasgui:dice_number_7', material: STICK, cmd: 5624137}
+    - {item: 'iavegasgui:dice_number_8', material: STICK, cmd: 5624138}
+    - {item: 'iavegasgui:dice_number_9', material: STICK, cmd: 5624139}
+    - {item: 'iavegasgui:dice_number_10', material: STICK, cmd: 5624140}
+    - {item: 'iavegasgui:dice_number_11', material: STICK, cmd: 5624141}
+    - {item: 'iavegasgui:dice_number_12', material: STICK, cmd: 5624142}

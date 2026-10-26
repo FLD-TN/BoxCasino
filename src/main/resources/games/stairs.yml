@@ -1,0 +1,47 @@
+# Leo Thang. Bố cục khớp texture stairs_gui của pack iavegasgui: 6 hàng x 6 ô, leo từ dưới lên.
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 4
+enabled: true
+title: '&f:offset_-48:&f{img:iavegasgui:stairs_gui}'
+fallback-title: '&#FFB86BLeo Thang'
+rows: 6
+
+# Hệ số sau hàng r = rtp / xác suất qua được hàng 1..r. Mặc định (6 ô, TNT 1-1-1-2-2-3):
+# x1,14 / x1,36 / x1,64 / x2,46 / x3,69 / x7,38
+rtp: 0.95
+width: 6
+# Số TNT mỗi hàng, từ hàng dưới cùng lên (cùng độ dài với slots.rows).
+tnt: [1, 1, 1, 2, 2, 3]
+reset-ticks: 60
+
+bet:
+  MONEY: {min: 1000, max: 1000000}
+  GEM: {min: 1, max: 1000}
+
+slots:
+  bet: 25
+  currency: 16
+  info: 34
+  spot: 43
+  lever: 52
+  # Ô đầu tiên của mỗi hàng, hàng dưới cùng trước.
+  rows: [46, 37, 28, 19, 10, 1]
+  # Ô mũi tên bên trái (rê chuột xem hệ số), hàng dưới cùng trước.
+  labels: [45, 36, 27, 18, 9, 0]
+
+items:
+  bet: {item: 'iavegasgui:stairs_money_bet', material: STICK, cmd: 5615106}
+  # Nút đổi tiền tệ: icon Tiền / Gem của server (item ItemsAdder treasure:money_item / treasure:gem_item).
+  currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
+  currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
+  info: {item: 'iavegasgui:stairs_info', material: STICK, cmd: 5615105}
+  spot: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  closed: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  current: {item: 'iavegasgui:stairs_click', material: STICK, cmd: 5615102}
+  clicked: {item: 'iavegasgui:stairs_clicked', material: STICK, cmd: 5615103}
+  tnt: {item: 'iavegasgui:stairs_tnt', material: STICK, cmd: 5615104}
+  passed: {item: 'iavegasgui:stairs_background', material: STICK, cmd: 5615101}
+  label: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  lever-idle: {item: 'iavegasgui:stairs_button_inactive', material: STICK, cmd: 5615111}
+  lever-running: {item: 'iavegasgui:stairs_button_rolling', material: STICK, cmd: 5615113}
+  lever-end: {item: 'iavegasgui:stairs_button_end', material: STICK, cmd: 5615114}

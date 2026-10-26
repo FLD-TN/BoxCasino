@@ -1,0 +1,58 @@
+# Dò Mìn. Bố cục khớp texture minesweeper_gui của pack iavegasgui.
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 4
+enabled: true
+title: '&f:offset_-48:&f{img:iavegasgui:minesweeper_gui}'
+fallback-title: '&#FF8A65Dò Mìn'
+rows: 6
+
+# Tỉ lệ hoàn trả (0.97 = 97%). Hệ số sau k ô an toàn = rtp x xác suất sống sót thật.
+rtp: 0.97
+# Thời gian (tick) hiện kết quả trước khi bàn tự làm mới.
+reset-ticks: 60
+
+bet:
+  MONEY: {min: 1000, max: 1000000}
+  GEM: {min: 1, max: 1000}
+
+difficulties:
+  easy:
+    mines: 3
+    slot: 3
+    inactive: {item: 'iavegasgui:minesweeper_button_easy_1', material: STICK, cmd: 5625106}
+    active: {item: 'iavegasgui:minesweeper_button_easy_2', material: STICK, cmd: 5625107}
+    opened: {item: 'iavegasgui:minesweeper_opened_easy', material: STICK, cmd: 5625112}
+  medium:
+    mines: 7
+    slot: 4
+    inactive: {item: 'iavegasgui:minesweeper_button_medium_1', material: STICK, cmd: 5625108}
+    active: {item: 'iavegasgui:minesweeper_button_medium_2', material: STICK, cmd: 5625109}
+    opened: {item: 'iavegasgui:minesweeper_opened_medium', material: STICK, cmd: 5625113}
+  hard:
+    mines: 14
+    slot: 5
+    inactive: {item: 'iavegasgui:minesweeper_button_hard_1', material: STICK, cmd: 5625110}
+    active: {item: 'iavegasgui:minesweeper_button_hard_2', material: STICK, cmd: 5625111}
+    opened: {item: 'iavegasgui:minesweeper_opened_hard', material: STICK, cmd: 5625114}
+
+slots:
+  bet: 46
+  currency: 47
+  info: 52
+  spot: 49
+  lever: [48, 50]
+  cells: [10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34,
+          37, 38, 39, 40, 41, 42, 43]
+
+items:
+  bet: {item: 'iavegasgui:minesweeper_money_bet', material: STICK, cmd: 5625102}
+  # Nút đổi tiền tệ: icon Tiền / Gem của server (item ItemsAdder treasure:money_item / treasure:gem_item).
+  currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
+  currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
+  info: {item: 'iavegasgui:minesweeper_info', material: STICK, cmd: 5625101}
+  spot: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  closed: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  mine: {item: 'iavegasgui:minesweeper_mine', material: STICK, cmd: 5625105}
+  lever-idle: {item: 'iavegasgui:minesweeper_button_inactive', material: STICK, cmd: 5625121}
+  lever-running: {item: 'iavegasgui:minesweeper_button_rolling', material: STICK, cmd: 5625123}
+  lever-end: {item: 'iavegasgui:minesweeper_button_end', material: STICK, cmd: 5625124}

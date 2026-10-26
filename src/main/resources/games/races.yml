@@ -1,0 +1,76 @@
+# Đua Ngựa - một cuộc đua chung cho cả server. Bố cục khớp texture races_gui của pack iavegasgui.
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 4
+# Có người cược đầu tiên thì đếm ngược, hết giờ thì đua. Không ai cược thì đứng yên.
+enabled: true
+title: '&f:offset_-48:&f{img:iavegasgui:races_gui}'
+fallback-title: '&#7BED9FĐua Ngựa'
+rows: 6
+
+# Ngựa thắng nhận x3. 4 ngựa, ngẫu nhiên đều nhau -> hoàn trả 3/4 = 75%.
+multiplier: 3.0
+betting-seconds: 30
+result-seconds: 5
+# Cuộc đua dài race-steps bước, mỗi bước step-ticks tick (40 x 5 = 10 giây).
+race-steps: 40
+step-ticks: 5
+# Ngựa về đích ở cột này (0 = cột xuất phát).
+finish-column: 7
+
+bet:
+  MONEY: {min: 1000, max: 1000000}
+  GEM: {min: 1, max: 1000}
+
+slots:
+  # Nút mức cược, bên trái nút đổi tiền tệ
+  bet: 51
+  currency: 52
+  info: 53
+  spot: 49
+  lever: [48, 50]
+  # Ô xuất phát của từng làn (ngựa 1-4). Bấm vào để chọn ngựa.
+  lanes: [9, 18, 27, 36]
+  # Cờ đích (cột cuối).
+  flags: [17, 26, 35, 44]
+
+horses:
+  '1':
+    idle: {item: 'iavegasgui:races_horse_1_inactive', material: STICK, cmd: 5613121}
+    choose: {item: 'iavegasgui:races_horse_1_choose', material: STICK, cmd: 5613122}
+    selected: {item: 'iavegasgui:races_horse_1_selected', material: STICK, cmd: 5613123}
+    running: {item: 'iavegasgui:races_horse_1_rolling', material: STICK, cmd: 5613124}
+  '2':
+    idle: {item: 'iavegasgui:races_horse_2_inactive', material: STICK, cmd: 5613131}
+    choose: {item: 'iavegasgui:races_horse_2_choose', material: STICK, cmd: 5613132}
+    selected: {item: 'iavegasgui:races_horse_2_selected', material: STICK, cmd: 5613133}
+    running: {item: 'iavegasgui:races_horse_2_rolling', material: STICK, cmd: 5613134}
+  '3':
+    idle: {item: 'iavegasgui:races_horse_3_inactive', material: STICK, cmd: 5613141}
+    choose: {item: 'iavegasgui:races_horse_3_choose', material: STICK, cmd: 5613142}
+    selected: {item: 'iavegasgui:races_horse_3_selected', material: STICK, cmd: 5613143}
+    running: {item: 'iavegasgui:races_horse_3_rolling', material: STICK, cmd: 5613144}
+  '4':
+    idle: {item: 'iavegasgui:races_horse_4_inactive', material: STICK, cmd: 5613151}
+    choose: {item: 'iavegasgui:races_horse_4_choose', material: STICK, cmd: 5613152}
+    selected: {item: 'iavegasgui:races_horse_4_selected', material: STICK, cmd: 5613153}
+    running: {item: 'iavegasgui:races_horse_4_rolling', material: STICK, cmd: 5613154}
+
+items:
+  bet: {item: 'iavegasgui:races_money_bet', material: STICK, cmd: 5613102}
+  # Nút đổi tiền tệ: icon Tiền / Gem của server (item ItemsAdder treasure:money_item / treasure:gem_item).
+  currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
+  currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
+  info: {item: 'iavegasgui:races_info', material: STICK, cmd: 5613101}
+  spot: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  flag-a: {item: 'iavegasgui:races_finish_black', material: STICK, cmd: 5613105}
+  flag-b: {item: 'iavegasgui:races_finish_white', material: STICK, cmd: 5613106}
+  lever-idle: {item: 'iavegasgui:races_button_inactive', material: STICK, cmd: 5613161}
+  lever-choose: {item: 'iavegasgui:races_button_choose', material: STICK, cmd: 5613162}
+  lever-betting: {item: 'iavegasgui:races_button_active', material: STICK, cmd: 5613163}
+  lever-racing: {item: 'iavegasgui:races_button_rolling', material: STICK, cmd: 5613164}
+  lever-end: {item: 'iavegasgui:races_button_end', material: STICK, cmd: 5613165}
+  # Hình đếm ngược 3 giây cuối (giây 1, 2, 3).
+  countdown:
+    - {item: 'iavegasgui:races_number_1', material: STICK, cmd: 5613107}
+    - {item: 'iavegasgui:races_number_2', material: STICK, cmd: 5613108}
+    - {item: 'iavegasgui:races_number_3', material: STICK, cmd: 5613109}

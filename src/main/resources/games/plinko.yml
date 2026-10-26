@@ -1,0 +1,38 @@
+# Kim Tự Tháp (Plinko). Bố cục khớp texture pyramid_gui của pack iavegasgui: bóng thả từ ô 4, 5 phễu ở hàng dưới.
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 4
+enabled: true
+title: '&f:offset_-48:&f{img:iavegasgui:pyramid_gui}'
+fallback-title: '&#F9D56EKim Tự Tháp'
+rows: 6
+
+# 5 phễu từ trái sang phải. Trọng số = tỉ lệ rơi (không cần cộng đủ 100). RTP = tổng (tỉ lệ x hệ số).
+# Mặc định: 22.5% x0.4 + 20% x0.8 + 15% x3 + 20% x0.8 + 22.5% x0.4 = 95%.
+hoppers:
+  weights: [22.5, 20, 15, 20, 22.5]
+  multipliers: [0.4, 0.8, 3.0, 0.8, 0.4]
+
+# Tốc độ bóng (tick mỗi bước) và thời gian giữ kết quả.
+step-ticks: 5
+reset-ticks: 20
+
+bet:
+  MONEY: {min: 1000, max: 1000000}
+  GEM: {min: 1, max: 1000}
+
+slots:
+  bet: 0
+  currency: 17
+  info: 8
+  spot: 4
+  hoppers: [45, 47, 49, 51, 53]
+
+items:
+  bet: {item: 'iavegasgui:pyramid_money_bet', material: STICK, cmd: 5614104}
+  # Nút đổi tiền tệ: icon Tiền / Gem của server (item ItemsAdder treasure:money_item / treasure:gem_item).
+  currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
+  currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
+  info: {item: 'iavegasgui:pyramid_info', material: STICK, cmd: 5614103}
+  spot: {item: 'iavegasgui:pyramid_bet', material: STICK, cmd: 5614102}
+  ball: {item: 'iavegasgui:pyramid_ball', material: STICK, cmd: 5614101}
+  hopper: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}

@@ -1,0 +1,56 @@
+# Oẳn Tù Tì 1v1. Chơi ở mọi nơi: /oantuti (/kbb), /kbb <số tiền> <tien|gem>, /kbb <người> <số tiền> <tien|gem>.
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 4
+# Bố cục khớp texture rockpaperscissors_gui của pack iavegasgui.
+enabled: true
+title: '&f:offset_-48:&f{img:iavegasgui:rockpaperscissors_gui}'
+fallback-title: '&#CF9FFFOẳn Tù Tì'
+rows: 6
+
+tax-percent: 5
+challenge-minutes: 5
+invite-seconds: 60
+# Thắng đủ games-to-win ván là thắng trận. turn-seconds: thời gian chọn mỗi ván (hết giờ chọn ngẫu nhiên).
+games-to-win: 2
+turn-seconds: 10
+show-seconds: 2
+
+bet:
+  MONEY: {min: 1000, max: 1000000}
+  GEM: {min: 1, max: 1000}
+
+slots:
+  seats: [28, 34]
+  heads: [19, 25]
+  figure: [21, 23]
+  score: [39, 41]
+  compare: 22
+  lever: 40
+  buttons-rock: [45, 51]
+  buttons-paper: [46, 52]
+  buttons-scissors: [47, 53]
+
+items:
+  bet: {item: 'iavegasgui:rockpaperscissors_money_bet', material: STICK, cmd: 5620102}
+  # Nút đổi tiền tệ: icon Tiền / Gem của server (item ItemsAdder treasure:money_item / treasure:gem_item).
+  currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
+  currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
+  info: {item: 'iavegasgui:rockpaperscissors_info', material: STICK, cmd: 5620101}
+  victory: {item: 'iavegasgui:rockpaperscissors_victory', material: STICK, cmd: 5620105}
+  defeat: {item: 'iavegasgui:rockpaperscissors_defeat', material: STICK, cmd: 5620106}
+  draw: {item: 'iavegasgui:rockpaperscissors_round_draw', material: STICK, cmd: 5620110}
+  rock: {item: 'iavegasgui:rockpaperscissors_figure_rock', material: STICK, cmd: 5620111}
+  paper: {item: 'iavegasgui:rockpaperscissors_figure_paper', material: STICK, cmd: 5620112}
+  scissors: {item: 'iavegasgui:rockpaperscissors_figure_scissors', material: STICK, cmd: 5620113}
+  hidden: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  compare-left: {item: 'iavegasgui:rockpaperscissors_round_more_left', material: STICK, cmd: 5620108}
+  compare-right: {item: 'iavegasgui:rockpaperscissors_round_more_right', material: STICK, cmd: 5620109}
+  compare-draw: {item: 'iavegasgui:rockpaperscissors_round_draw', material: STICK, cmd: 5620110}
+  lever: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  numbers:
+    - {item: 'iavegasgui:rockpaperscissors_number_0', material: STICK, cmd: 5620120}
+    - {item: 'iavegasgui:rockpaperscissors_number_1', material: STICK, cmd: 5620121}
+    - {item: 'iavegasgui:rockpaperscissors_number_2', material: STICK, cmd: 5620122}
+    - {item: 'iavegasgui:rockpaperscissors_number_3', material: STICK, cmd: 5620123}
+    - {item: 'iavegasgui:rockpaperscissors_number_4', material: STICK, cmd: 5620124}
+    - {item: 'iavegasgui:rockpaperscissors_number_5', material: STICK, cmd: 5620125}

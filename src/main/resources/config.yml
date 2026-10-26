@@ -1,0 +1,269 @@
+# BoxCasino - cấu hình chung. Chữ hiển thị nằm ở messages.yml, từng game ở games/<game>.yml.
+# Sau khi sửa: /casino admin reload (mọi ván đang chơi sẽ được chốt hoặc hoàn tiền trước khi nạp lại).
+
+# Không sửa dòng này. Khi bản plugin mới có số cao hơn, file cũ được chuyển vào old-configs/ rồi tạo file mới.
+config-version: 2
+
+access:
+  # Các game trong sòng chỉ mở được khi đứng trong một trong các vùng WorldGuard này (tên vùng, chữ thường).
+  regions: [casino]
+  # true: NPC (lệnh console /casino open) mở được game cho người đứng ngoài vùng.
+  npc-ignores-region: false
+
+# Giới hạn giờ chơi: chỉ tính lúc đang mở GUI casino. Chơi đủ play-minutes thì phải nghỉ rest-minutes.
+# Đang giữa ván thì cho chơi hết ván. Nghỉ xong đồng hồ đếm lại từ 0. Tính chung theo tài khoản chính của IP.
+play-limit:
+  enabled: true
+  play-minutes: 180
+  rest-minutes: 60
+
+# Lỗ ròng tối đa mỗi ngày (tiền cược - tiền nhận lại). 0 = tắt. Qua ngày mới (theo timezone) thì tính lại.
+daily-loss-limit:
+  MONEY: 5000000
+  GEM: 2000
+
+timezone: Asia/Ho_Chi_Minh
+
+# Mỗi người chỉ được xử lý 1 cú click trong khoảng này (tick, 20 tick = 1 giây). Chống autoclicker.
+click-cooldown-ticks: 4
+
+# Lịch sử cược (ledger) cũ hơn số ngày này bị xoá.
+log-retention-days: 90
+
+# Hình chip theo mức cược (chỉ là hình minh hoạ, không phải item thật): mức cược dùng hình của mệnh giá lớn nhất
+# không vượt quá nó. item: id ItemsAdder; material + cmd: dùng khi không có ItemsAdder.
+chips:
+  MONEY:
+    '1000': {item: 'iavegasgui:chip_1', material: DIAMOND, cmd: 5680101}
+    '5000': {item: 'iavegasgui:chip_2', material: DIAMOND, cmd: 5680102}
+    '10000': {item: 'iavegasgui:chip_3', material: DIAMOND, cmd: 5680103}
+    '50000': {item: 'iavegasgui:chip_4', material: DIAMOND, cmd: 5680104}
+    '100000': {item: 'iavegasgui:chip_5', material: DIAMOND, cmd: 5680105}
+  GEM:
+    '1': {item: 'iavegasgui:chip_6', material: DIAMOND, cmd: 5680106}
+    '5': {item: 'iavegasgui:chip_7', material: DIAMOND, cmd: 5680107}
+    '10': {item: 'iavegasgui:chip_8', material: DIAMOND, cmd: 5680108}
+    '50': {item: 'iavegasgui:chip_9', material: DIAMOND, cmd: 5680109}
+    '100': {item: 'iavegasgui:chip_10', material: DIAMOND, cmd: 5680110}
+
+# Âm thanh trong GUI (bấm nút, thắng, thua...). Người chơi không muốn nghe thì chỉnh âm lượng trong game.
+game-sounds: true
+# ESC khi ván chưa được thoát (bóng đang rơi, vòng đang quay, trận 1v1 ở máy): GUI tự mở lại sau số tick này.
+# Trong lúc đó bấm Shift đứng dậy khỏi ghế thì bỏ qua (Kim Tự Tháp / Vòng Quay ra kết quả ngay, trận 1v1 bị xử thua).
+esc-reopen-ticks: 8
+
+# Hiệu ứng khi thắng (mọi game): pháo hoa bắn lên từ người thắng (không gây sát thương) và tiếng đếm tiền.
+effects:
+  win:
+    enabled: true
+    firework: true
+    # 0 = nổ ngay trên đầu, 1-3 = bay cao hơn.
+    firework-power: 1
+    # Mỗi dòng: 'âm thanh:âm lượng:cao độ:trễ (tick)'. Âm thanh vanilla hoặc âm thanh trong pack
+    # (vd 'boxcasino:effects.cash:1:1:0' nếu thêm file .ogg vào pack).
+    sounds:
+      - 'item.book.page_turn:0.9:1.8:0'
+      - 'item.book.page_turn:0.9:1.9:2'
+      - 'item.book.page_turn:0.9:1.8:4'
+      - 'item.book.page_turn:0.9:2.0:6'
+      - 'item.book.page_turn:0.9:1.9:8'
+      - 'entity.experience_orb.pickup:0.8:1.2:11'
+      - 'block.note_block.bell:0.6:1.6:13'
+
+# Nhạc sòng. Nhạc nền lặp lại khi đứng trong vùng casino (area); ai không muốn nghe gõ /casino nhac.
+# Đoạn nhạc ngắn khi thắng / thua / hoà / nổ hũ phát trong mọi game (results-enabled, tắt ở đây).
+# Hai loại bài:
+#   - Nhạc thật trong resource pack (.ogg): {sound: 'namespace:ten', length: số giây}. Không cần plugin nào thêm.
+#     File để ở pack/boxcasino/resourcepack/boxcasino/sounds/music/<ten>.ogg và khai báo trong sounds.json cạnh đó.
+#   - Nhạc nốt .nbs (cần plugin Boombox, không có thì bị bỏ qua): ghi tên file không đuôi, file ở
+#     plugins/BoxCasino/music (nhạc của Vegas). Đoạn nhạc thắng / thua (results) cũng là .nbs.
+music:
+  enabled: true
+  # Người chơi mới: nhạc bật sẵn hay không (mỗi người bật / tắt bằng nút nhạc, được nhớ ở music-players.yml).
+  default-on: true
+  volume: 50
+  # Phát nhạc nền khi đứng trong vùng casino (access.regions).
+  area: true
+  # Phát nhạc nền cả khi mở GUI sòng ở ngoài vùng casino (Xúc Xắc / Oẳn Tù Tì từ xa).
+  in-gui: false
+  # Đoạn nhạc thắng / thua (.nbs, cần Boombox).
+  results-enabled: true
+  # Rời vùng casino bao nhiêu giây thì nhạc nền dừng.
+  grace-seconds: 3
+  # Nhạc nền: bài đầu tiên phát trong sòng (các bài sau để dự phòng khi bài đầu không phát được).
+  backgrounds:
+    - {sound: 'boxcasino:music.casino_1', length: 102}
+    - background_1
+    - background_2
+    - background_3
+    - background_4
+  # Thắng với hệ số từ mức này trở lên dùng nhạc big-win.
+  big-win-multiplier: 5
+  results:
+    win: victory
+    lose: defeat
+    draw: draw
+    big-win: bonus
+    jackpot: jackpot
+
+# Menu chọn mức cược (bấm nút Mức cược trong game). Nền shop_gui của pack Vegas (chữ CƯỢC), lưới 7x5:
+#   hàng 2: nút trừ (trái) - mức đang chọn (giữa) - nút cộng (phải), mỗi nút một bước trong steps (tối đa 3)
+#   hàng 3: các mức có sẵn (tối đa 7, mức nằm ngoài giới hạn cược của game bị ẩn)
+#   hàng 4: Tối thiểu, Chia đôi, Gấp đôi, Tối đa (tối đa = giới hạn của game hoặc số dư nếu ít hơn)
+#   hàng 5: Xong (ổ khoá bên phải nền cũng là nút Xong). ESC cũng quay lại game.
+bet-menu:
+  title: '&f:offset_-48:&f{img:iavegasgui:shop_gui}'
+  steps:
+    MONEY: [1000, 10000, 100000]
+    GEM: [1, 10, 100]
+  presets:
+    MONEY: [1000, 5000, 10000, 50000, 100000, 500000, 1000000]
+    GEM: [1, 5, 10, 50, 100, 500, 1000]
+  items:
+    plus: {item: 'boxcasino:bet_plus', material: LIME_STAINED_GLASS_PANE, cmd: 0}
+    minus: {item: 'boxcasino:bet_minus', material: RED_STAINED_GLASS_PANE, cmd: 0}
+    min: {item: 'boxcasino:bet_min', material: BLUE_DYE, cmd: 0}
+    half: {item: 'boxcasino:bet_half', material: ORANGE_DYE, cmd: 0}
+    double: {item: 'boxcasino:bet_double', material: YELLOW_DYE, cmd: 0}
+    max: {item: 'boxcasino:bet_max', material: PURPLE_DYE, cmd: 0}
+    done: {item: 'boxcasino:bet_done', material: LIME_DYE, cmd: 0}
+    done-tab: {item: 'iavegasgui:empty_button', material: LIME_DYE, cmd: 0}
+
+# Menu /casino (texture main_gui của pack). Mỗi game cách nhau 1 ô:
+#   hàng 2: game 1 người   -> Dò Mìn, Kim Tự Tháp, Leo Thang, Vòng Quay
+#   hàng 3: bàn chung       -> Đua Ngựa, Xì Dách
+#   hàng 4: đấu 1v1         -> Xúc Xắc, Oẳn Tù Tì, Cờ Caro
+#   hàng 6: Thống kê, Bảng xếp hạng, Hồ sơ, Hũ Jackpot, Tự khóa
+# {img:namespace:id} = font image ItemsAdder; :offset_-48: để ItemsAdder tự thay.
+menu:
+  title: '&f:offset_-48:&f{img:iavegasgui:main_gui}'
+  fallback-title: '&#E056FDSòng Bạc'
+  rows: 6
+  games:
+    mines: {slot: 10, item: 'iavegasgui:main_gui_logo_minesweeper', material: STICK, cmd: 5658166}
+    plinko: {slot: 12, item: 'iavegasgui:main_gui_logo_pyramid', material: STICK, cmd: 5658155}
+    stairs: {slot: 14, item: 'iavegasgui:main_gui_logo_stairs', material: STICK, cmd: 5658156}
+    roulette: {slot: 16, item: 'iavegasgui:main_gui_logo_roulette', material: STICK, cmd: 5658151}
+    races: {slot: 21, item: 'iavegasgui:main_gui_logo_races', material: STICK, cmd: 5658154}
+    xidach: {slot: 23, item: 'iavegasgui:main_gui_logo_blackjack', material: STICK, cmd: 5658160}
+    dice: {slot: 29, item: 'iavegasgui:main_gui_logo_dice', material: STICK, cmd: 5658165}
+    rps: {slot: 31, item: 'iavegasgui:main_gui_logo_rockpaperscissors', material: STICK, cmd: 5658161}
+    tictactoe: {slot: 33, item: 'iavegasgui:main_gui_logo_tictactoe', material: STICK, cmd: 5658162}
+  # Ô 45 có hình rương vẽ sẵn trên texture: dùng nút trong suốt đè lên.
+  stats: {slot: 45, item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  leaderboard: {slot: 47, item: 'iavegasgui:main_gui_statistics_button', material: STICK, cmd: 5658113}
+  profile: {slot: 49, material: PLAYER_HEAD}
+  jackpot: {slot: 51, item: 'iavegasgui:chip_5', material: DIAMOND, cmd: 5680105}
+  exclude: {slot: 53, material: CLOCK}
+
+# Hũ Jackpot: mỗi loại tiền một hũ. contribute-percent % tiền thua ở game nhà cái (không tính 1v1) được bỏ vào hũ.
+# Mỗi ván game nhà cái có cược >= min-bet có chance-percent % cơ hội nổ hũ (nhận cả hũ, ngoài kết quả ván).
+jackpot:
+  enabled: true
+  contribute-percent: 1
+  chance-percent: 0.05
+  min-bet:
+    MONEY: 10000
+    GEM: 10
+
+# Thông báo cả server khi thắng lớn: lời >= min-profit, hoặc hệ số >= min-multiplier và lời >= 10% min-profit.
+broadcast:
+  enabled: true
+  min-profit:
+    MONEY: 1000000
+    GEM: 1000
+  min-multiplier: 10
+  # Kèo 1v1 mới mở: Xúc Xắc / Oẳn Tù Tì báo cả server (có nút [Nhận kèo]), Cờ Caro chỉ báo người trong sòng.
+  challenges: true
+  # Đua Ngựa / Xì Dách bắt đầu đếm ngược: báo mọi người trong vùng sòng, kể cả người đang ngồi (chỉ chữ).
+  tables: true
+  # Cùng một bàn chỉ báo lại sau số giây này (đặt rồi huỷ cược liên tục không spam chat).
+  table-cooldown: 30
+
+# Máy chơi đặt trong world: /casino admin machine place <game> (nhìn vào khối sàn, máy đứng lên khối đó),
+# /casino admin machine remove (nhìn vào máy), /casino admin machine refit [bán kính] (làm lại vùng bấm + barrier
+# của các máy đã đặt quanh bạn theo bounds bên dưới, model giữ nguyên chỗ - dùng cho máy đặt từ bản cũ).
+# Cần cài pack máy (iavegastables) vào ItemsAdder.
+machines:
+  display: HEAD
+  # Phóng to / thu nhỏ model (vùng bấm và barrier tự theo). 0.625 = đúng cỡ như plugin Vegas gốc.
+  scale: 1.0
+  # Nâng / hạ model thêm (khối) khi đặt máy mới, nếu thấy model lơ lửng hoặc lún xuống sàn.
+  y-adjust: 0.0
+  # Đặt barrier dưới chân model để không đi xuyên máy (1 lớp cho bàn thấp, 2 lớp cho máy cao).
+  place-barrier: true
+  # Ghế quanh máy (pack boxcasino: casino_chair, casino_stool). Đặt cùng máy; máy cũ thêm ghế bằng lệnh refit.
+  # Chuột phải ghế = ngồi ghế đó, chuột phải máy = ngồi ghế trống ngẫu nhiên, rồi mở game.
+  # ESC / E chỉ đóng GUI (chuột phải máy để mở lại). Shift = đứng dậy, rời bàn; đứng dậy giữa ván 1v1 là thua.
+  seats:
+    chair: {item: 'boxcasino:casino_chair', material: OAK_STAIRS, cmd: 0}
+    stool: {item: 'boxcasino:casino_stool', material: OAK_SLAB, cmd: 0}
+    # Khoảng cách từ mặt máy tới tâm ghế (khối).
+    gap: 0.55
+    # Độ cao chỗ ngồi so với sàn (khối) - chỉnh nếu người ngồi bị lún / lơ lửng.
+    sit-height: 0.8
+    scale: 1.3
+    # Xoay thêm model ghế (độ) nếu ghế quay lưng vào máy.
+    yaw-offset: 0
+    # Mỗi dòng 1 ghế: '<chair|stool> <front|back> <lệch ngang>'. front = phía admin đứng khi đặt máy.
+    # Máy không có dòng nào (Đua Ngựa) = không ghế, bấm máy mở game như cũ.
+    layouts:
+      mines: ['chair front 0']
+      plinko: ['chair front 0']
+      stairs: ['chair front 0']
+      roulette: ['chair front 0']
+      xidach: ['stool front 1.4', 'stool front 0', 'stool front -1.4']
+      tictactoe: ['stool front 0', 'stool back 0']
+  # Game chơi nhiều người ở một bàn: chữ nổi / thông báo ghi "Bàn X"; các máy khác ghi "Máy X".
+  # Số được đánh khi đặt máy (tăng dần theo từng game, lưu ở machines.yml).
+  table-games: [xidach, tictactoe]
+  # Chữ nổi trên máy: tên game (in hoa, màu của game) và số ghế trống. Chữ ở messages.yml > machine.holo.
+  hologram:
+    enabled: true
+    # Cao hơn đỉnh model bao nhiêu khối.
+    height: 0.5
+    scale: 1.0
+    shadow: true
+    # Màu nền dạng AARRGGBB (vd '40000000' = đen mờ); để trống = nền mặc định của Minecraft.
+    background: ''
+    # Khoảng cách chữ tới viền nền: số dấu cách thêm vào 2 bên mỗi dòng (ngang)
+    # và số dòng trống thêm phía trên / dưới (dọc, 1 dòng trống khá cao - thường để 0).
+    padding: 3
+    padding-lines: 0
+  # NPC nhà cái (cần plugin ZNPCsPlus, không có thì máy không có nhà cái). Đặt cùng máy; máy cũ: lệnh refit.
+  dealers:
+    enabled: true
+    name: '&#E056FDNhà Cái'
+    # Skin: cách chắc chắn là dán texture + signature (lấy ở mineskin.org: tải file png lên, chép "Texture Value"
+    # và "Texture Signature"), rồi /casino admin dealer để đổi skin cho mọi nhà cái.
+    texture: ''
+    signature: ''
+    # Không có texture / signature: dùng file png trong plugins/ZNPCsPlus/skins (casino_dealer.png được chép sẵn),
+    # ZNPCsPlus gửi lên MineSkin - có thể bị MineSkin từ chối, khi đó nhà cái không có skin.
+    skin: casino_dealer.png
+    # '<back|left|right> <khoảng cách>': back = phía sau bàn đối diện người chơi, left / right = bên cạnh máy.
+    positions:
+      xidach: 'back 0.4'
+      roulette: 'right 0.6'
+  # Hộp bao model so với tâm của nó, ở scale 1 (khối): [minX, minY, minZ, maxX, maxY, maxZ].
+  # Đo từ file model của pack iavegastables (HEAD). Vùng bấm phủ đúng hộp này, bàn rộng có nhiều ô bấm.
+  bounds:
+    mines: [-0.66, -2.7, -0.66, 0.66, 0.3, 0.71]
+    plinko: [-0.76, -2.69, -0.85, 0.76, 0.33, 1.04]
+    stairs: [-0.74, -2.7, -0.8, 0.74, 0.28, 0.74]
+    roulette: [-0.79, -2.91, -1.49, 1.05, -1.15, 1.05]
+    races: [-0.65, -2.7, -0.65, 0.65, -1.39, 1.21]
+    xidach: [-2.23, -2.7, -1.68, 2.23, -1.1, 0.74]
+    dice: [-0.76, -2.69, -0.88, 0.76, -1.38, 0.76]
+    rps: [-0.75, -2.7, -0.38, 0.75, 0.3, 1.0]
+    tictactoe: [-0.76, -2.69, -0.76, 0.76, -1.51, 0.76]
+  items:
+    mines: {item: 'iavegastables:minesweeper', material: BARRIER, cmd: 66616}
+    plinko: {item: 'iavegastables:pyramid', material: BARRIER, cmd: 66605}
+    stairs: {item: 'iavegastables:stairs', material: BARRIER, cmd: 66606}
+    roulette: {item: 'iavegastables:roulette', material: BARRIER, cmd: 66601}
+    races: {item: 'iavegastables:races', material: BARRIER, cmd: 66604}
+    xidach: {item: 'iavegastables:blackjack', material: BARRIER, cmd: 66610}
+    dice: {item: 'iavegastables:dice', material: BARRIER, cmd: 66615}
+    rps: {item: 'iavegastables:rockpaperscissors', material: BARRIER, cmd: 66611}
+    tictactoe: {item: 'iavegastables:tictactoe', material: BARRIER, cmd: 66612}
