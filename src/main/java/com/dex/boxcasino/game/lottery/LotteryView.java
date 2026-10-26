@@ -159,6 +159,12 @@ final class LotteryView extends GameView {
         render();
     }
 
+    /** A ticket being scratched must be finished: ESC opens the GUI again; leaving the server / chair scratches the rest. */
+    @Override
+    protected boolean holdOnEsc() {
+        return state == State.RUNNING;
+    }
+
     @Override
     protected void onClose() {
         if (task != null) {

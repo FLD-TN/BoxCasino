@@ -24,7 +24,8 @@ class ResourceFilesTest {
             try (InputStream in = getClass().getResourceAsStream("/" + f)) {
                 assertNotNull(in, f);
                 YamlConfiguration yml = YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8));
-                assertEquals(f.equals("config.yml") ? 2 : f.equals("messages.yml") ? 8 : 4, yml.getInt("config-version"), f);
+                int expected = f.equals("config.yml") ? 2 : f.equals("messages.yml") ? 8 : f.equals("games/lottery.yml") ? 5 : 4;
+                assertEquals(expected, yml.getInt("config-version"), f);
                 assertFalse(yml.getKeys(false).isEmpty(), f);
             }
         }

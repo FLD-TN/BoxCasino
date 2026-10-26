@@ -692,13 +692,14 @@ games:
         - '&#BFC7D5Cào vé, ăn theo ô cao nhất'
         - ''
         - '&#FFD1661. &7Bấm ô dưới để mua vé'
-        - '&#FFD1662. &7Cào 5 trong 15 ô'
+        - '&#FFD1662. &7Cào 5 trong 24 ô'
         - '&#FFD1663. &7Nhận = cược x hệ số cao nhất'
         - ''
         - '&7Mỗi ô: &fx0,05 &7tới &#FFD166x7'
         - ''
         - '&8Bút chì: cào hết 1 lượt'
-        - '&8ESC: tự cào nốt, trả tiền'
+        - '&8Đang cào thì phải cào xong'
+        - '&8mới thoát ra được'
     cell-idle:
       name: '&8Mua vé để cào'
     cell:
