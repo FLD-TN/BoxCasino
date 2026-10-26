@@ -32,7 +32,14 @@ public final class RoomService {
             if (room != null) return room;
         }
         Game races = plugin.games().get("races");
-        if (races instanceof RacesGame g) return g.roomOf(player);
+        if (races instanceof RacesGame g) {
+            ChatRoom room = g.roomOf(player);
+            if (room != null) return room;
+        }
+        if (plugin.games().get("crash") instanceof com.dex.boxcasino.game.crash.CrashGame g) {
+            ChatRoom room = g.roomOf(player);
+            if (room != null) return room;
+        }
         return null;
     }
 

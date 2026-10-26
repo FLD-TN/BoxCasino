@@ -21,6 +21,8 @@ public final class BetMemory {
     public static final class Entry {
         public Currency currency = Currency.MONEY;
         public final Map<String, Long> amounts = new HashMap<>();
+        /** Other per-game choices kept with the bet (Tên Lửa auto cash-out). */
+        public final Map<String, Double> options = new HashMap<>();
 
         public long amount(String game, Currency c, long fallback) {
             return amounts.getOrDefault(game + ":" + c.name(), fallback);

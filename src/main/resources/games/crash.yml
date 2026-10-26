@@ -1,0 +1,61 @@
+# Tên Lửa (Crash của Vegas) - một chuyến bay chung cho cả server. Bố cục khớp texture crash_gui của pack iavegasgui.
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 4
+enabled: true
+title: '&f:offset_-48:&f{img:iavegasgui:crash_gui}'
+fallback-title: '&#FF6F91Tên Lửa'
+rows: 6
+
+# Có người cược đầu tiên thì đếm ngược betting-seconds giây rồi cất cánh. Hệ số tăng từ x1.00 tới khi nổ.
+# Điểm nổ bốc lúc cất cánh: P(bay tới >= x) = rtp / x. Rút sớm hay muộn thì hoàn trả về lâu dài đều = rtp.
+#   rtp 0.96: ~5% nổ ngay ở x1.00, 48% bay tới x2, 9,6% tới x10, ~1% tới x100.
+rtp: 0.96
+# Trần hệ số: bay tới đây là mọi người còn trên tên lửa tự rút ở mức này.
+max-multiplier: 100
+# Mỗi bước (step-ticks tick) hệ số tăng growth-percent %. 1.5% / 2 tick: x2 sau ~5s, x10 ~15s, x100 ~31s.
+growth-percent: 1.5
+step-ticks: 2
+betting-seconds: 10
+result-seconds: 4
+# Các mốc tự rút (nút Tự rút xoay vòng qua: tắt, rồi các mốc này).
+auto-cashout: [1.5, 2, 3, 5, 10]
+# Thanh tiến trình (slots.progress): ô thứ i sáng lên khi hệ số chạm progress[i].
+progress: [1.2, 1.5, 2, 3, 5, 10, 25]
+# Màu theo hệ số (lịch sử, thanh tiến trình, ô trạng thái): dùng màu đầu tiên có hệ số < below.
+colors:
+  - {below: 1.5, item: 'iavegasgui:crash_rolling_item_5', material: LIME_CONCRETE, cmd: 5617109}
+  - {below: 2.5, item: 'iavegasgui:crash_rolling_item_1', material: LIGHT_BLUE_CONCRETE, cmd: 5617105}
+  - {below: 10, item: 'iavegasgui:crash_rolling_item_3', material: YELLOW_CONCRETE, cmd: 5617107}
+  - {below: 50, item: 'iavegasgui:crash_rolling_item_2', material: ORANGE_CONCRETE, cmd: 5617106}
+  - {below: 1000000, item: 'iavegasgui:crash_rolling_item_4', material: RED_CONCRETE, cmd: 5617108}
+
+bet:
+  MONEY: {min: 1000, max: 1000000}
+  GEM: {min: 1, max: 1000}
+
+slots:
+  bet: 45
+  currency: 53
+  info: 44
+  # Ô trạng thái (đếm ngược / hệ số / nổ ở) và danh sách người đang bay
+  status: 4
+  # Nút chính: đặt cược / rút tiền
+  button: 22
+  auto: 49
+  progress: [10, 11, 12, 13, 14, 15, 16]
+  # 7 lần nổ gần nhất, mới nhất bên trái
+  history: [37, 38, 39, 40, 41, 42, 43]
+
+items:
+  bet: {item: 'iavegasgui:crash_money_bet', material: STICK, cmd: 5617102}
+  # Nút đổi tiền tệ: icon Tiền / Gem của server (item ItemsAdder treasure:money_item / treasure:gem_item).
+  currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
+  currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
+  info: {item: 'iavegasgui:crash_info', material: STICK, cmd: 5617101}
+  status: {item: 'iavegasgui:crash_button_inactive', material: STICK, cmd: 5617121}
+  button-idle: {item: 'iavegasgui:crash_button_inactive', material: STICK, cmd: 5617121}
+  button-active: {item: 'iavegasgui:crash_button_active', material: STICK, cmd: 5617122}
+  button-flying: {item: 'iavegasgui:crash_button_rolling', material: STICK, cmd: 5617123}
+  button-end: {item: 'iavegasgui:crash_button_end', material: STICK, cmd: 5617124}
+  auto: {material: CLOCK}
+  empty: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}

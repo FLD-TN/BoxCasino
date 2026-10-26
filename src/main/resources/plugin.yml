@@ -49,6 +49,8 @@ permissions:
     default: true
   boxcasino.game.chest:
     default: true
+  boxcasino.game.crash:
+    default: true
   boxcasino.bypass.limits:
     description: Bỏ qua giới hạn giờ chơi, giới hạn lỗ và tự khóa
     default: false

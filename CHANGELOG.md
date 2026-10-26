@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.15.0 - 2026-10-26
+
+- Game mới **Tên Lửa** (`crash`, Crash của Vegas): một chuyến bay chung cho cả server, Tiền và Gem.
+  - Cược đầu tiên bắt đầu đếm ngược 10 giây (báo trong sòng như Đua Ngựa); chuột phải lúc đếm ngược = huỷ cược.
+  - Hệ số tăng từ x1.00 (+1,5% mỗi 2 tick), bấm **Rút tiền** để nhận cược x hệ số lúc rút; nổ mà chưa rút = mất cược.
+  - Điểm nổ bốc lúc cất cánh: P(bay tới >= x) = 0,96 / x, nên rút ở mốc nào thì hoàn trả cũng 96%. Trần x100.
+  - **Tự rút**: chọn mốc x1.5 / x2 / x3 / x5 / x10 (chuột trái tăng, chuột phải giảm), nhớ theo người chơi.
+  - **ESC khi đang bay = rút ngay** ở hệ số hiện tại. Đóng bảng trước khi cất cánh: rút ngay lúc cất cánh (x1.00).
+  - Ô trạng thái hiện đếm ngược / hệ số / điểm nổ và danh sách người chơi; thanh tiến trình sáng theo mốc; 7 lần nổ
+    gần nhất có màu theo mức.
+  - `/casino tieptuc` mở lại chuyến bay; máy trong world (model crash, không ghế); permission `boxcasino.game.crash`.
+- `config.yml` (bản mặc định): `menu.games.crash`, `machines.bounds.crash`, `machines.items.crash`.
+- `messages.yml`: thêm `games.crash` (tự lấy từ jar nếu thiếu). Không đổi config-version.
+
 ## 0.14.0 - 2026-10-26
 
 ### 3 game mới (1 người chơi, đấu nhà cái, Tiền và Gem)

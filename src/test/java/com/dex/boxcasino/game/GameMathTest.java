@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.dex.boxcasino.game.chest.ChestGame;
+import com.dex.boxcasino.game.crash.CrashGame;
 import com.dex.boxcasino.game.lottery.LotteryGame;
 import com.dex.boxcasino.game.mines.MinesGame;
 import com.dex.boxcasino.game.slots.SlotsGame;
@@ -156,5 +157,12 @@ class GameMathTest {
         // every difficulty in turn: the mean of the three
         double expected = chest.difficulties().values().stream().mapToDouble(chest::rtp).average().orElseThrow();
         assertEquals(expected, chest.simulate(ROUNDS, RandomGenerator.of("L64X128MixRandom")), 0.01);
+    }
+
+    @Test
+    void crashPaysRtpForAnyTarget() {
+        CrashGame crash = load(new CrashGame(null), "crash");
+        assertEquals(0.96, crash.rtp(), 1e-9);
+        assertEquals(0.96, crash.simulate(ROUNDS, RandomGenerator.of("L64X128MixRandom")), 0.01);
     }
 }
