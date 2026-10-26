@@ -39,6 +39,14 @@ public final class Challenge {
         return bet.amount();
     }
 
+    public int id() {
+        return id;
+    }
+
+    public PvpGame game() {
+        return game;
+    }
+
     boolean visibleTo(UUID player) {
         return target == null || target.equals(player) || creator.equals(player);
     }

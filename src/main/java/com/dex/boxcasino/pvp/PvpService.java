@@ -46,6 +46,12 @@ public final class PvpService {
         return out;
     }
 
+    /** Any challenge of {@code player} still waiting for an opponent (one game at a time). */
+    public Challenge challengeOf(UUID player) {
+        for (Challenge c : challenges.values()) if (c.creator.equals(player)) return c;
+        return null;
+    }
+
     Challenge ownChallenge(PvpGame game, UUID player) {
         for (Challenge c : challenges.values()) if (c.game == game && c.creator.equals(player)) return c;
         return null;
@@ -200,6 +206,7 @@ public final class PvpService {
             plugin.messages().send(player, "game.disabled");
             return;
         }
+        if (plugin.access().busyElsewhere(player, game.id())) return;
         if (!game.permitted(player) || !plugin.access().canPlay(player, game.casinoOnly(), npc)) return;
         if (matches.containsKey(player.getUniqueId())) {
             plugin.messages().send(player, "pvp.in-match");
@@ -226,7 +233,7 @@ public final class PvpService {
         matches.put(player.getUniqueId(), match);
         match.start();
         match.open(player);
-        boolean creatorBusy = creator.getOpenInventory().getTopInventory().getHolder() instanceof CasinoView v && v.busy();
+        boolean creatorBusy = creator.getOpenInventory().getTopInventory().getHolder(false) instanceof CasinoView v && v.busy();
         if (creatorBusy) {
             plugin.messages().send(creator, "pvp.accepted-resume", "player", player.getName(), "game", game.displayName());
         } else {
@@ -319,22 +326,12 @@ public final class PvpService {
         refreshTables();
     }
 
+    /** Plain digits only ("10000"): no separators or k / m, so "1.5k" can never become 15.000. -1 when invalid. */
     public static long parseAmount(String s) {
-        String t = s.toLowerCase(java.util.Locale.ROOT).replace(".", "").replace(",", "");
-        long mul = 1;
-        if (t.endsWith("k")) {
-            mul = 1_000;
-            t = t.substring(0, t.length() - 1);
-        } else if (t.endsWith("m")) {
-            mul = 1_000_000;
-            t = t.substring(0, t.length() - 1);
-        }
-        try {
-            long v = Long.parseLong(t);
-            return v <= 0 || v > Long.MAX_VALUE / mul ? -1 : v * mul;
-        } catch (NumberFormatException ex) {
-            return -1;
-        }
+        String t = s.trim();
+        if (!t.matches("[0-9]{1,18}")) return -1;
+        long v = Long.parseLong(t);
+        return v <= 0 ? -1 : v;
     }
 
     static String left(Challenge c) {

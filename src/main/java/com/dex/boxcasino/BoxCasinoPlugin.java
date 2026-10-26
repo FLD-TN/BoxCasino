@@ -35,6 +35,7 @@ import com.dex.boxcasino.listener.PlayerListener;
 import com.dex.boxcasino.storage.Database;
 import com.dex.boxcasino.storage.Ledger;
 import com.dex.boxcasino.storage.ProfileStore;
+import com.dex.boxcasino.storage.WriteBuffer;
 import com.dex.boxcore.api.GemService;
 import java.io.File;
 import java.security.SecureRandom;
@@ -58,6 +59,7 @@ public final class BoxCasinoPlugin extends JavaPlugin {
     private Database database;
     private Ledger ledger;
     private ProfileStore profileStore;
+    private WriteBuffer writes;
     private ProfileService profiles;
     private AccessService access;
     private BetService bets;
@@ -101,9 +103,10 @@ public final class BoxCasinoPlugin extends JavaPlugin {
             return;
         }
         ledger = new Ledger(database);
+        writes = new WriteBuffer(database, profileStore);
         profiles = new ProfileService(this, profileStore);
         access = new AccessService(this);
-        bets = new BetService(this, ledger, profileStore);
+        bets = new BetService(this, ledger);
         pvp = new PvpService(this);
         jackpot = new JackpotService(this, database);
         jackpot.load();
@@ -172,6 +175,7 @@ public final class BoxCasinoPlugin extends JavaPlugin {
 
         Bukkit.getScheduler().runTaskTimer(this, access::tick, 20L, 20L);
         Bukkit.getScheduler().runTaskTimer(this, profiles::saveAllDirty, 1200L, 1200L);
+        Bukkit.getScheduler().runTaskTimer(this, writes::flush, 100L, 100L);
         Bukkit.getScheduler().runTaskTimer(this, this::purge, 200L, 20L * 60 * 60 * 6);
         Bukkit.getScheduler().runTaskTimer(this, leaderboard::refresh, 100L, 20L * 60 * 5);
 
@@ -188,6 +192,7 @@ public final class BoxCasinoPlugin extends JavaPlugin {
         if (profiles != null) {
             for (Player p : Bukkit.getOnlinePlayers()) profiles.unload(p.getUniqueId());
         }
+        if (writes != null) writes.flush();
         database.close();
     }
 
@@ -304,6 +309,10 @@ public final class BoxCasinoPlugin extends JavaPlugin {
 
     public RoomService rooms() {
         return rooms;
+    }
+
+    public WriteBuffer writes() {
+        return writes;
     }
 
     public BetMemory betMemory() {

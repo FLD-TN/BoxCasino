@@ -28,7 +28,7 @@ public final class GuiListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onClick(InventoryClickEvent e) {
         InventoryView view = e.getView();
-        if (!(view.getTopInventory().getHolder() instanceof CasinoView casino)) return;
+        if (!(view.getTopInventory().getHolder(false) instanceof CasinoView casino)) return;
         e.setCancelled(true);
         if (!(e.getWhoClicked() instanceof Player player)) return;
         int raw = e.getRawSlot();
@@ -43,19 +43,19 @@ public final class GuiListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDrag(InventoryDragEvent e) {
-        if (e.getView().getTopInventory().getHolder() instanceof CasinoView) e.setCancelled(true);
+        if (e.getView().getTopInventory().getHolder(false) instanceof CasinoView) e.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onClose(InventoryCloseEvent e) {
-        if (e.getInventory().getHolder() instanceof CasinoView casino) casino.handleClose(e.getReason());
+        if (e.getInventory().getHolder(false) instanceof CasinoView casino) casino.handleClose(e.getReason());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
         lastClick.remove(e.getPlayer().getUniqueId());
         CasinoView.releaseHeld(e.getPlayer().getUniqueId());
-        if (e.getPlayer().getOpenInventory().getTopInventory().getHolder() instanceof CasinoView casino) {
+        if (e.getPlayer().getOpenInventory().getTopInventory().getHolder(false) instanceof CasinoView casino) {
             casino.handleClose(InventoryCloseEvent.Reason.DISCONNECT);
         }
     }
@@ -64,7 +64,7 @@ public final class GuiListener implements Listener {
     public static void closeAll() {
         CasinoView.releaseAllHeld();
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getOpenInventory().getTopInventory().getHolder() instanceof CasinoView casino) {
+            if (p.getOpenInventory().getTopInventory().getHolder(false) instanceof CasinoView casino) {
                 casino.handleClose(InventoryCloseEvent.Reason.PLUGIN);
                 p.closeInventory();
             }

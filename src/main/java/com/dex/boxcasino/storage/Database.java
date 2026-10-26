@@ -32,6 +32,10 @@ public final class Database {
                     + " state TEXT NOT NULL, created_at INTEGER NOT NULL, settled_at INTEGER)",
             "CREATE INDEX IF NOT EXISTS bets_state ON bets(state)",
             "CREATE INDEX IF NOT EXISTS bets_uuid ON bets(uuid, id)",
+            // purge and "round without bets" checks: without these every old round scans the whole bets table
+            "CREATE INDEX IF NOT EXISTS bets_round ON bets(round_id)",
+            "CREATE INDEX IF NOT EXISTS bets_created ON bets(created_at)",
+            "CREATE INDEX IF NOT EXISTS rounds_created ON rounds(created_at)",
             "CREATE TABLE IF NOT EXISTS pending_payouts (id INTEGER PRIMARY KEY AUTOINCREMENT, uuid TEXT NOT NULL,"
                     + " currency TEXT NOT NULL, amount INTEGER NOT NULL, reason TEXT NOT NULL, created_at INTEGER NOT NULL)",
             "CREATE INDEX IF NOT EXISTS pending_uuid ON pending_payouts(uuid)",
@@ -58,6 +62,8 @@ public final class Database {
     private final Logger log;
     private Connection conn;
     private ExecutorService writer;
+    /** Prepared once per SQL text: the ledger runs the same few statements on the main thread every round. */
+    private final java.util.Map<String, PreparedStatement> statements = new java.util.HashMap<>();
 
     public Database(Logger log) {
         this.log = log;
@@ -91,6 +97,14 @@ public final class Database {
             }
         }
         synchronized (this) {
+            for (PreparedStatement ps : statements.values()) {
+                try {
+                    ps.close();
+                } catch (SQLException ignored) {
+                    // closing anyway
+                }
+            }
+            statements.clear();
             try {
                 if (conn != null) conn.close();
             } catch (SQLException ex) {
@@ -111,28 +125,39 @@ public final class Database {
     }
 
     public synchronized int update(String sql, Object... args) throws SQLException {
-        try (PreparedStatement ps = prepare(sql, args)) {
-            return ps.executeUpdate();
-        }
+        return prepare(sql, false, args).executeUpdate();
     }
 
     /** INSERT returning the generated id. */
     public synchronized long insert(String sql, Object... args) throws SQLException {
-        try (PreparedStatement ps = prepare(sql, args)) {
-            ps.executeUpdate();
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) return rs.getLong(1);
-            }
+        PreparedStatement ps = prepare(sql, true, args);
+        ps.executeUpdate();
+        try (ResultSet rs = ps.getGeneratedKeys()) {
+            if (rs.next()) return rs.getLong(1);
         }
         throw new SQLException("No generated key for " + sql);
     }
 
     public synchronized <T> List<T> query(String sql, RowMapper<T> mapper, Object... args) throws SQLException {
         List<T> out = new ArrayList<>();
-        try (PreparedStatement ps = prepare(sql, args); ResultSet rs = ps.executeQuery()) {
+        try (ResultSet rs = prepare(sql, false, args).executeQuery()) {
             while (rs.next()) out.add(mapper.map(rs));
         }
         return out;
+    }
+
+    /** Runs {@code task} as one transaction (one commit instead of one per statement); rolled back on error. */
+    public synchronized void transaction(SqlTask task) throws SQLException {
+        conn.setAutoCommit(false);
+        try {
+            task.run();
+            conn.commit();
+        } catch (SQLException | RuntimeException ex) {
+            conn.rollback();
+            throw ex;
+        } finally {
+            conn.setAutoCommit(true);
+        }
     }
 
     public <T> T first(String sql, RowMapper<T> mapper, Object... args) throws SQLException {
@@ -151,8 +176,13 @@ public final class Database {
         return salt;
     }
 
-    private PreparedStatement prepare(String sql, Object... args) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+    private PreparedStatement prepare(String sql, boolean keys, Object... args) throws SQLException {
+        PreparedStatement ps = statements.get(sql);
+        if (ps == null) {
+            ps = keys ? conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS) : conn.prepareStatement(sql);
+            statements.put(sql, ps);
+        }
+        ps.clearParameters();
         for (int i = 0; i < args.length; i++) ps.setObject(i + 1, args[i]);
         return ps;
     }

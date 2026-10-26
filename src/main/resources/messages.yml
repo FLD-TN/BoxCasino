@@ -26,6 +26,7 @@ currency-name:
 access:
   busy-seated: '&#FF6B6B✘ Bạn đang ngồi ở một bàn &7- mỗi lần chỉ chơi 1 game, bấm Shift để đứng dậy'
   busy-match: '&#FF6B6B✘ Bạn đang có ván chưa xong &7- mỗi lần chỉ chơi 1 game'
+  busy-challenge: '&#FF6B6B✘ Bạn đang có kèo {game} chờ người nhận &7- huỷ kèo đó để chơi game khác &8(&e/casino pvp cancel {id}&8)'
   not-loaded: '&#FF6B6B✘ Dữ liệu của bạn đang tải, thử lại sau vài giây'
   not-in-casino: '&#FF6B6B✘ Trò này chỉ chơi được trong &#FFD166sòng bạc'
   excluded: '&#FF6B6B✘ Bạn đang tự khóa sòng bạc &8(còn &f{time}&8)'
@@ -874,8 +875,8 @@ pvp:
         name: '&#FF8A8AQuay lại'
         lore:
           - '&8[&#FF8A8AChuột trái để về sảnh kèo&8]'
-    prompt: '&#FFD166(!) Nhập mức cược {game} bằng {currency} vào chat &7({min} &7- {max}&7, ví dụ 10k) &8- &7gõ &fhuy &7để huỷ'
-    prompt-invalid: '&#FF6B6B✘ Mức cược không hợp lệ &7- nhập số như 10000, 10k, 2m hoặc gõ &fhuy'
+    prompt: '&#FFD166(!) Nhập mức cược {game} bằng {currency} vào chat &7({min} &7- {max}&7, ví dụ 10000) &8- &7gõ &fhuy &7để huỷ'
+    prompt-invalid: '&#FF6B6B✘ Mức cược không hợp lệ &7- chỉ nhập số, ví dụ 10000 hoặc 400000, hoặc gõ &fhuy'
     prompt-cancelled: '&7Đã huỷ tạo kèo'
   button-join: '&8[&#7CFC9ANhận kèo&8]'
   # kèo ở máy (ghế trong sòng): chỉ báo người trong sòng

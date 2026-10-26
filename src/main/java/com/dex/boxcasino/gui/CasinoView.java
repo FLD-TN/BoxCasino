@@ -115,7 +115,7 @@ public abstract class CasinoView implements InventoryHolder {
                 if (HELD.get(player.getUniqueId()) != this) return;
                 HELD.remove(player.getUniqueId());
                 if (player.isOnline() && holdOnEsc()
-                        && !(player.getOpenInventory().getTopInventory().getHolder() instanceof CasinoView)) {
+                        && !(player.getOpenInventory().getTopInventory().getHolder(false) instanceof CasinoView)) {
                     player.openInventory(inventory);
                 } else {
                     handleClose(player.isOnline() ? InventoryCloseEvent.Reason.PLUGIN : InventoryCloseEvent.Reason.DISCONNECT);
@@ -129,7 +129,7 @@ public abstract class CasinoView implements InventoryHolder {
         returning = true;
         if (reason == InventoryCloseEvent.Reason.PLAYER && player.isOnline() && plugin.isEnabled()) {
             Bukkit.getScheduler().runTask(plugin, () -> {
-                if (player.isOnline() && !(player.getOpenInventory().getTopInventory().getHolder() instanceof CasinoView)) {
+                if (player.isOnline() && !(player.getOpenInventory().getTopInventory().getHolder(false) instanceof CasinoView)) {
                     resumeParent();
                 } else {
                     parent.suspended = false;

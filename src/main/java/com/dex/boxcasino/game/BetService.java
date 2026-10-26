@@ -3,7 +3,6 @@ package com.dex.boxcasino.game;
 import com.dex.boxcasino.BoxCasinoPlugin;
 import com.dex.boxcasino.economy.Currency;
 import com.dex.boxcasino.storage.Ledger;
-import com.dex.boxcasino.storage.ProfileStore;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
@@ -19,14 +18,12 @@ public final class BetService {
 
     private final BoxCasinoPlugin plugin;
     private final Ledger ledger;
-    private final ProfileStore store;
     /** Bet ids held by a live game (admins cannot refund these by hand). */
     private final Set<Long> live = new HashSet<>();
 
-    public BetService(BoxCasinoPlugin plugin, Ledger ledger, ProfileStore store) {
+    public BetService(BoxCasinoPlugin plugin, Ledger ledger) {
         this.plugin = plugin;
         this.ledger = ledger;
-        this.store = store;
     }
 
     /**
@@ -41,8 +38,9 @@ public final class BetService {
         long roundId;
         long betId;
         try {
-            roundId = ledger.createRound(game, outcome);
-            betId = ledger.createBet(roundId, player.getUniqueId(), currency, amount);
+            long[] ids = ledger.open(game, outcome, player.getUniqueId(), currency, amount);
+            roundId = ids[0];
+            betId = ids[1];
         } catch (SQLException ex) {
             plugin.getLogger().log(Level.SEVERE, "Ledger write failed, bet refused", ex);
             plugin.messages().send(player, "bet.storage-error");
@@ -110,10 +108,13 @@ public final class BetService {
         if (!bet.isOpen()) return;
         bet.state = Bet.State.SETTLED;
         live.remove(bet.id);
-        try {
-            ledger.setState(bet.id, Ledger.SETTLING, payout);
-        } catch (SQLException ex) {
-            plugin.getLogger().log(Level.SEVERE, "Ledger SETTLING write failed for bet #" + bet.id + ", paying anyway", ex);
+        // nothing to pay on a loss: straight to DONE (one write instead of two)
+        if (payout > 0) {
+            try {
+                ledger.setState(bet.id, Ledger.SETTLING, payout);
+            } catch (SQLException ex) {
+                plugin.getLogger().log(Level.SEVERE, "Ledger SETTLING write failed for bet #" + bet.id + ", paying anyway", ex);
+            }
         }
         pay(bet.player, bet.currency, payout, reason(bet.game, "payout"));
         markDone(bet.id, Ledger.DONE, payout);
@@ -235,8 +236,7 @@ public final class BetService {
     }
 
     private void house(String game, Currency currency, long wagered, long paid, long tax) {
-        String day = plugin.profiles().today();
-        plugin.database().async(() -> store.addHouse(day, game, currency, wagered, paid, tax));
+        plugin.writes().addHouse(plugin.profiles().today(), game, currency, wagered, paid, tax);
     }
 
     public static String reason(String game, String what) {

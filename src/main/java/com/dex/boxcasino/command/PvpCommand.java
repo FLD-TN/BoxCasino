@@ -17,8 +17,8 @@ import org.bukkit.entity.Player;
 
 /**
  * /xucxac and /kbb (spec 7.7): no argument = the challenge lobby; {@code <tien|gem> <amount>} = open challenge;
- * {@code <player> <tien|gem> <amount>} = direct challenge. Currency and amount may come in any order; amounts accept
- * 10000, 10k, 2m.
+ * {@code <player> <tien|gem> <amount>} = direct challenge. Currency and amount may come in any order; the amount is plain
+ * digits (10000).
  */
 public final class PvpCommand implements TabExecutor {
 

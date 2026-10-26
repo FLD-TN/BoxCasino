@@ -81,18 +81,26 @@ public final class ProfileStore {
     }
 
     public void addStats(UUID uuid, String game, Currency currency, long bet, long payout) throws SQLException {
-        int win = payout > bet ? 1 : 0;
-        int loss = payout < bet ? 1 : 0;
-        int draw = payout == bet ? 1 : 0;
         long won = Math.max(0, payout - bet);
-        long lost = Math.max(0, bet - payout);
+        addStats(uuid, game, currency, 1, payout > bet ? 1 : 0, payout < bet ? 1 : 0, payout == bet ? 1 : 0, bet, payout,
+                won, Math.max(0, bet - payout), won);
+    }
+
+    /** Several rounds at once (see {@link WriteBuffer}). */
+    public void addStats(UUID uuid, String game, Currency currency, long rounds, long win, long loss, long draw, long bet,
+                         long payout, long won, long lost, long biggestWin) throws SQLException {
         db.update("INSERT INTO stats (uuid, game, currency, rounds, wins, losses, draws, wagered, paid, won, lost, biggest_win)"
-                        + " VALUES (?, ?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?)"
-                        + " ON CONFLICT(uuid, game, currency) DO UPDATE SET rounds = rounds + 1, wins = wins + excluded.wins,"
+                        + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                        + " ON CONFLICT(uuid, game, currency) DO UPDATE SET rounds = rounds + excluded.rounds, wins = wins + excluded.wins,"
                         + " losses = losses + excluded.losses, draws = draws + excluded.draws,"
                         + " wagered = wagered + excluded.wagered, paid = paid + excluded.paid, won = won + excluded.won,"
                         + " lost = lost + excluded.lost, biggest_win = MAX(biggest_win, excluded.biggest_win)",
-                uuid.toString(), game, currency.name(), win, loss, draw, bet, payout, won, lost, won);
+                uuid.toString(), game, currency.name(), rounds, win, loss, draw, bet, payout, won, lost, biggestWin);
+    }
+
+    public void setPot(Currency currency, long pot) throws SQLException {
+        db.update("INSERT INTO jackpot (currency, pot) VALUES (?, ?) ON CONFLICT(currency) DO UPDATE SET pot = excluded.pot",
+                currency.name(), pot);
     }
 
     public void addHouse(String day, String game, Currency currency, long wagered, long paid, long tax) throws SQLException {

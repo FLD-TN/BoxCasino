@@ -39,7 +39,7 @@ public final class RoomService {
     /** Sent when a member closes the table GUI while still in it: a clickable way back. */
     public void offerReturn(Player player) {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (!player.isOnline() || player.getOpenInventory().getTopInventory().getHolder() instanceof CasinoView) return;
+            if (!player.isOnline() || player.getOpenInventory().getTopInventory().getHolder(false) instanceof CasinoView) return;
             if (roomOf(player.getUniqueId()) == null) return;
             player.sendMessage(plugin.messages().text("prefix").append(plugin.messages().text("chat.left-room"))
                     .append(Component.text(" "))

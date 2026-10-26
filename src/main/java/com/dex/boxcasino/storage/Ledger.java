@@ -37,6 +37,16 @@ public final class Ledger {
                 roundId, player.toString(), currency.name(), amount, OPEN, System.currentTimeMillis());
     }
 
+    /** Round and bet in one transaction (one commit on the main thread). Returns {roundId, betId}. */
+    public long[] open(String game, String outcome, UUID player, Currency currency, long amount) throws SQLException {
+        long[] ids = new long[2];
+        db.transaction(() -> {
+            ids[0] = createRound(game, outcome);
+            ids[1] = createBet(ids[0], player, currency, amount);
+        });
+        return ids;
+    }
+
     /** The withdraw failed: the bet never existed. */
     public void deleteBet(long betId) throws SQLException {
         db.update("DELETE FROM bets WHERE id = ? AND state = ?", betId, OPEN);

@@ -41,7 +41,8 @@ public final class AccessService {
      */
     /**
      * One game at a time: a player sitting at a machine, in a running 1v1 or with cards on a xì dách table can only
-     * open that game ({@code game} null = the casino menu). Tells the player and returns true when refused.
+     * open that game ({@code game} null = the casino menu). An open challenge (Xúc Xắc / Oẳn Tù Tì) blocks every
+     * other game until it is cancelled. Tells the player and returns true when refused.
      */
     public boolean busyElsewhere(Player player, String game) {
         var seat = plugin.seats().of(player.getUniqueId());
@@ -52,6 +53,12 @@ public final class AccessService {
         var match = plugin.pvp().matchOf(player.getUniqueId());
         if (match != null && !match.finished() && !match.game().id().equals(game)) {
             msg().send(player, "access.busy-match");
+            return true;
+        }
+        var challenge = game == null ? null : plugin.pvp().challengeOf(player.getUniqueId());
+        if (challenge != null && !challenge.game().id().equals(game)) {
+            msg().send(player, "access.busy-challenge", "game", challenge.game().displayName(),
+                    "id", String.valueOf(challenge.id()));
             return true;
         }
         if (!"xidach".equals(game) && plugin.games().get("xidach") instanceof com.dex.boxcasino.game.xidach.XiDachGame xd
@@ -162,7 +169,7 @@ public final class AccessService {
         if (!settings().playLimitEnabled) return;
         long now = System.currentTimeMillis();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!(player.getOpenInventory().getTopInventory().getHolder() instanceof CasinoView view)) continue;
+            if (!(player.getOpenInventory().getTopInventory().getHolder(false) instanceof CasinoView view)) continue;
             if (player.hasPermission(BYPASS_LIMITS)) continue;
             Profile p = plugin.profiles().get(player.getUniqueId());
             if (p == null) continue;

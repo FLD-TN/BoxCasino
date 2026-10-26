@@ -76,7 +76,7 @@ public final class ProfileService {
         String day = today();
         Profile p = get(uuid);
         if (p != null) p.dailyNet.merge(currency, delta, Long::sum);
-        plugin.database().async(() -> store.addDailyNet(uuid, day, currency, delta));
+        plugin.writes().addDailyNet(uuid, day, currency, delta);
     }
 
     public void addStats(UUID uuid, String game, Currency currency, long bet, long payout) {
@@ -90,7 +90,7 @@ public final class ProfileService {
             t.lost += Math.max(0, bet - payout);
             t.biggestWin = Math.max(t.biggestWin, payout - bet);
         }
-        plugin.database().async(() -> store.addStats(uuid, game, currency, bet, payout));
+        plugin.writes().addStats(uuid, game, currency, bet, payout);
     }
 
     /** Offline edit of limits (admin commands). */

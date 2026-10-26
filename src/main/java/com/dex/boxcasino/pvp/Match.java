@@ -161,7 +161,7 @@ public abstract class Match implements ChatRoom {
                 for (UUID id : ids) {
                     Player p = Bukkit.getPlayer(id);
                     if (p != null && plugin.seats().seatedAt(id, machine)
-                            && p.getOpenInventory().getTopInventory().getHolder() instanceof MatchView v && v.match == this) {
+                            && p.getOpenInventory().getTopInventory().getHolder(false) instanceof MatchView v && v.match == this) {
                         game.openAtMachine(p, machine);
                     }
                 }

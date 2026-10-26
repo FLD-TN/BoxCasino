@@ -206,7 +206,7 @@ public final class MusicService implements Listener {
     /** Music plays in the casino region (music.area) and, with music.in-gui, at any casino GUI. */
     private boolean wantsMusic(Player player) {
         if (config().getBoolean("in-gui", false)
-                && player.getOpenInventory().getTopInventory().getHolder() instanceof CasinoView) {
+                && player.getOpenInventory().getTopInventory().getHolder(false) instanceof CasinoView) {
             return true;
         }
         return config().getBoolean("area", true) && plugin.access().inCasino(player);

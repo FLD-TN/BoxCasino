@@ -127,4 +127,47 @@ class StorageTest {
         assertEquals(1500, t.biggestWin);
         assertEquals(700, profile.dailyNet.get(Currency.MONEY));
     }
+
+    @Test
+    void roundAndBetOpenTogether() throws Exception {
+        UUID p = UUID.randomUUID();
+        long[] ids = ledger.open("mines", "{}", p, Currency.MONEY, 1000);
+        long[] next = ledger.open("mines", "{}", p, Currency.MONEY, 2000);
+        assertTrue(next[0] > ids[0] && next[1] > ids[1], "cached statements still return fresh ids");
+        Ledger.BetRow row = ledger.bet(ids[1]);
+        assertEquals(ids[0], row.roundId());
+        assertEquals(1000, row.amount());
+        ledger.setState(ids[1], Ledger.DONE, 0);
+        ledger.setState(next[1], Ledger.DONE, 0);
+        ledger.purge(System.currentTimeMillis() + 1000);
+        assertEquals(null, ledger.bet(ids[1]));
+    }
+
+    @Test
+    void bufferedWritesLandInOneFlush() throws Exception {
+        UUID p = UUID.randomUUID();
+        WriteBuffer writes = new WriteBuffer(db, store);
+        writes.addStats(p, "mines", Currency.MONEY, 1000, 2500);
+        writes.addStats(p, "mines", Currency.MONEY, 1000, 0);
+        writes.addDailyNet(p, "2026-10-23", Currency.MONEY, 1000);
+        writes.addDailyNet(p, "2026-10-23", Currency.MONEY, -300);
+        writes.addHouse("2026-10-23", "mines", Currency.MONEY, 2000, 2500, 0);
+        writes.setPot(Currency.GEM, 40);
+        writes.setPot(Currency.GEM, 55);
+        writes.flush();
+        java.util.concurrent.CountDownLatch done = new java.util.concurrent.CountDownLatch(1);
+        db.async(done::countDown);
+        assertTrue(done.await(5, java.util.concurrent.TimeUnit.SECONDS));
+
+        Profile profile = store.load(p, "2026-10-23");
+        Profile.Totals t = profile.totals.get(Currency.MONEY);
+        assertEquals(2, t.rounds);
+        assertEquals(2000, t.wagered);
+        assertEquals(2500, t.paid);
+        assertEquals(1500, t.biggestWin);
+        assertEquals(700, profile.dailyNet.get(Currency.MONEY));
+        assertEquals(1, store.house("2026-10-01", "mines").size());
+        long pot = db.first("SELECT pot FROM jackpot WHERE currency = 'GEM'", rs -> rs.getLong(1));
+        assertEquals(55, pot);
+    }
 }

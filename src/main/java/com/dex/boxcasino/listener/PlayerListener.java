@@ -36,5 +36,8 @@ public final class PlayerListener implements Listener {
     public void onQuit(PlayerQuitEvent e) {
         plugin.pvp().quit(e.getPlayer().getUniqueId());
         plugin.profiles().unload(e.getPlayer().getUniqueId());
+        plugin.betMemory().forget(e.getPlayer().getUniqueId());
+        // queued before a quick rejoin's profile load, so it reads today's loss with the last rounds
+        plugin.writes().flush();
     }
 }

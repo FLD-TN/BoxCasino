@@ -80,7 +80,11 @@ public final class JackpotService {
         if (game == null || !game.house()) return;
         if (payout < bet.amount()) {
             long add = Payouts.payout(bet.amount() - payout, contributePercent / 100.0);
-            if (add > 0) set(bet.currency, pot(bet.currency) + add);
+            if (add > 0) {
+                long v = pot(bet.currency) + add;
+                pots.put(bet.currency, v);
+                plugin.writes().setPot(bet.currency, v);
+            }
         }
         long pot = pot(bet.currency);
         if (pot <= 0 || bet.amount() < minBet(bet.currency)) return;
@@ -108,11 +112,11 @@ public final class JackpotService {
         plugin.getLogger().info("JACKPOT: " + name + " won " + pot + " " + bet.currency + " in " + bet.game);
     }
 
-    /** Admin: set or add to a pot. */
+    /** Admin set / jackpot won: written right away (contributions are written with the next flush). */
     public void set(Currency currency, long value) {
         long v = Math.max(0, value);
         pots.put(currency, v);
-        db.async(() -> db.update("INSERT INTO jackpot (currency, pot) VALUES (?, ?)"
-                + " ON CONFLICT(currency) DO UPDATE SET pot = excluded.pot", currency.name(), v));
+        plugin.writes().setPot(currency, v);
+        plugin.writes().flush();
     }
 }

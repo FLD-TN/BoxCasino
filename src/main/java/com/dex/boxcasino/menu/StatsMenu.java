@@ -25,6 +25,7 @@ public final class StatsMenu extends CasinoView {
         this.inventory = Bukkit.createInventory(this, 54, plugin.messages().text("stats.title"));
         inventory.setItem(BACK_SLOT, item(Material.ARROW, plugin.messages().line("stats.back"), List.of()));
         UUID uuid = player.getUniqueId();
+        plugin.writes().flush();
         plugin.database().async(() -> {
             List<ProfileStore.StatRow> rows = plugin.profileStore().stats(uuid);
             Bukkit.getScheduler().runTask(plugin, () -> fill(rows));

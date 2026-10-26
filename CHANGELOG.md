@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.13.4 - 2026-10-26
+
+- Database: thêm index `bets(round_id)`, `bets(created_at)`, `rounds(created_at)` (tự tạo khi khởi động). Việc xoá
+  lịch sử cũ và kiểm tra "round không còn cược" không còn quét toàn bảng `bets`, không giữ khoá DB lâu làm đứng server.
+- Ghi DB nhẹ hơn cho luồng chính: câu lệnh SQL được chuẩn bị 1 lần rồi dùng lại; mở cược (round + bet) gộp 1
+  transaction; ván thua ghi thẳng DONE (bỏ bước SETTLING). Thống kê, sổ nhà cái, số thua trong ngày và hũ jackpot
+  được cộng dồn trong RAM và ghi 1 transaction mỗi 5 giây (cũng ghi khi người chơi thoát, khi mở Thống kê và khi
+  tắt plugin). Sổ cược (ledger) vẫn ghi ngay để an toàn khi crash.
+- `getHolder(false)` ở mọi chỗ kiểm tra GUI: click trong rương / lò thường không còn tạo bản sao block.
+- Mức cược nhập vào chat và lệnh `/xucxac`, `/kbb` chỉ nhận số thường (10000, 400000). Bỏ `k`, `m`, dấu `.` `,`
+  (trước đây `1.5k` thành 15.000).
+- Đang có kèo Xúc Xắc / Oẳn Tù Tì chờ người nhận thì không vào game khác (kể cả nhận kèo game khác): báo
+  "Bạn đang có kèo ... huỷ kèo đó để chơi game khác (/casino pvp cancel <id>)".
+- Mức cược đã nhớ của người chơi được xoá khi thoát server (trước đây giữ trong RAM đến khi restart).
+- `messages.yml`: thêm `access.busy-challenge` (tự lấy từ bản trong jar nếu thiếu); sửa `pvp.lobby.prompt`,
+  `pvp.lobby.prompt-invalid` (bỏ ví dụ 10k / 2m). Không đổi config-version.
+
 ## 0.13.3 - 2026-10-25
 
 - Sửa lỗi nút chơi (thả bóng Kim Tự Tháp, quay Roulette, Dò Mìn, Leo Thang, Đua Ngựa, bàn kèo PvP) vẫn hiện mức
