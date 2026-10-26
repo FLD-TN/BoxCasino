@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.16.1 - 2026-10-26
+
+- Menu `/casino`: bấm một game chơi trong sòng thì **dịch chuyển tới máy của game đó** thay vì mở GUI tại chỗ.
+  - Game có ghế: máy gần nhất còn ghế trống, ngồi luôn vào một ghế trống (GUI game tự mở, không bị người khác giành).
+  - Máy không ghế (Đua Ngựa, Tên Lửa, Góp Hũ): tới trước máy gần nhất rồi mở game.
+  - Đang ngồi sẵn ở máy của game đó: mở lại máy đó, không dịch chuyển.
+  - Không còn máy nào trống: báo "Máy ... nào cũng đã kín chỗ"; chưa đặt máy nào: báo "Sòng chưa có máy ... nào".
+  - Xúc Xắc / Oẳn Tù Tì / Cờ Caro chơi ở mọi nơi nên vẫn mở sảnh kèo ngay.
+  - Tắt bằng `menu.teleport-to-machine: false` (mặc định bật, config cũ không có dòng này cũng là bật).
+  - Chỉ tìm máy trong vùng đang được tải (người chơi đứng trong sòng thì máy trong sòng luôn được tải).
+- `messages.yml`: thêm `menu.no-machine`, `menu.machines-full` (tự lấy từ jar nếu thiếu).
+
 ## 0.16.0 - 2026-10-26
 
 - Game mới **Góp Hũ** (`pot`, Classic của Vegas): người chơi góp tiền vào chung 1 hũ, cơ hội thắng = phần mình góp /

@@ -1409,6 +1409,8 @@ chat:
 
 menu:
   unlimited: 'không giới hạn'
+  no-machine: '&#FF6B6B✘ Sòng chưa có máy {game} &#FF6B6Bnào'
+  machines-full: '&#FF6B6B✘ Máy {game} &#FF6B6Bnào cũng đã kín chỗ &7- thử lại sau nhé'
   game:
     name: '{game}'
     lore:

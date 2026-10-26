@@ -126,7 +126,13 @@ public final class MainMenu extends CasinoView {
             if (plugin.access().busyElsewhere(player, game.id())
                     || !game.permitted(player) || !plugin.access().canPlay(player, game.casinoOnly(), npc)) return;
             if (plugin.gameSounds()) player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.6f, 1f);
-            game.open(player, npc);
+            // casino games are played at their machines: go to a free one (games playable anywhere open here)
+            if (game.casinoOnly() && plugin.getConfig().getBoolean("menu.teleport-to-machine", true)) {
+                player.closeInventory();
+                plugin.machines().goTo(player, game);
+            } else {
+                game.open(player, npc);
+            }
             return;
         }
         if (slot == leaderboardSlot) {

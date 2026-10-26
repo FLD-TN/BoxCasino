@@ -139,6 +139,10 @@ menu:
   title: '&f:offset_-48:&f{img:iavegasgui:main_gui}'
   fallback-title: '&#E056FDSòng Bạc'
   rows: 6
+  # Bấm game trong menu: dịch chuyển tới máy gần nhất còn ghế trống của game đó và ngồi vào (GUI game tự mở).
+  # Máy không ghế (Đua Ngựa, Tên Lửa, Góp Hũ): tới trước máy gần nhất rồi mở game. Hết máy trống = báo ở chat.
+  # Xúc Xắc / Oẳn Tù Tì / Cờ Caro chơi ở mọi nơi nên vẫn mở ngay. false = mở GUI game ngay như cũ.
+  teleport-to-machine: true
   games:
     mines: {slot: 10, item: 'iavegasgui:main_gui_logo_minesweeper', material: STICK, cmd: 5658166}
     plinko: {slot: 12, item: 'iavegasgui:main_gui_logo_pyramid', material: STICK, cmd: 5658155}

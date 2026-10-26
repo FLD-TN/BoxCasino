@@ -547,6 +547,70 @@ public final class MachineService implements Listener {
                 "radius", String.valueOf((int) radius));
     }
 
+    // --- menu: go to a machine ---
+
+    /** The model displays of every placed machine of {@code game} in the loaded chunks. */
+    private List<ItemDisplay> machinesOf(String game) {
+        List<ItemDisplay> out = new ArrayList<>();
+        for (World w : Bukkit.getWorlds()) {
+            for (ItemDisplay d : w.getEntitiesByClass(ItemDisplay.class)) {
+                if (game.equals(d.getPersistentDataContainer().get(gameKey, PersistentDataType.STRING))) out.add(d);
+            }
+        }
+        return out;
+    }
+
+    /**
+     * Menu click on a game: the nearest machine of it with a free chair, the player is teleported onto that chair
+     * (which opens the game). Machines without chairs (shared tables) take everyone: the player lands in front of the
+     * nearest one and the game opens. Tells the player when no machine has room or none is placed.
+     */
+    public void goTo(Player player, Game game) {
+        Messages m = plugin.messages();
+        SeatService.Seated seated = plugin.seats().of(player.getUniqueId());
+        if (seated != null && seated.game().equals(game.id())) {
+            // already on a chair of this game: just open it again
+            plugin.seats().sitAnywhere(player, seated.machine(), game.id(), player.getLocation());
+            return;
+        }
+        List<ItemDisplay> machines = machinesOf(game.id());
+        if (machines.isEmpty()) {
+            m.send(player, "menu.no-machine", "game", game.displayName());
+            return;
+        }
+        Location from = player.getLocation();
+        machines.sort(java.util.Comparator.comparingDouble(d -> d.getWorld().equals(from.getWorld())
+                ? d.getLocation().distanceSquared(from) : Double.MAX_VALUE));
+        int seats = seatCount(game.id());
+        if (seats == 0) {
+            ItemDisplay d = machines.get(0);
+            player.teleport(front(d, game.id()));
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                if (player.isOnline()) open(player, game.id());
+            });
+            return;
+        }
+        for (ItemDisplay d : machines) {
+            String id = d.getUniqueId().toString();
+            if (plugin.seats().freeSeats(id, seats) > 0) {
+                plugin.seats().sitAnywhere(player, id, game.id(), d.getLocation());
+                return;
+            }
+        }
+        m.send(player, "menu.machines-full", "game", game.displayName());
+    }
+
+    /** A spot on the floor in front of the machine (the side the admin stood on), facing it. */
+    private Location front(ItemDisplay display, String game) {
+        Box box = box(display, game);
+        float yaw = display.getLocation().getYaw();
+        double fx = -Math.sin(Math.toRadians(yaw)), fz = Math.cos(Math.toRadians(yaw));
+        double cx = (box.x0() + box.x1()) / 2, cz = (box.z0() + box.z1()) / 2;
+        double halfDepth = (Math.abs(fx) > 0.5 ? box.x1() - box.x0() : box.z1() - box.z0()) / 2;
+        double out = halfDepth + 1.0;
+        return new Location(display.getWorld(), cx + fx * out, Math.floor(box.y0() + 0.01) + 0.01, cz + fz * out, yaw + 180f, 10f);
+    }
+
     void open(Player player, String id) {
         if (plugin.access().busyElsewhere(player, id)) return;
         Game game = plugin.games().get(id);
