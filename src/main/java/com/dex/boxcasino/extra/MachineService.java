@@ -179,7 +179,7 @@ public final class MachineService implements Listener {
         }
         // the (possibly empty) barrier list also marks the machine as built by this version
         display.getPersistentDataContainer().set(barriersKey, PersistentDataType.STRING, "");
-        if (config().getBoolean("place-barrier", true)) placeBarriers(display, box);
+        if (config().getBoolean("place-barrier", true)) placeBarriers(display, game, box);
         buildSeats(display, game, box);
         buildHologram(display, game, box);
         buildDealer(display, game, box);
@@ -358,17 +358,21 @@ public final class MachineService implements Listener {
         plugin.dealers().spawn(display.getUniqueId().toString(), new Location(display.getWorld(), x, box.y0(), z, facing, 0));
     }
 
-    private void placeBarriers(ItemDisplay display, Box box) {
+    private void placeBarriers(ItemDisplay display, String game, Box box) {
         World world = display.getWorld();
         double h = box.y1() - box.y0();
         // barriers on every block column whose centre is under the model; 1 layer for low tables, 2 for tall machines
         int layers = Math.max(1, Math.min(2, (int) Math.floor(h + 0.25)));
         int floorY = (int) Math.floor(box.y0() + 0.01);
+        List<double[]> chairs = seatPoints(display, game, box);
         List<String> placed = new ArrayList<>();
         for (int bx = (int) Math.floor(box.x0()); bx <= (int) Math.floor(box.x1()); bx++) {
             for (int bz = (int) Math.floor(box.z0()); bz <= (int) Math.floor(box.z1()); bz++) {
                 if (bx + 0.5 < box.x0() || bx + 0.5 > box.x1() || bz + 0.5 < box.z0() || bz + 0.5 > box.z1()) continue;
-                for (int l = 0; l < layers; l++) {
+                // a block column can reach past the model's edge: next to a chair only the floor layer, so the head
+                // of a seated player is never inside a barrier (suffocation)
+                int columnLayers = nearChair(chairs, bx, bz) ? 1 : layers;
+                for (int l = 0; l < columnLayers; l++) {
                     Block block = world.getBlockAt(bx, floorY + l, bz);
                     if (!block.getType().isAir()) continue;
                     block.setType(Material.BARRIER);
@@ -409,27 +413,48 @@ public final class MachineService implements Listener {
      * Chairs around the model. Front = the side that faced the admin when placing; a chair stands {@code gap} blocks out
      * from that side of the model box and faces the model.
      */
-    private void buildSeats(ItemDisplay display, String game, Box box) {
-        List<SeatSpot> spots = layout(game);
-        if (spots.isEmpty()) return;
+    /** Centre (x, z) of every chair of the machine, in layout order. */
+    private List<double[]> seatPoints(ItemDisplay display, String game, Box box) {
+        List<double[]> out = new ArrayList<>();
         ConfigurationSection c = config().getConfigurationSection("seats");
         double gap = c == null ? 0.55 : c.getDouble("gap", 0.55);
-        double sit = c == null ? 0.55 : c.getDouble("sit-height", 0.55);
-        float scale = (float) (c == null ? 1.0 : c.getDouble("scale", 1.0));
-        float yawOffset = (float) (c == null ? 0 : c.getDouble("yaw-offset", 0));
-        World world = display.getWorld();
         float yaw = display.getLocation().getYaw();
         // forward = towards the admin who placed it, right = forward turned clockwise
         double fx = -Math.sin(Math.toRadians(yaw)), fz = Math.cos(Math.toRadians(yaw));
         double rx = -fz, rz = fx;
         double cx = (box.x0() + box.x1()) / 2, cz = (box.z0() + box.z1()) / 2;
-        boolean alongX = Math.abs(fx) > 0.5;
-        double halfDepth = (alongX ? box.x1() - box.x0() : box.z1() - box.z0()) / 2;
+        double halfDepth = (Math.abs(fx) > 0.5 ? box.x1() - box.x0() : box.z1() - box.z0()) / 2;
+        for (SeatSpot spot : layout(game)) {
+            double dist = spot.side() * (halfDepth + gap);
+            out.add(new double[] {cx + fx * dist + rx * spot.lateral(), cz + fz * dist + rz * spot.lateral()});
+        }
+        return out;
+    }
+
+    /** True when block column (bx, bz) comes within reach of a seated player's head (half width 0.3 + margin). */
+    private static boolean nearChair(List<double[]> chairs, int bx, int bz) {
+        for (double[] p : chairs) {
+            double dx = Math.max(0, Math.max(bx - p[0], p[0] - (bx + 1)));
+            double dz = Math.max(0, Math.max(bz - p[1], p[1] - (bz + 1)));
+            if (dx * dx + dz * dz < 0.6 * 0.6) return true;
+        }
+        return false;
+    }
+
+    private void buildSeats(ItemDisplay display, String game, Box box) {
+        List<SeatSpot> spots = layout(game);
+        if (spots.isEmpty()) return;
+        ConfigurationSection c = config().getConfigurationSection("seats");
+        double sit = c == null ? 0.55 : c.getDouble("sit-height", 0.55);
+        float scale = (float) (c == null ? 1.0 : c.getDouble("scale", 1.0));
+        float yawOffset = (float) (c == null ? 0 : c.getDouble("yaw-offset", 0));
+        World world = display.getWorld();
+        float yaw = display.getLocation().getYaw();
+        List<double[]> points = seatPoints(display, game, box);
         String id = display.getUniqueId().toString();
         for (int i = 0; i < spots.size(); i++) {
             SeatSpot spot = spots.get(i);
-            double out = spot.side() * (halfDepth + gap);
-            double x = cx + fx * out + rx * spot.lateral(), z = cz + fz * out + rz * spot.lateral();
+            double x = points.get(i)[0], z = points.get(i)[1];
             // the chair (and whoever sits on it) faces the model
             float chairYaw = (spot.side() > 0 ? yaw + 180f : yaw) + yawOffset;
             int index = i;
