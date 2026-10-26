@@ -735,6 +735,223 @@ games:
     cell-marked:
       name: '&#5EE7DF{mark} &8[&7{player}&8]'
 
+  lottery:
+    name: '&#FF9F9FVé Số'
+    description: '&#BFC7D5Cào vé, ăn theo ô cao nhất'
+    info:
+      name: '&#FF9F9FVé Số &8[&fLuật chơi&8]'
+      lore:
+        - '&#BFC7D5Mua vé, cào ô, nhận thưởng'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Bấm ô dưới để mua vé'
+        - '&7• Cào 5 ô bất kỳ trên vé'
+        - '&7• Nhận cược x &#FFD166hệ số cao nhất'
+        - '&7  trong các ô đã cào'
+        - '&7• Cao nhất: &#FFD166x7'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tỉ lệ hoàn trả: &f{rtp}'
+        - '&8  (trung bình cược 100 nhận lại'
+        - '&8  đúng số % này)'
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Bút chì: &fcào hết giúp bạn'
+        - '&7• Bấm ESC: &ftự cào nốt và trả tiền'
+    cell-idle:
+      name: '&8Mua vé để cào'
+    cell:
+      name: '&fÔ chưa cào'
+      lore:
+        - '&7• Còn cào được: &f{left} ô'
+        - ''
+        - '&8[&#7CFC9AChuột trái để cào&8]'
+    cell-open:
+      name: '&fĐã cào &8[&#FFD166x{multiplier}&8]'
+    cell-best:
+      name: '&#7CFC9A✔ Cao nhất &8[&#FFD166x{multiplier}&8]'
+    cell-missed:
+      name: '&8Không cào &8[&7x{multiplier}&8]'
+    spot:
+      name: '&#7CFC9AMua vé mới'
+      lore:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Giá vé: {bet}'
+        - '&7• Cào {picks} trong {cells} ô'
+        - ''
+        - '&8[&#7CFC9AChuột trái để mua vé&8]'
+    spot-running:
+      name: '&#FFD166Vé đang cào &8[{bet}&8]'
+    lever-idle:
+      name: '&7Mua vé để bắt đầu'
+    lever-running:
+      name: '&#FF9F9FCào hết'
+      lore:
+        - '&7• Còn cào được: &f{left} ô'
+        - '&7• Cao nhất hiện tại: &#FFD166{best}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để cào hết&8]'
+      lore-auto:
+        - '&7• Còn cào được: &f{left} ô'
+        - '&7• Cao nhất hiện tại: &#FFD166{best}'
+    lever-end:
+      name: '&7Vé đã cào xong &8[&#FFD166x{multiplier}&8]'
+    won: '&#7CFC9A✔ Vé trúng &#FFD166x{multiplier} &#7CFC9A- bạn nhận {payout}'
+    even: '&#FFD166(!) Vé trúng &#FFD166x{multiplier} &7- hoà vốn, nhận lại {payout}'
+    lost: '&#FF6B6B✘ Vé chỉ được &#FFD166x{multiplier} &7- nhận lại {payout} &7(cược {bet}&7)'
+  slots:
+    name: '&#E6B980Máy Xèng'
+    description: '&#BFC7D5Quay màn 5x5, xếp hình là trúng'
+    info:
+      name: '&#E6B980Máy Xèng &8[&fLuật chơi&8]'
+      lore:
+        - '&#BFC7D5Màn hình 5x5, 8 biểu tượng'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Bấm cần gạt để quay'
+        - '&7• Một biểu tượng xếp thành hình:'
+        - '&#7CFC9A  trúng thưởng'
+        - '&7• Chỉ tính 1 hình lớn nhất'
+        - '&7• Biểu tượng chữ W: &#FFD166x2 thưởng'
+        - ''
+        - '&#FFD166Bảng thưởng:'
+        - '&7• Ô vuông 2x2: &#FFD166x0.5'
+        - '&7• Chữ X nhỏ: &#FFD166x1'
+        - '&7• Hàng ngang, cột dọc: &#FFD166x3'
+        - '&7• Hàng ngang giữa: &#FFD166x5'
+        - '&7• Đường chéo: &#FFD166x6'
+        - '&7• Ô vuông 3x3: &#FFD166x10'
+        - '&7• Chữ X lớn: &#FFD166x20'
+        - '&7• Ô vuông 4x4: &#FFD166x50'
+        - '&7• Kín màn: &#FFD166x200'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tỉ lệ hoàn trả: &f{rtp}'
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Bấm ESC khi đang quay:'
+        - '&f  kết quả vẫn trả, báo ở chat'
+    pattern:
+      square2: 'Ô vuông 2x2'
+      cross3: 'Chữ X nhỏ'
+      hline: 'Hàng ngang'
+      vline: 'Cột dọc'
+      hline-center: 'Hàng ngang giữa'
+      diagonal: 'Đường chéo'
+      square3: 'Ô vuông 3x3'
+      cross5: 'Chữ X lớn'
+      square4: 'Ô vuông 4x4'
+      full: 'Kín màn'
+    symbol:
+      name: ' '
+    symbol-win:
+      name: '&#7CFC9A✔ Trúng'
+    lever-idle:
+      name: '&#E6B980Quay'
+      lore:
+        - '&7• Cược: {bet}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để quay&8]'
+    lever-running:
+      name: '&7Đang quay...'
+    lever-won:
+      name: '&#7CFC9A✔ Trúng &#FFD166x{multiplier}'
+    lever-lost:
+      name: '&7Không trúng'
+    won: '&#7CFC9A✔ {pattern} &#FFD166x{multiplier} &#7CFC9A- bạn nhận {payout}'
+    even: '&#FFD166(!) {pattern} &#FFD166x{multiplier} &7- hoà vốn, nhận lại {payout}'
+    partial: '&#FFD166(!) {pattern} &#FFD166x{multiplier} &7- nhận lại {payout} &7(cược {bet}&7)'
+    lost: '&#FF6B6B✘ Không trúng &7- mất {bet}'
+  chest:
+    name: '&#4FC3F7Rương Hải Tặc'
+    description: '&#BFC7D5Mở 3 lần rương, né bẫy'
+    info:
+      name: '&#4FC3F7Rương Hải Tặc &8[&fLuật chơi&8]'
+      lore:
+        - '&#BFC7D53 rương, được mở 3 lần'
+        - ''
+        - '&#FFD166Cách chơi:'
+        - '&7• Chọn độ khó, bấm ô giữa'
+        - '&7• Bấm rương bất kỳ để mở'
+        - '&7• Vàng: &#FFD166cộng cược x số'
+        - '&7• Hệ số: &#FFD166nhân toàn bộ vàng'
+        - '&7• Bẫy: &#FF6B6Bmất hết'
+        - '&7• Nhận: cược x vàng x hệ số'
+        - '&7• Không có vàng: không nhận gì'
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Tỉ lệ hoàn trả: &f{rtp}'
+        - ''
+        - '&#FFD166Lưu ý:'
+        - '&7• Bấm ESC: &ftự mở nốt và trả tiền'
+    chest:
+      name: '&#4FC3F7Rương'
+      lore:
+        - '&7• Còn mở được: &f{left} lần'
+        - ''
+        - '&8[&#7CFC9AChuột trái để mở&8]'
+    chest-idle:
+      name: '&8Đặt cược để mở rương'
+    result-empty:
+      name: '&8Lần mở {number}'
+    result-gold:
+      name: '&#FFD166Vàng &8[&f+{value}&8]'
+    result-multiplier:
+      name: '&#CF9FFFHệ số &8[&fx{value}&8]'
+    result-trap:
+      name: '&#FF6B6BBẫy'
+    difficulty:
+      name: '&#4FC3F7Độ khó {name}'
+      easy: 'Dễ'
+      medium: 'Vừa'
+      hard: 'Khó'
+      lore:
+        - '&7• Bẫy: &#FF8A8A{trap}'
+        - '&7• Vàng: &#FFD166{gold}'
+        - '&7• Hệ số: &#CF9FFF{multiplier}'
+        - '&7• Hoàn trả: &f{rtp}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để chọn&8]'
+      lore-active:
+        - '&7• Bẫy: &#FF8A8A{trap}'
+        - '&7• Vàng: &#FFD166{gold}'
+        - '&7• Hệ số: &#CF9FFF{multiplier}'
+        - '&7• Hoàn trả: &f{rtp}'
+        - ''
+        - '&#7CFC9A✔ Đang chọn'
+    spot:
+      name: '&#7CFC9ABắt đầu ván mới'
+      lore:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Cược: {bet}'
+        - '&7• Độ khó: &#4FC3F7{name}'
+        - '&7• Số lần mở: &f{opens}'
+        - ''
+        - '&8[&#7CFC9AChuột trái để bắt đầu&8]'
+    spot-running:
+      name: '&#FFD166Đang cược &8[{bet}&8]'
+      lore:
+        - '&#BFC7D5Bấm một rương để mở'
+    lever-idle:
+      name: '&7Chưa bắt đầu'
+    lever-running:
+      name: '&#4FC3F7Đang có'
+      lore:
+        - '&7• Vàng: &#FFD166{gold}'
+        - '&7• Hệ số: &#CF9FFFx{multiplier}'
+        - '&7• Tạm tính: {payout}'
+        - '&7• Còn mở: &f{left} lần'
+    lever-end:
+      name: '&7Ván đã kết thúc &8[&#FFD166x{multiplier}&8]'
+    found-gold: '&#FFD166Vàng &7- cộng &f{value} &7lần cược'
+    found-multiplier: '&#CF9FFFHệ số &7- nhân vàng &fx{value}'
+    trapped: '&#FF6B6B✘ Dính bẫy &7- mất {bet}'
+    empty: '&#FF6B6B✘ Không có vàng nào &7- mất {bet}'
+    won: '&#7CFC9A✔ Rương cho &#FFD166x{multiplier} &#7CFC9A- bạn nhận {payout}'
+    partial: '&#FFD166(!) Rương cho &#FFD166x{multiplier} &7- nhận lại {payout} &7(cược {bet}&7)'
+
 pvp:
   usage: '&7Dùng: &f/{label} &8(xem kèo) &7| &f/{label} <tien|gem> <mức cược> &7| &f/{label} <người> <tien|gem> <mức cược>'
   in-match: '&#FF6B6B✘ Bạn đang trong một trận &7- gõ &f/casino tieptuc &7để quay lại'

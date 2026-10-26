@@ -45,10 +45,15 @@ public final class MainMenu extends CasinoView {
         if (c == null) return;
         Messages m = plugin.messages();
         for (Game game : plugin.games().all()) {
-            ConfigurationSection g = c.getConfigurationSection("games." + game.id());
+            ConfigurationSection g = gameEntry(c, game.id());
             if (g == null) continue;
             int slot = g.getInt("slot", -1);
             if (slot < 0 || slot >= inventory.getSize()) continue;
+            if (gameSlots.containsKey(slot)) {
+                plugin.getLogger().warning("menu.games." + game.id() + ".slot " + slot + " is already used by "
+                        + gameSlots.get(slot).id() + " in config.yml: " + game.id() + " is not shown in /casino");
+                continue;
+            }
             double rtp = game.rtp();
             String rtpText = Double.isNaN(rtp) ? m.raw("panel.rtp-rules") : Format.percent(rtp);
             String path = game.enabled() ? "menu.game" : "menu.game-disabled";
@@ -98,6 +103,16 @@ public final class MainMenu extends CasinoView {
             }
             inventory.setItem(profileSlot, head);
         }
+    }
+
+    /**
+     * The game's icon entry: from the server's config.yml, else from the copy in the jar, so a game added by an update
+     * shows up without touching a hand-edited config.
+     */
+    private ConfigurationSection gameEntry(ConfigurationSection menu, String id) {
+        if (menu.contains("games." + id, true)) return menu.getConfigurationSection("games." + id);
+        var defaults = plugin.getConfig().getDefaults();
+        return defaults == null ? null : defaults.getConfigurationSection("menu.games." + id);
     }
 
     @Override

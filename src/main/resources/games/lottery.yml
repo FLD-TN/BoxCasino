@@ -1,0 +1,60 @@
+# Vé Số. Bố cục khớp texture lottery_gui của pack iavegasgui (tấm vé bên trái, bút chì bên phải).
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 4
+enabled: true
+title: '&f:offset_-48:&f{img:iavegasgui:lottery_gui}'
+fallback-title: '&#FF9F9FVé Số'
+rows: 6
+
+# Mua vé = đặt cược. Vé có các ô ở slots.cells, mỗi ô được bốc 1 hệ số theo bảng prizes lúc mua vé.
+# Người chơi cào picks ô, nhận cược x hệ số CAO NHẤT trong các ô đã cào.
+picks: 5
+# Bút chì "cào hết": mỗi ô cách nhau bao nhiêu tick. Kết quả giữ bao lâu (tick) trước khi vé mới hiện ra.
+reveal-ticks: 6
+reset-ticks: 60
+
+# Bảng hệ số của MỘT ô. weight = tỉ lệ ra (không cần cộng đủ 100). item = hình số của pack (lottery_XYZ = xX.YZ).
+# Mặc định (cào 5 ô): hoàn trả 95%, có lãi 18,4% số vé, hoà vốn 6,4%, trúng x7 khoảng 1,5% số vé.
+prizes:
+  - {multiplier: 0.05, weight: 24.23, item: 'iavegasgui:lottery_005', material: STICK, cmd: 5616109}
+  - {multiplier: 0.1, weight: 18.42, item: 'iavegasgui:lottery_010', material: STICK, cmd: 5616114}
+  - {multiplier: 0.2, weight: 14.0, item: 'iavegasgui:lottery_020', material: STICK, cmd: 5616124}
+  - {multiplier: 0.3, weight: 10.64, item: 'iavegasgui:lottery_030', material: STICK, cmd: 5616125}
+  - {multiplier: 0.4, weight: 8.08, item: 'iavegasgui:lottery_040', material: STICK, cmd: 5616126}
+  - {multiplier: 0.5, weight: 6.14, item: 'iavegasgui:lottery_050', material: STICK, cmd: 5616127}
+  - {multiplier: 0.6, weight: 4.67, item: 'iavegasgui:lottery_060', material: STICK, cmd: 5616128}
+  - {multiplier: 0.7, weight: 3.55, item: 'iavegasgui:lottery_070', material: STICK, cmd: 5616129}
+  - {multiplier: 0.8, weight: 2.7, item: 'iavegasgui:lottery_080', material: STICK, cmd: 5616130}
+  - {multiplier: 0.9, weight: 2.05, item: 'iavegasgui:lottery_090', material: STICK, cmd: 5616131}
+  - {multiplier: 1.0, weight: 1.56, item: 'iavegasgui:lottery_100', material: STICK, cmd: 5616132}
+  - {multiplier: 1.2, weight: 1.18, item: 'iavegasgui:lottery_120', material: STICK, cmd: 5616134}
+  - {multiplier: 1.5, weight: 0.9, item: 'iavegasgui:lottery_150', material: STICK, cmd: 5616137}
+  - {multiplier: 2.0, weight: 0.68, item: 'iavegasgui:lottery_200', material: STICK, cmd: 5616142}
+  - {multiplier: 3.0, weight: 0.52, item: 'iavegasgui:lottery_300', material: STICK, cmd: 5616143}
+  - {multiplier: 5.0, weight: 0.39, item: 'iavegasgui:lottery_500', material: STICK, cmd: 5616145}
+  - {multiplier: 7.0, weight: 0.3, item: 'iavegasgui:lottery_700', material: STICK, cmd: 5616147}
+
+bet:
+  MONEY: {min: 1000, max: 1000000}
+  GEM: {min: 1, max: 1000}
+
+slots:
+  bet: 45
+  currency: 52
+  info: 53
+  spot: 49
+  lever: [48, 50]
+  # 15 ô trên tấm vé (3 hàng x 5)
+  cells: [10, 11, 12, 13, 14, 19, 20, 21, 22, 23, 28, 29, 30, 31, 32]
+
+items:
+  bet: {item: 'iavegasgui:lottery_money_bet', material: STICK, cmd: 5616102}
+  # Nút đổi tiền tệ: icon Tiền / Gem của server (item ItemsAdder treasure:money_item / treasure:gem_item).
+  currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
+  currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
+  info: {item: 'iavegasgui:lottery_info', material: STICK, cmd: 5616101}
+  spot: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  closed: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  lever-idle: {item: 'iavegasgui:lottery_button_inactive', material: STICK, cmd: 5616161}
+  lever-running: {item: 'iavegasgui:lottery_button_active', material: STICK, cmd: 5616162}
+  lever-end: {item: 'iavegasgui:lottery_button_end', material: STICK, cmd: 5616164}

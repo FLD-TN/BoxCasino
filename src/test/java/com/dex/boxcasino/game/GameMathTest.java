@@ -4,7 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.dex.boxcasino.game.chest.ChestGame;
+import com.dex.boxcasino.game.lottery.LotteryGame;
 import com.dex.boxcasino.game.mines.MinesGame;
+import com.dex.boxcasino.game.slots.SlotsGame;
 import com.dex.boxcasino.game.plinko.PlinkoGame;
 import com.dex.boxcasino.game.races.RacesGame;
 import com.dex.boxcasino.game.roulette.RouletteGame;
@@ -130,5 +133,28 @@ class GameMathTest {
         double measured = mines.simulate(ROUNDS, RandomGenerator.of("L64X128MixRandom"));
         // truncation to 2 decimals only lowers the payout slightly
         assertTrue(measured <= 0.975 && measured >= 0.94, "measured " + measured);
+    }
+
+    @Test
+    void lotteryDefaultRtpIs95() {
+        LotteryGame lottery = load(new LotteryGame(null), "lottery");
+        assertEquals(0.95, lottery.rtp(), 0.002);
+        assertEquals(lottery.rtp(), lottery.simulate(ROUNDS, RandomGenerator.of("L64X128MixRandom")), 0.01);
+    }
+
+    @Test
+    void slotsDefaultRtpIs95() {
+        SlotsGame slots = load(new SlotsGame(null), "slots");
+        assertEquals(0.952, slots.rtp(), 0.001);
+        assertEquals(slots.rtp(), slots.simulate(ROUNDS, RandomGenerator.of("L64X128MixRandom")), 0.02);
+    }
+
+    @Test
+    void chestDifficultiesAreAbout95() {
+        ChestGame chest = load(new ChestGame(null), "chest");
+        for (var d : chest.difficulties().values()) assertEquals(0.95, chest.rtp(d), 0.01, d.key());
+        // every difficulty in turn: the mean of the three
+        double expected = chest.difficulties().values().stream().mapToDouble(chest::rtp).average().orElseThrow();
+        assertEquals(expected, chest.simulate(ROUNDS, RandomGenerator.of("L64X128MixRandom")), 0.01);
     }
 }

@@ -1,0 +1,66 @@
+# Máy Xèng (Drums của Vegas). Bố cục khớp texture drums_gui của pack iavegasgui: màn hình 5x5 ở giữa.
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 4
+enabled: true
+title: '&f:offset_-48:&f{img:iavegasgui:drums_gui}'
+fallback-title: '&#E6B980Máy Xèng'
+rows: 5
+
+# Mỗi lần quay: bốc trúng hình nào (hoặc không trúng) theo chance (%), rồi vẽ màn hình đúng hình đó.
+# Chỉ tính 1 hình lớn nhất. Tổng chance không quá 100; phần còn lại = không trúng.
+# RTP = tổng (chance x multiplier) x trung bình bonus của biểu tượng.
+# Mặc định: 84,6% x 1,125 = 95,2%. Có trúng 44%, có lãi khoảng 13,5%.
+patterns:
+  square2: {chance: 20, multiplier: 0.5}        # ô vuông 2x2
+  cross3: {chance: 12, multiplier: 1}           # chữ X nhỏ trong ô 3x3
+  hline: {chance: 4.2, multiplier: 3}           # hàng ngang (trừ hàng giữa)
+  vline: {chance: 3.5, multiplier: 3}           # cột dọc
+  hline-center: {chance: 1.5, multiplier: 5}    # hàng ngang giữa
+  diagonal: {chance: 1.5, multiplier: 6}        # đường chéo
+  square3: {chance: 0.8, multiplier: 10}        # ô vuông 3x3
+  cross5: {chance: 0.4, multiplier: 20}         # chữ X lớn
+  square4: {chance: 0.1, multiplier: 50}        # ô vuông 4x4
+  full: {chance: 0.01, multiplier: 200}         # kín màn 5x5
+
+# Biểu tượng (ít nhất 8). Khi trúng, biểu tượng của hình được bốc theo weight; bonus nhân thêm tiền thưởng.
+symbols:
+  - {weight: 1, bonus: 2, item: 'iavegasgui:drums_rolling_item_1', material: STICK, cmd: 5612105}
+  - {weight: 1, bonus: 1, item: 'iavegasgui:drums_rolling_item_2', material: STICK, cmd: 5612106}
+  - {weight: 1, bonus: 1, item: 'iavegasgui:drums_rolling_item_3', material: STICK, cmd: 5612107}
+  - {weight: 1, bonus: 1, item: 'iavegasgui:drums_rolling_item_4', material: STICK, cmd: 5612108}
+  - {weight: 1, bonus: 1, item: 'iavegasgui:drums_rolling_item_5', material: STICK, cmd: 5612109}
+  - {weight: 1, bonus: 1, item: 'iavegasgui:drums_rolling_item_6', material: STICK, cmd: 5612110}
+  - {weight: 1, bonus: 1, item: 'iavegasgui:drums_rolling_item_7', material: STICK, cmd: 5612111}
+  - {weight: 1, bonus: 1, item: 'iavegasgui:drums_rolling_item_8', material: STICK, cmd: 5612112}
+
+# Hiệu ứng quay: mỗi khung hình frame-ticks tick; cột 1-5 dừng ở khung thứ stop-frames.
+frame-ticks: 2
+stop-frames: [10, 13, 16, 19, 22]
+# Kết quả giữ bao lâu (tick) trước khi màn hình trở lại bình thường.
+reset-ticks: 60
+
+bet:
+  MONEY: {min: 1000, max: 1000000}
+  GEM: {min: 1, max: 1000}
+
+slots:
+  bet: 27
+  currency: 18
+  info: 9
+  spot: 26
+  lever: [35]
+  # Màn hình 5x5, từng hàng từ trên xuống
+  grid: [2, 3, 4, 5, 6, 11, 12, 13, 14, 15, 20, 21, 22, 23, 24, 29, 30, 31, 32, 33, 38, 39, 40, 41, 42]
+
+items:
+  bet: {item: 'iavegasgui:drums_money_bet', material: STICK, cmd: 5612102}
+  # Nút đổi tiền tệ: icon Tiền / Gem của server (item ItemsAdder treasure:money_item / treasure:gem_item).
+  currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
+  currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
+  info: {item: 'iavegasgui:drums_info', material: STICK, cmd: 5612101}
+  spot: {item: 'iavegasgui:drums_button_inactive', material: STICK, cmd: 5612121}
+  # Ô không thuộc hình trúng (tạm che đi để làm nổi hình trúng)
+  dim: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  lever-idle: {item: 'iavegasgui:drums_button_active', material: STICK, cmd: 5612122}
+  lever-running: {item: 'iavegasgui:drums_button_rolling', material: STICK, cmd: 5612123}
+  lever-end: {item: 'iavegasgui:drums_button_end', material: STICK, cmd: 5612124}

@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.14.0 - 2026-10-26
+
+### 3 game mới (1 người chơi, đấu nhà cái, Tiền và Gem)
+- **Vé Số** (`lottery`): mua vé = đặt cược, vé 15 ô, cào 5 ô, nhận cược x hệ số cao nhất đã cào (x0.05 - x7, hình
+  số của pack). Bút chì = cào hết. Hoàn trả 95%. ESC giữa chừng: tự cào nốt và trả tiền.
+- **Máy Xèng** (`slots`, Drums của Vegas): màn 5x5, 8 biểu tượng. Bốc trước hình trúng (ô vuông 2x2 / 3x3 / 4x4,
+  chữ X nhỏ / lớn, hàng ngang, hàng giữa, cột dọc, đường chéo, kín màn) rồi vẽ màn hình đúng hình đó; biểu tượng
+  chữ W nhân đôi thưởng. Hoàn trả 95,2%. Các cột dừng lần lượt, trúng thì che các ô còn lại để nổi hình trúng.
+- **Rương Hải Tặc** (`chest`, Dead Man's Chest của Vegas): 3 độ khó, mở rương 3 lần, mỗi lần ra Vàng / Hệ số / Bẫy,
+  nhận cược x tổng vàng x tích hệ số. Mỗi độ khó hoàn trả khoảng 95%. ESC: tự mở nốt và trả tiền.
+- Kết quả của cả 3 game được quyết định lúc đặt cược và ghi vào sổ; min / max cược riêng ở `games/<id>.yml`.
+- Máy trong world (model lottery / drums / deadmanschest của pack iavegastables, 1 ghế), permission
+  `boxcasino.game.lottery|slots|chest`, mở bằng NPC `/casino open <người> lottery|slots|chest`.
+
+### Khác
+- Menu `/casino`: game chưa có trong `config.yml` của server thì lấy vị trí từ bản mặc định trong jar (game mới tự
+  hiện, không phải sửa config). Trùng ô với game khác thì không hiện và báo trong console.
+- `config.yml` (bản mặc định): thêm `menu.games`, `machines.seats.layouts`, `machines.bounds`, `machines.items` cho
+  3 game. Bounds / model / ghế tự lấy từ jar nếu config server chưa có. Không đổi config-version.
+- `messages.yml`: thêm `games.lottery`, `games.slots`, `games.chest` (tự lấy từ jar nếu thiếu).
+
 ## 0.13.5 - 2026-10-26
 
 - Cờ Caro chuyển sang sảnh kèo giống Xúc Xắc / Oẳn Tù Tì: GUI rương liệt kê kèo, nút Tạo kèo (chọn Tiền / Gem rồi

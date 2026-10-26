@@ -43,6 +43,12 @@ permissions:
     default: true
   boxcasino.game.races:
     default: true
+  boxcasino.game.lottery:
+    default: true
+  boxcasino.game.slots:
+    default: true
+  boxcasino.game.chest:
+    default: true
   boxcasino.bypass.limits:
     description: Bỏ qua giới hạn giờ chơi, giới hạn lỗ và tự khóa
     default: false

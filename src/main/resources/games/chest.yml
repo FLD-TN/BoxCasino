@@ -1,0 +1,85 @@
+# Rương Hải Tặc (Dead Man's Chest của Vegas). Bố cục khớp texture deadmanschest_gui của pack iavegasgui.
+# Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
+config-version: 4
+enabled: true
+title: '&f:offset_-48:&f{img:iavegasgui:deadmanschest_gui}'
+fallback-title: '&#4FC3F7Rương Hải Tặc'
+rows: 6
+
+# Số lần mở rương mỗi ván (mở rương nào cũng được, 1 rương mở nhiều lần cũng được).
+opens: 3
+# Kết quả giữ bao lâu (tick) trước khi bàn tự làm mới.
+reset-ticks: 60
+
+# Mỗi lần mở ra 1 trong 3 thứ, theo tỉ lệ trap / gold / multiplier (không cần cộng đủ 100):
+#   gold       = vàng: cộng cược x một số ngẫu nhiên trong [gold-min, gold-max]
+#   multiplier = hệ số: nhân toàn bộ vàng với một số trong [multiplier-min, multiplier-max]
+#   trap       = bẫy: mất hết, ván kết thúc ngay
+# Nhận cuối ván: cược x (tổng vàng) x (tích các hệ số). Không có vàng nào = không nhận gì.
+# Mặc định cả 3 độ khó hoàn trả khoảng 95%; khó hơn = dễ trắng tay hơn nhưng thắng to hơn.
+difficulties:
+  easy:
+    trap: 10
+    gold: 50
+    multiplier: 40
+    gold-min: 0.31
+    gold-max: 0.82
+    multiplier-min: 1.1
+    multiplier-max: 1.7
+    slot: 39
+    inactive: {item: 'iavegasgui:deadmanschest_button_easy_1', material: STICK, cmd: 5622111}
+    active: {item: 'iavegasgui:deadmanschest_button_easy_2', material: STICK, cmd: 5622112}
+  medium:
+    trap: 20
+    gold: 45
+    multiplier: 35
+    gold-min: 0.34
+    gold-max: 0.87
+    multiplier-min: 1.3
+    multiplier-max: 2.3
+    slot: 40
+    inactive: {item: 'iavegasgui:deadmanschest_button_medium_1', material: STICK, cmd: 5622113}
+    active: {item: 'iavegasgui:deadmanschest_button_medium_2', material: STICK, cmd: 5622114}
+  hard:
+    trap: 30
+    gold: 40
+    multiplier: 30
+    gold-min: 0.38
+    gold-max: 0.99
+    multiplier-min: 1.5
+    multiplier-max: 3.0
+    slot: 41
+    inactive: {item: 'iavegasgui:deadmanschest_button_hard_1', material: STICK, cmd: 5622115}
+    active: {item: 'iavegasgui:deadmanschest_button_hard_2', material: STICK, cmd: 5622116}
+
+bet:
+  MONEY: {min: 1000, max: 1000000}
+  GEM: {min: 1, max: 1000}
+
+slots:
+  bet: 45
+  currency: 52
+  info: 53
+  spot: 49
+  lever: [48, 50]
+  # 3 rương giữa bàn
+  chests: [20, 22, 24]
+  # Ô hiện thứ mở được ở mỗi lần (cần đủ số ô = opens)
+  results: [3, 4, 5]
+
+items:
+  bet: {item: 'iavegasgui:deadmanschest_money_bet', material: STICK, cmd: 5622102}
+  # Nút đổi tiền tệ: icon Tiền / Gem của server (item ItemsAdder treasure:money_item / treasure:gem_item).
+  currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
+  currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
+  info: {item: 'iavegasgui:deadmanschest_info', material: STICK, cmd: 5622101}
+  spot: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  chest-closed: {item: 'iavegasgui:deadmanschest_chest_closed', material: STICK, cmd: 5622106}
+  chest-opened: {item: 'iavegasgui:deadmanschest_chest_opened', material: STICK, cmd: 5622105}
+  gold: {item: 'iavegasgui:deadmanschest_winnings', material: STICK, cmd: 5622107}
+  multiplier: {item: 'iavegasgui:deadmanschest_multiplier', material: STICK, cmd: 5622108}
+  trap: {item: 'iavegasgui:minesweeper_mine', material: STICK, cmd: 5625105}
+  result-empty: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
+  lever-idle: {item: 'iavegasgui:deadmanschest_button_active', material: STICK, cmd: 5622122}
+  lever-running: {item: 'iavegasgui:deadmanschest_button_rolling', material: STICK, cmd: 5622123}
+  lever-end: {item: 'iavegasgui:deadmanschest_button_end', material: STICK, cmd: 5622124}

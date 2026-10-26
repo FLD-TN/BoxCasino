@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "com.dex"
-version = "0.13.5"
+version = "0.14.0"
 
 repositories {
     mavenCentral()

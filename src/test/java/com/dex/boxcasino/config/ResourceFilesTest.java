@@ -16,7 +16,7 @@ class ResourceFilesTest {
 
     private static final List<String> FILES = List.of("config.yml", "messages.yml", "games/mines.yml", "games/plinko.yml",
             "games/stairs.yml", "games/roulette.yml", "games/races.yml", "games/xidach.yml", "games/dice.yml",
-            "games/rps.yml", "games/tictactoe.yml");
+            "games/rps.yml", "games/tictactoe.yml", "games/lottery.yml", "games/slots.yml", "games/chest.yml");
 
     @Test
     void allFilesParseWithVersion() throws Exception {
@@ -36,7 +36,7 @@ class ResourceFilesTest {
             YamlConfiguration yml = YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8));
             var games = yml.getConfigurationSection("menu.games");
             assertNotNull(games);
-            assertEquals(9, games.getKeys(false).size());
+            assertEquals(12, games.getKeys(false).size());
             for (String id : games.getKeys(false)) {
                 int slot = games.getInt(id + ".slot");
                 for (String other : games.getKeys(false)) {

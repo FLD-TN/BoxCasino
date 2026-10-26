@@ -149,6 +149,9 @@ menu:
     dice: {slot: 29, item: 'iavegasgui:main_gui_logo_dice', material: STICK, cmd: 5658165}
     rps: {slot: 31, item: 'iavegasgui:main_gui_logo_rockpaperscissors', material: STICK, cmd: 5658161}
     tictactoe: {slot: 33, item: 'iavegasgui:main_gui_logo_tictactoe', material: STICK, cmd: 5658162}
+    lottery: {slot: 19, item: 'iavegasgui:main_gui_logo_lottery', material: STICK, cmd: 5658157}
+    slots: {slot: 25, item: 'iavegasgui:main_gui_logo_drums', material: STICK, cmd: 5658153}
+    chest: {slot: 38, item: 'iavegasgui:main_gui_logo_deadmanschest', material: STICK, cmd: 5658163}
   # Ô 45 có hình rương vẽ sẵn trên texture: dùng nút trong suốt đè lên.
   stats: {slot: 45, item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
   leaderboard: {slot: 47, item: 'iavegasgui:main_gui_statistics_button', material: STICK, cmd: 5658113}
@@ -212,6 +215,9 @@ machines:
       plinko: ['chair front 0']
       stairs: ['chair front 0']
       roulette: ['chair front 0']
+      lottery: ['chair front 0']
+      slots: ['chair front 0']
+      chest: ['chair front 0']
       xidach: ['stool front 1.4', 'stool front 0', 'stool front -1.4']
   # Game chơi nhiều người ở một bàn: chữ nổi / thông báo ghi "Bàn X"; các máy khác ghi "Máy X".
   # Số được đánh khi đặt máy (tăng dần theo từng game, lưu ở machines.yml).
@@ -256,6 +262,9 @@ machines:
     dice: [-0.76, -2.69, -0.88, 0.76, -1.38, 0.76]
     rps: [-0.75, -2.7, -0.38, 0.75, 0.3, 1.0]
     tictactoe: [-0.76, -2.69, -0.76, 0.76, -1.51, 0.76]
+    lottery: [-0.84, -2.7, -1.19, 0.75, 0.3, 0.8]
+    slots: [-0.76, -2.7, -1.01, 0.76, 0.28, 1.05]
+    chest: [-1.02, -2.7, -2.21, 2.01, 0.0, 1.97]
   items:
     mines: {item: 'iavegastables:minesweeper', material: BARRIER, cmd: 66616}
     plinko: {item: 'iavegastables:pyramid', material: BARRIER, cmd: 66605}
@@ -266,3 +275,6 @@ machines:
     dice: {item: 'iavegastables:dice', material: BARRIER, cmd: 66615}
     rps: {item: 'iavegastables:rockpaperscissors', material: BARRIER, cmd: 66611}
     tictactoe: {item: 'iavegastables:tictactoe', material: BARRIER, cmd: 66612}
+    lottery: {item: 'iavegastables:lottery', material: BARRIER, cmd: 66607}
+    slots: {item: 'iavegastables:drums', material: BARRIER, cmd: 66603}
+    chest: {item: 'iavegastables:deadmanschest', material: BARRIER, cmd: 66613}
