@@ -192,6 +192,7 @@ public final class BoxCasinoPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         if (database == null) return;
+        if (goldenHour != null) goldenHour.shutdown();
         GuiListener.closeAll();
         if (seats != null) seats.shutdown();
         if (music != null) music.stop();

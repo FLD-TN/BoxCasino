@@ -40,6 +40,13 @@ golden-hour:
   # Giới hạn để gõ nhầm không bật quá lâu / quá cao.
   max-minutes: 240
   max-percent: 50
+  # Thanh boss trên đầu màn hình cho cả server (không cần ở trong sòng): thời gian còn lại, thanh rút dần.
+  bossbar:
+    enabled: true
+    # PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE
+    color: YELLOW
+    # PROGRESS (liền) hoặc NOTCHED_6 / NOTCHED_10 / NOTCHED_12 / NOTCHED_20 (chia vạch)
+    style: NOTCHED_10
 
 timezone: Asia/Ho_Chi_Minh
 

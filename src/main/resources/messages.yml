@@ -1509,6 +1509,7 @@ command:
 golden-hour:
   started: '&#FFD166Giờ Vàng &7đã bắt đầu &8- &7thắng đấu Nhà Cái được cộng thêm &#FFD166{percent}% &7tiền lời trong &f{minutes} phút'
   ended: '&#FFD166Giờ Vàng &7đã kết thúc'
+  bossbar: '&#FFD166Giờ Vàng &8- &7thắng Nhà Cái +&#FFD166{percent}% &7tiền lời &8- &fcòn {time}'
   bonus: '&#FFD166Giờ Vàng &7+{percent}% lời &8- &7bạn nhận thêm {amount}'
   status-on: '&#FFD166Giờ Vàng &7đang diễn ra &8- &7+{percent}% tiền lời, còn &f{time}'
   status-off: '&7Hiện không có Giờ Vàng'

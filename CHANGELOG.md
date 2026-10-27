@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.17.1 - 2026-10-27
+
+- Giờ Vàng có **thanh boss** cho cả server (ở đâu cũng thấy, không cần vào sòng): "+X% tiền lời - còn ...", cập nhật
+  mỗi giây, thanh rút dần tới lúc hết. Người vào server giữa chừng cũng thấy. Tắt Giờ Vàng / hết giờ / tắt plugin thì
+  thanh biến mất.
+- `config.yml`: `golden-hour.bossbar` (`enabled`, `color`, `style`), tự lấy từ jar nếu thiếu.
+- `messages.yml`: thêm `golden-hour.bossbar` (tự lấy từ jar nếu thiếu). Không đổi config-version.
+
 ## 0.17.0 - 2026-10-26
 
 - **Kim Tự Tháp** thành Plinko thật: bóng nảy trái / phải 50-50 ở mỗi hàng chốt, rơi đâu ăn đó (không bốc phễu trước
