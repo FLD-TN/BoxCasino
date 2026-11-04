@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.19.0 - 2026-11-04
+
+- **Vòng Quay thành Roulette thật (châu Âu, 1 số 0)**, cùng id `roulette`, cùng máy / icon menu / quyền.
+  - 37 số ra đều nhau, bốc trước khi quay. Đúng 1 số x36, Đỏ / Đen / Chẵn / Lẻ / 1-18 / 19-36 x2, Tá x3; cửa nào
+    cũng hoàn trả 97,3%. Ra số 0: mọi cửa ngoài thua, chỉ cửa số 0 thắng.
+  - Đặt nhiều cửa trong 1 ván. Nút **Bàn cược** (cột phải) mở bàn 6 hàng: số 1-36 ở 4 hàng trên, số 0 + cửa ngoài ở
+    hàng 5, hàng 6: Tá 25-36, mức chip, hoàn tác, xoá hết, quay, quay lại. Chuột trái đặt 1 chip, chuột phải bớt 1;
+    cửa đã đặt phát sáng, rê chuột thấy đã đặt bao nhiêu / thắng nhận bao nhiêu.
+  - Vòng 16 ô hiện 16 số liền nhau của bánh xe, quay thì số trôi vòng quanh rồi dừng; số ở ô kim chỉ (ô giữa hàng
+    trên, phát sáng) là số thắng. Giữa vòng: số vừa ra, nút Quay, 7 số ra gần nhất. Cột phải thêm Tóm tắt, Xoá hết,
+    Đặt lại ván trước.
+  - Tổng cược 1 ván theo `bet.<TIỀN>.max`; mỗi số tối đa `max-straight` (100.000$ / 100 Gem). Tiền chỉ bị trừ lúc
+    quay. Lịch sử cược ghi số ra + mọi cửa đã đặt.
+  - Chữ to giữa màn hình khi dừng (màu + số, tiền nhận / mất).
+- Pack `boxcasino`: 37 hình ô số `roulette_0..36` (nền ô Double Roulette + chữ số Xúc Xắc của pack Vegas). Chưa cài
+  lại pack thì ô vẫn đúng màu đỏ / đen / xanh, chỉ chưa có chữ số.
+- `games/roulette.yml`: không đổi config-version, mục mới (`payouts`, `max-straight`, `spin-laps`, `slots.board/
+  summary/clear/repeat/history`, `items.board.*`...) tự lấy từ jar. `difficulties`, `bonus`, `laps`, `items.cell-*`,
+  `items.label` không dùng nữa, xoá được.
+- `messages.yml`: khối `games.roulette` cũ (còn `difficulty:`) **tự được thay bằng khối mới** lúc khởi động, phần
+  còn lại của file giữ nguyên; bản cũ chép vào `old-configs/messages-roulette-<ngày>.yml`. Không đổi config-version.
+- Sửa: danh sách ô (`slots.*` dạng list) thiếu trong file của server giờ lấy từ jar.
+
 ## 0.18.0 - 2026-11-04
 
 - **Đua Ngựa**: thấy ngay mình đang chọn / cược con nào (3 hình ngựa của pack Vegas giống hệt nhau nên trước đây bấm

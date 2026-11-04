@@ -1,55 +1,49 @@
-# Vòng Quay. Bố cục khớp texture roulette_gui của pack iavegasgui: vòng 16 ô quanh bánh xe 5x5.
+# Roulette (châu Âu, 1 số 0). Bố cục khớp texture roulette_gui của pack iavegasgui: vòng 16 ô quanh bánh xe 5x5.
 # Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
 config-version: 4
 enabled: true
 title: '&f:offset_-48:&f{img:iavegasgui:roulette_gui}'
-fallback-title: '&#F78FB3Vòng Quay'
+fallback-title: '&#F78FB3Roulette'
 rows: 5
 
-# Tỉ lệ (weight) tính bằng %. Phần còn lại là các ô trống (x0).
-# RTP mỗi độ khó = (tỉ lệ ô thắng x hệ số + tổng tỉ lệ ô thưởng x hệ số) / 100. Mặc định đều 95%.
-difficulties:
-  easy:
-    weight: 31
-    multiplier: 2.4
-    slot: 16
-    inactive: {item: 'iavegasgui:roulette_button_easy_1', material: STICK, cmd: 5610101}
-    active: {item: 'iavegasgui:roulette_button_easy_2', material: STICK, cmd: 5610102}
-  medium:
-    weight: 15.5
-    multiplier: 4.8
-    slot: 25
-    inactive: {item: 'iavegasgui:roulette_button_medium_1', material: STICK, cmd: 5610103}
-    active: {item: 'iavegasgui:roulette_button_medium_2', material: STICK, cmd: 5610104}
-  hard:
-    weight: 7.44
-    multiplier: 10
-    slot: 34
-    inactive: {item: 'iavegasgui:roulette_button_hard_1', material: STICK, cmd: 5610105}
-    active: {item: 'iavegasgui:roulette_button_hard_2', material: STICK, cmd: 5610106}
+# 37 số (0-36) ra đều nhau. Hệ số tính cả tiền cược: đúng 1 số x36, Đỏ/Đen/Chẵn/Lẻ/1-18/19-36 x2, Tá x3.
+# Mặc định đều hoàn trả 36/37 = 97,3%. Ra số 0 thì mọi cửa ngoài (Đỏ, Chẵn, Tá...) đều thua.
+payouts:
+  straight: 36
+  even: 2
+  dozen: 3
+# Tối đa đặt vào 1 số mỗi ván (0 = không giới hạn). Tổng cược 1 ván theo bet.max bên dưới.
+max-straight:
+  MONEY: 100000
+  GEM: 100
 
-# Ô thưởng: index = vị trí trong slots.ring (0 = ô đầu). label-slot = ô bên trong để rê chuột xem.
-bonus:
-  left: {index: 4, weight: 8, multiplier: 1.0, label-slot: 19}
-  bottom: {index: 8, weight: 6, multiplier: 1.5, label-slot: 29}
-  right: {index: 12, weight: 6, multiplier: 0.6, label-slot: 21}
-
-# Ô thắng (index trong slots.ring).
+# Ô kim chỉ (index trong slots.ring, 0 = ô đầu): số nằm ở ô này khi dừng là số thắng.
 win-index: 0
-# Số vòng chạy trước khi dừng, thời gian giữ kết quả.
-laps: 3
+# Số vòng bánh xe quay trước khi chậm lại dừng (1 vòng = 37 số), thời gian giữ kết quả.
+spin-laps: 1
 reset-ticks: 40
 
 bet:
   MONEY: {min: 1000, max: 1000000}
   GEM: {min: 1, max: 1000}
 
+# Bàn cược (GUI 6 hàng mở từ nút Bàn cược). Để trống title = dùng chữ trong messages.yml.
+board:
+  title: ''
+
 slots:
+  # Cột phải: mức chip, tiền tệ, luật chơi, bàn cược, tóm tắt, xoá, đặt lại ván trước
   bet: 14
   currency: 32
   info: 23
+  board: 16
+  summary: 25
+  clear: 34
+  repeat: 43
+  # Giữa vòng: số vừa ra, nút quay, 7 số ra gần nhất
   spot: 11
   lever: 20
+  history: [10, 12, 19, 21, 28, 29, 30]
   ring: [2, 1, 0, 9, 18, 27, 36, 37, 38, 39, 40, 31, 22, 13, 4, 3]
 
 items:
@@ -59,6 +53,20 @@ items:
   currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
   info: {item: 'iavegasgui:roulette_info', material: STICK, cmd: 5610109}
   spot: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
-  label: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
-  cell-a: {item: 'iavegasgui:roulette_red_square', material: STICK, cmd: 5610107}
-  cell-b: {item: 'iavegasgui:roulette_black_square', material: STICK, cmd: 5610108}
+  clear: {material: BARRIER}
+  repeat: {material: CLOCK}
+  undo: {material: ARROW}
+  back: {material: OAK_DOOR}
+  spin: {material: LIME_DYE}
+  # Ô số 0-36 mặc định: boxcasino:roulette_<số> (pack boxcasino). Đổi từng số: numbers: {'7': {item: ..., material: ..., cmd: ...}}
+  # Cửa ngoài trên bàn cược (đổi được): red, black, even, odd, low, high, dozen1, dozen2, dozen3
+  board:
+    red: {item: 'iavegasgui:doubleroulette_red_rolling_block', material: STICK, cmd: 5626106}
+    black: {item: 'iavegasgui:doubleroulette_black_rolling_block', material: STICK, cmd: 5626105}
+    even: {material: LIGHT_BLUE_DYE}
+    odd: {material: ORANGE_DYE}
+    low: {material: LIME_DYE}
+    high: {material: YELLOW_DYE}
+    dozen1: {material: PINK_DYE}
+    dozen2: {material: MAGENTA_DYE}
+    dozen3: {material: PURPLE_DYE}

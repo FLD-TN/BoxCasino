@@ -52,11 +52,24 @@ class GameMathTest {
     }
 
     @Test
-    void rouletteEveryDifficultyIs95() {
+    void rouletteIsEuropeanSingleZero() {
         RouletteGame roulette = load(new RouletteGame(null), "roulette");
-        assertEquals(0.95, roulette.rtp(), 1e-9);
+        assertEquals(36 / 37.0, roulette.rtp(), 1e-9);
         double measured = roulette.simulate(ROUNDS, RandomGenerator.of("L64X128MixRandom"));
-        assertEquals(0.95, measured, 0.006);
+        assertEquals(36 / 37.0, measured, 0.015);
+        // every number once on the wheel, 18 red
+        assertEquals(37, java.util.Arrays.stream(RouletteGame.WHEEL).distinct().count());
+        assertEquals(18, RouletteGame.RED.size());
+        // exact RTP of every spot over the 37 numbers
+        java.util.List<String> spots = new java.util.ArrayList<>(RouletteGame.OUTSIDE);
+        for (int n = 0; n <= 36; n++) spots.add(String.valueOf(n));
+        for (String spot : spots) {
+            long paid = 0;
+            for (int n = 0; n <= 36; n++) paid += roulette.payout(java.util.Map.of(spot, 1000L), n);
+            assertEquals(36_000, paid, spot);
+        }
+        // zero loses every outside spot
+        for (String spot : RouletteGame.OUTSIDE) assertEquals(0, roulette.payout(java.util.Map.of(spot, 1000L), 0), spot);
     }
 
     @Test

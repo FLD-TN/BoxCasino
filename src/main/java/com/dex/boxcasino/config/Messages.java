@@ -41,6 +41,8 @@ public final class Messages {
     public void load() {
         ConfigFiles.ensure(plugin, "messages.yml");
         File file = new File(plugin.getDataFolder(), "messages.yml");
+        // 0.19.0: Vòng Quay became Roulette; its old texts (marked by "difficulty:") are swapped for the jar's block
+        ConfigFiles.replaceBlock(plugin, "messages.yml", "games", "roulette", "    difficulty:");
         YamlConfiguration loaded = YamlConfiguration.loadConfiguration(file);
         try (InputStream in = plugin.getResource("messages.yml")) {
             if (in != null) {

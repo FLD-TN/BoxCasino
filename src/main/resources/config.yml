@@ -75,7 +75,7 @@ chips:
 # Âm thanh trong GUI (bấm nút, thắng, thua...). Người chơi không muốn nghe thì chỉnh âm lượng trong game.
 game-sounds: true
 # ESC khi ván chưa được thoát (bóng đang rơi, vòng đang quay, trận 1v1 ở máy): GUI tự mở lại sau số tick này.
-# Trong lúc đó bấm Shift đứng dậy khỏi ghế thì bỏ qua (Kim Tự Tháp / Vòng Quay ra kết quả ngay, trận 1v1 bị xử thua).
+# Trong lúc đó bấm Shift đứng dậy khỏi ghế thì bỏ qua (Kim Tự Tháp / Roulette ra kết quả ngay, trận 1v1 bị xử thua).
 esc-reopen-ticks: 8
 
 # Hiệu ứng khi thắng (mọi game): pháo hoa bắn lên từ người thắng (không gây sát thương) và tiếng đếm tiền.
@@ -156,7 +156,7 @@ bet-menu:
     done-tab: {item: 'iavegasgui:empty_button', material: LIME_DYE, cmd: 0}
 
 # Menu /casino (texture main_gui của pack). Mỗi game cách nhau 1 ô:
-#   hàng 2: game 1 người   -> Dò Mìn, Kim Tự Tháp, Leo Thang, Vòng Quay
+#   hàng 2: game 1 người   -> Dò Mìn, Kim Tự Tháp, Leo Thang, Roulette
 #   hàng 3: bàn chung       -> Đua Ngựa, Xì Dách
 #   hàng 4: đấu 1v1         -> Xúc Xắc, Oẳn Tù Tì, Cờ Caro
 #   hàng 6: Thống kê, Bảng xếp hạng, Hồ sơ, Hũ Jackpot, Tự khóa

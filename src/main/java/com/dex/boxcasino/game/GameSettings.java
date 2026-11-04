@@ -62,9 +62,10 @@ public final class GameSettings {
 
     public List<Integer> slots(String key) {
         List<Integer> out = new ArrayList<>();
+        // get() without a default falls back to the jar copy, so slot lists added later work on old files too
         Object raw = yml.get("slots." + key);
         if (raw instanceof Number n) out.add(n.intValue());
-        else for (Object o : yml.getList("slots." + key, List.of())) if (o instanceof Number n) out.add(n.intValue());
+        else if (raw instanceof List<?> list) for (Object o : list) if (o instanceof Number n) out.add(n.intValue());
         return out;
     }
 
