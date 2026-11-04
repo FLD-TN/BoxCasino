@@ -7,6 +7,7 @@ import com.dex.boxcasino.game.Bet;
 import com.dex.boxcasino.game.GameSettings;
 import com.dex.boxcasino.game.GameView;
 import com.dex.boxcasino.util.Format;
+import com.dex.boxcasino.util.Payouts;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -21,21 +22,15 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
- * One player's Roulette table. Chips are laid on the board (child GUI) without taking money; the spin takes the
- * total as one bet, draws the number, then turns the wheel until that number is under the pointer.
+ * One player's Roulette table, one screen. Pick the bet amount, click Đỏ / Đen / Xanh to put that amount on it (click
+ * again = new amount, right click = take it off), then spin. Money is taken at the spin, as one bet for all spots.
  */
 final class RouletteView extends GameView {
 
     private final RouletteGame roulette;
-    /** Spots laid for the next spin (amounts in {@link #currency()}). Insertion order = board order of laying. */
-    final Map<String, Long> stakes = new LinkedHashMap<>();
-    /** Every chip laid, newest last, for undo. */
-    private final Deque<Map.Entry<String, Long>> laid = new ArrayDeque<>();
-    /** Last spin's spots, for "repeat". */
-    private Map<String, Long> lastStakes = Map.of();
-    private Currency lastCurrency;
+    /** Amount on each spot for the next spin, in {@link #currency()}. */
+    private final Map<String, Long> stakes = new LinkedHashMap<>();
     private Bet bet;
-    /** Spots of the running round (copy of stakes at spin time). */
     private Map<String, Long> running = Map.of();
     private int result = -1;
     /** Wheel index under the pointer cell. */
@@ -52,10 +47,6 @@ final class RouletteView extends GameView {
         render();
     }
 
-    RouletteGame game() {
-        return roulette;
-    }
-
     @Override
     protected boolean locked() {
         return bet != null;
@@ -66,26 +57,25 @@ final class RouletteView extends GameView {
         return bet != null;
     }
 
-    long total() {
+    private long total() {
         long sum = 0;
         for (long v : stakes.values()) sum += v;
         return sum;
     }
 
-    /** Lays one chip (the current bet amount) on {@code spot}. False when refused (player told). */
-    boolean lay(String spot) {
-        if (bet != null) return false;
+    /** Puts the current bet amount on {@code spot} (replacing what was there). False when refused (player told). */
+    private boolean place(String spot) {
         Currency c = currency();
         GameSettings.Limits limits = gs.limits.get(c);
-        long chip = amount();
-        long after = total() + chip;
+        long amount = amount();
+        long after = total() - stakes.getOrDefault(spot, 0L) + amount;
         if (after > limits.max()) {
             plugin.messages().send(player, "games.roulette.max-total", "max", plugin.wallet().format(c, limits.max()));
             return false;
         }
-        long cap = roulette.maxStraight.getOrDefault(c, 0L);
-        if (RouletteGame.isNumber(spot) && cap > 0 && stakes.getOrDefault(spot, 0L) + chip > cap) {
-            plugin.messages().send(player, "games.roulette.max-straight", "max", plugin.wallet().format(c, cap));
+        long cap = roulette.maxGreen.getOrDefault(c, 0L);
+        if (spot.equals("green") && cap > 0 && amount > cap) {
+            plugin.messages().send(player, "games.roulette.max-green", "max", plugin.wallet().format(c, cap));
             return false;
         }
         long balance = plugin.wallet().balance(player, c);
@@ -93,71 +83,8 @@ final class RouletteView extends GameView {
             plugin.messages().send(player, "games.roulette.no-money", "balance", plugin.wallet().format(c, balance));
             return false;
         }
-        stakes.merge(spot, chip, Long::sum);
-        laid.addLast(Map.entry(spot, chip));
-        return true;
-    }
-
-    /** Takes one chip off {@code spot} (the last one laid there, else the current chip amount). */
-    boolean takeOff(String spot) {
-        Long current = stakes.get(spot);
-        if (bet != null || current == null) return false;
-        long chip = amount();
-        for (var it = laid.descendingIterator(); it.hasNext(); ) {
-            var e = it.next();
-            if (e.getKey().equals(spot)) {
-                chip = e.getValue();
-                it.remove();
-                break;
-            }
-        }
-        long left = current - chip;
-        if (left <= 0) stakes.remove(spot);
-        else stakes.put(spot, left);
-        return true;
-    }
-
-    boolean undo() {
-        if (bet != null || laid.isEmpty()) return false;
-        var e = laid.pollLast();
-        long left = stakes.getOrDefault(e.getKey(), 0L) - e.getValue();
-        if (left <= 0) stakes.remove(e.getKey());
-        else stakes.put(e.getKey(), left);
-        return true;
-    }
-
-    boolean clear() {
-        if (bet != null || stakes.isEmpty()) return false;
-        stakes.clear();
-        laid.clear();
-        return true;
-    }
-
-    /** Lays the last spin's spots again (same currency only). */
-    boolean repeat() {
-        if (bet != null || lastStakes.isEmpty()) return false;
-        if (lastCurrency != currency()) {
-            plugin.messages().send(player, "games.roulette.repeat-currency");
-            return false;
-        }
-        Map<String, Long> before = new LinkedHashMap<>(stakes);
-        var laidBefore = new ArrayDeque<>(laid);
-        stakes.clear();
-        laid.clear();
-        Currency c = currency();
-        long sum = 0;
-        for (long v : lastStakes.values()) sum += v;
-        long balance = plugin.wallet().balance(player, c);
-        if (sum > gs.limits.get(c).max() || (balance >= 0 && sum > balance)) {
-            stakes.putAll(before);
-            laid.addAll(laidBefore);
-            plugin.messages().send(player, "games.roulette.no-money", "balance", plugin.wallet().format(c, Math.max(0, balance)));
-            return false;
-        }
-        for (var e : lastStakes.entrySet()) {
-            stakes.put(e.getKey(), e.getValue());
-            laid.addLast(Map.entry(e.getKey(), e.getValue()));
-        }
+        if (stakes.getOrDefault(spot, 0L) == amount) return false;
+        stakes.put(spot, amount);
         return true;
     }
 
@@ -165,7 +92,6 @@ final class RouletteView extends GameView {
     protected void onCurrencyChanged() {
         if (!stakes.isEmpty()) {
             stakes.clear();
-            laid.clear();
             plugin.messages().send(player, "games.roulette.cleared-currency");
             render();
         }
@@ -178,40 +104,24 @@ final class RouletteView extends GameView {
             spin();
             return;
         }
-        if (slot == roulette.boardSlot) {
-            if (bet != null) {
-                reject();
-                return;
-            }
-            sound(Sound.UI_BUTTON_CLICK);
-            openChild(new RouletteBoard(plugin, player, this));
-            return;
-        }
-        if (slot == roulette.clearSlot) {
-            if (clear()) {
-                sound(Sound.UI_BUTTON_CLICK);
+        for (var e : roulette.spotSlots.entrySet()) {
+            if (e.getValue() != slot) continue;
+            String spot = e.getKey();
+            boolean ok;
+            if (bet != null) ok = false;
+            else if (click.isRightClick()) ok = stakes.remove(spot) != null;
+            else ok = place(spot);
+            if (ok) {
+                sound(click.isRightClick() ? Sound.UI_BUTTON_CLICK : Sound.BLOCK_NOTE_BLOCK_HAT);
                 render();
             } else {
                 reject();
             }
             return;
         }
-        if (slot == roulette.repeatSlot) {
-            if (repeat()) {
-                sound(Sound.UI_BUTTON_CLICK);
-                render();
-            } else {
-                reject();
-            }
-        }
     }
 
-    /** Opens the bet amount menu over {@code over} (the board): changes the chip size. */
-    void openChipMenu(com.dex.boxcasino.gui.CasinoView over) {
-        openBetMenu(over);
-    }
-
-    void spin() {
+    private void spin() {
         if (bet != null) {
             reject();
             return;
@@ -246,11 +156,10 @@ final class RouletteView extends GameView {
         bet = placed;
         result = drawn;
         running = Map.copyOf(stakes);
-        lastStakes = new LinkedHashMap<>(stakes);
-        lastCurrency = currency();
-        int target = RouletteGame.wheelIndex(drawn);
-        totalSteps = roulette.laps * RouletteGame.WHEEL.length + Math.floorMod(target - offset, RouletteGame.WHEEL.length);
-        if (totalSteps < 12) totalSteps += RouletteGame.WHEEL.length;
+        int len = RouletteGame.WHEEL.length;
+        // straight to the drawn number (plus spin-laps extra turns), never a too short spin
+        totalSteps = roulette.laps * len + Math.floorMod(RouletteGame.wheelIndex(drawn) - offset, len);
+        if (totalSteps < 12) totalSteps += len;
         step = 0;
         render();
         sound(Sound.UI_BUTTON_CLICK);
@@ -258,10 +167,10 @@ final class RouletteView extends GameView {
         scheduleStep();
     }
 
-    /** Fast at first, slower towards the end (1 → 6 ticks per step). */
+    /** Fast at first, slower towards the end (1 → 5 ticks per step). */
     private void scheduleStep() {
         double t = step / (double) Math.max(1, totalSteps);
-        long delay = 1 + (long) (5.0 * t * t);
+        long delay = 1 + (long) (4.0 * t * t);
         task = Bukkit.getScheduler().runTaskLater(plugin, () -> {
             offset = (offset + 1) % RouletteGame.WHEEL.length;
             step++;
@@ -291,7 +200,7 @@ final class RouletteView extends GameView {
         while (history.size() > Math.max(1, roulette.historySlots.size())) history.removeLast();
         bet = null;
         running = Map.of();
-        // the laid chips stay on the board for the next spin
+        // the bets stay for the next spin
         if (!visible) return;
         sound(profit ? Sound.ENTITY_PLAYER_LEVELUP : payout > 0 ? Sound.ENTITY_EXPERIENCE_ORB_PICKUP : Sound.BLOCK_NOTE_BLOCK_BASS);
         player.showTitle(net.kyori.adventure.title.Title.title(m.text("games.roulette.title", ph),
@@ -300,13 +209,7 @@ final class RouletteView extends GameView {
         render();
     }
 
-    private long lastTotal() {
-        long sum = 0;
-        for (long v : lastStakes.values()) sum += v;
-        return sum;
-    }
-
-    String colorName(int n) {
+    private String colorName(int n) {
         return plugin.messages().raw(n == 0 ? "games.roulette.color-green" : RouletteGame.isRed(n)
                 ? "games.roulette.color-red" : "games.roulette.color-black");
     }
@@ -331,35 +234,30 @@ final class RouletteView extends GameView {
         render();
     }
 
-    /** Lore lines listing the laid spots ("Đỏ: 10.000$"), at most 8 then "...". */
-    List<Component> stakeLines(Map<String, Long> spots, Currency c) {
-        Messages m = plugin.messages();
-        List<Component> out = new ArrayList<>();
-        int shown = 0;
-        for (var e : spots.entrySet()) {
-            if (shown++ >= 8) {
-                out.add(m.line("games.roulette.stake-more", "count", String.valueOf(spots.size() - 8)));
-                break;
-            }
-            out.add(m.line("games.roulette.stake-line", "spot", spotName(e.getKey()),
-                    "amount", plugin.wallet().format(c, e.getValue()),
-                    "multiplier", Format.decimal(roulette.multiplier(e.getKey()))));
-        }
-        return out;
-    }
-
-    String spotName(String spot) {
-        if (RouletteGame.isNumber(spot)) return plugin.messages().raw("games.roulette.spot-number", "number", spot);
-        return plugin.messages().raw("games.roulette.spot." + spot);
-    }
-
-    void render() {
+    private void render() {
         if (isClosed()) return;
         Messages m = plugin.messages();
         renderPanel();
         renderRing();
-        Currency c = currency();
-        String totalText = plugin.wallet().format(c, total());
+        Map<String, Long> shown = bet != null ? running : stakes;
+        Currency c = bet != null ? bet.currency : currency();
+        String bet1 = plugin.wallet().format(currency(), amount());
+        // the three bets
+        for (String spot : RouletteGame.SPOTS) {
+            long stake = shown.getOrDefault(spot, 0L);
+            String mul = Format.decimal(roulette.multiplier(spot));
+            List<Component> lore = new ArrayList<>(m.lines("games.roulette.bet-spot." + spot + ".lore", "multiplier", mul));
+            if (stake > 0) {
+                lore.addAll(m.lines("games.roulette.bet-spot.staked", "amount", plugin.wallet().format(c, stake),
+                        "payout", plugin.wallet().format(c, Payouts.payout(stake, roulette.multiplier(spot)))));
+            }
+            if (bet == null) lore.addAll(m.lines(stake > 0 ? "games.roulette.bet-spot.hint-staked" : "games.roulette.bet-spot.hint",
+                    "bet", bet1));
+            set(roulette.spotSlots.get(spot), roulette.spotItems.get(spot),
+                    m.line(stake > 0 ? "games.roulette.bet-spot.name-staked" : "games.roulette.bet-spot.name",
+                            "spot", m.raw("games.roulette.spot." + spot), "multiplier", mul,
+                            "amount", plugin.wallet().format(c, stake)), lore, stake > 0);
+        }
         // center: last number, spin button, history
         if (bet == null && result >= 0) {
             set(roulette.spotSlot, roulette.numberItems[result], m.line("games.roulette.last.name", "number",
@@ -368,17 +266,15 @@ final class RouletteView extends GameView {
             set(roulette.spotSlot, roulette.spotItem, m.line(bet != null ? "games.roulette.spinning.name"
                     : "games.roulette.last-none.name"), List.of());
         }
-        List<Component> spinLore = new ArrayList<>();
+        String totalText = plugin.wallet().format(c, bet != null ? bet.amount() : total());
         if (bet != null) {
-            spinLore.addAll(stakeLines(running, bet.currency));
-            set(roulette.leverSlot, roulette.spotItem, m.line("games.roulette.spinning.name"), spinLore);
+            set(roulette.leverSlot, roulette.spotItem, m.line("games.roulette.spinning.name"), List.of());
         } else if (stakes.isEmpty()) {
             set(roulette.leverSlot, roulette.spotItem, m.line("games.roulette.lever-empty.name"),
                     m.lines("games.roulette.lever-empty.lore"));
         } else {
-            spinLore.addAll(stakeLines(stakes, c));
-            spinLore.addAll(m.lines("games.roulette.lever.lore", "total", totalText));
-            set(roulette.leverSlot, roulette.spotItem, m.line("games.roulette.lever.name", "total", totalText), spinLore);
+            set(roulette.leverSlot, roulette.spotItem, m.line("games.roulette.lever.name", "total", totalText),
+                    m.lines("games.roulette.lever.lore", "total", totalText));
         }
         List<Integer> h = new ArrayList<>(history);
         for (int i = 0; i < roulette.historySlots.size(); i++) {
@@ -391,20 +287,6 @@ final class RouletteView extends GameView {
                 set(slot, roulette.spotItem, m.line("games.roulette.history-empty.name"), List.of());
             }
         }
-        // right panel: board, summary, clear, repeat
-        set(roulette.boardSlot, chip(c, amount(), m.line("games.roulette.board-button.name"),
-                m.lines("games.roulette.board-button.lore", "chip", plugin.wallet().format(c, amount()))));
-        if (stakes.isEmpty()) {
-            set(roulette.summarySlot, roulette.spotItem, m.line("games.roulette.summary-empty.name"), List.of());
-        } else {
-            set(roulette.summarySlot, chip(c, total(), m.line("games.roulette.summary.name", "total", totalText),
-                    stakeLines(stakes, c)));
-        }
-        set(roulette.clearSlot, roulette.clearItem, m.line("games.roulette.clear.name"), m.lines("games.roulette.clear.lore"));
-        String lastText = lastStakes.isEmpty() || lastCurrency == null ? "-" : plugin.wallet().format(lastCurrency, lastTotal());
-        set(roulette.repeatSlot, roulette.repeatItem, m.line("games.roulette.repeat.name"),
-                m.lines(lastStakes.isEmpty() ? "games.roulette.repeat.lore-none" : "games.roulette.repeat.lore",
-                        "total", lastText));
     }
 
     /** The 16 ring cells: a window of the wheel, the pointer cell shows the wheel number at {@link #offset}. */

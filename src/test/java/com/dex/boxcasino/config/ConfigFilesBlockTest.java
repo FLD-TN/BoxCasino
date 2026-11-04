@@ -37,7 +37,7 @@ class ConfigFilesBlockTest {
             List<String> lines = List.of(new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8).split("\r?\n", -1));
             int[] b = ConfigFiles.block(lines, "games", "roulette");
             for (int i = b[0]; i < b[1]; i++) {
-                if (lines.get(i).startsWith("    difficulty:")) throw new AssertionError("old marker left in the jar block");
+                if (lines.get(i).startsWith("    difficulty:") || lines.get(i).startsWith("    board-button:")) throw new AssertionError("old marker left in the jar block");
             }
         }
     }

@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.20.0 - 2026-11-05
+
+- **Roulette gọn lại, 1 màn hình (hình nền Vegas)**: bỏ bàn cược riêng, bỏ cửa số lẻ / Tá / Chẵn Lẻ / 1-18 / 19-36,
+  bỏ hoàn tác / đặt lại / xoá.
+  - Chỉ 3 ô cược ở cột phải (chỗ nút độ khó cũ): **Đỏ x2, Đen x2, Xanh (số 0) x36**, đều hoàn trả 97,3%. Ra số 0 thì
+    Đỏ và Đen thua.
+  - Chọn mức cược, bấm ô: ô nhận đúng số tiền đó (bấm lại = đổi thành mức đang chọn, không cộng dồn chip), chuột phải
+    gỡ. Đặt nhiều ô cùng lúc được; tiền trừ lúc quay.
+  - Bánh xe quay thẳng tới số trúng, không chạy thêm vòng (`spin-laps: 0`), nhanh hơn.
+  - Ô Xanh tối đa `max-green` (100.000$ / 100 Gem) mỗi ván.
+- `messages.yml`: khối `games.roulette` của 0.18 / 0.19 tự được thay bằng khối mới (sao lưu vào `old-configs/`).
+  `games/roulette.yml`: mục mới tự lấy từ jar; `payouts.straight/even/dozen`, `max-straight`, `slots.board/summary/
+  clear/repeat`, `items.board` không dùng nữa.
+
 ## 0.19.1 - 2026-11-04
 
 - File mặc định trong jar khớp với config đang dùng trên server (ServerFile/BoxCasino): `daily-profit-limit.MONEY`

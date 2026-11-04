@@ -1,4 +1,5 @@
-# Roulette (châu Âu, 1 số 0). Bố cục khớp texture roulette_gui của pack iavegasgui: vòng 16 ô quanh bánh xe 5x5.
+# Roulette (bánh xe châu Âu 37 số, 1 số 0). Bố cục khớp texture roulette_gui của pack iavegasgui: vòng 16 ô quanh
+# bánh xe 5x5, cột phải là bảng cược.
 # Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
 config-version: 4
 enabled: true
@@ -6,40 +7,33 @@ title: '&f:offset_-48:&f{img:iavegasgui:roulette_gui}'
 fallback-title: '&#F78FB3Roulette'
 rows: 5
 
-# 37 số (0-36) ra đều nhau. Hệ số tính cả tiền cược: đúng 1 số x36, Đỏ/Đen/Chẵn/Lẻ/1-18/19-36 x2, Tá x3.
-# Mặc định đều hoàn trả 36/37 = 97,3%. Ra số 0 thì mọi cửa ngoài (Đỏ, Chẵn, Tá...) đều thua.
+# 3 cửa: Đỏ, Đen (18 số mỗi màu) và Xanh (chỉ số 0). Hệ số tính cả tiền cược.
+# Mặc định đều hoàn trả 97,3%: Đỏ / Đen x2 (18/37), Xanh x36 (1/37). Ra số 0 thì Đỏ và Đen đều thua.
 payouts:
-  straight: 36
-  even: 2
-  dozen: 3
-# Tối đa đặt vào 1 số mỗi ván (0 = không giới hạn). Tổng cược 1 ván theo bet.max bên dưới.
-max-straight:
+  color: 2
+  green: 36
+# Tối đa đặt vào ô Xanh mỗi ván (0 = không giới hạn). Tổng cược 1 ván theo bet.max bên dưới.
+max-green:
   MONEY: 100000
   GEM: 100
 
 # Ô kim chỉ (index trong slots.ring, 0 = ô đầu): số nằm ở ô này khi dừng là số thắng.
 win-index: 0
-# Số vòng bánh xe quay trước khi chậm lại dừng (1 vòng = 37 số), thời gian giữ kết quả.
-spin-laps: 1
-reset-ticks: 40
+# Bánh xe quay thẳng tới số trúng; spin-laps = số vòng quay thêm trước đó (0 = không quay thêm).
+spin-laps: 0
 
 bet:
   MONEY: {min: 1000, max: 1000000}
   GEM: {min: 1, max: 1000}
 
-# Bàn cược (GUI 6 hàng mở từ nút Bàn cược). Để trống title = dùng chữ trong messages.yml.
-board:
-  title: ''
-
 slots:
-  # Cột phải: mức chip, tiền tệ, luật chơi, bàn cược, tóm tắt, xoá, đặt lại ván trước
+  # Cột phải: mức cược, tiền tệ, luật chơi và 3 ô cược Đỏ / Đen / Xanh
   bet: 14
   currency: 32
   info: 23
-  board: 16
-  summary: 25
-  clear: 34
-  repeat: 43
+  red: 16
+  black: 25
+  green: 34
   # Giữa vòng: số vừa ra, nút quay, 7 số ra gần nhất
   spot: 11
   lever: 20
@@ -53,20 +47,8 @@ items:
   currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
   info: {item: 'iavegasgui:roulette_info', material: STICK, cmd: 5610109}
   spot: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}
-  clear: {material: BARRIER}
-  repeat: {material: CLOCK}
-  undo: {material: ARROW}
-  back: {material: OAK_DOOR}
-  spin: {material: LIME_DYE}
-  # Ô số 0-36 mặc định: boxcasino:roulette_<số> (pack boxcasino). Đổi từng số: numbers: {'7': {item: ..., material: ..., cmd: ...}}
-  # Cửa ngoài trên bàn cược (đổi được): red, black, even, odd, low, high, dozen1, dozen2, dozen3
-  board:
-    red: {item: 'iavegasgui:doubleroulette_red_rolling_block', material: STICK, cmd: 5626106}
-    black: {item: 'iavegasgui:doubleroulette_black_rolling_block', material: STICK, cmd: 5626105}
-    even: {material: LIGHT_BLUE_DYE}
-    odd: {material: ORANGE_DYE}
-    low: {material: LIME_DYE}
-    high: {material: YELLOW_DYE}
-    dozen1: {material: PINK_DYE}
-    dozen2: {material: MAGENTA_DYE}
-    dozen3: {material: PURPLE_DYE}
+  # 3 ô cược (ô của pack Vegas Double Roulette)
+  red: {item: 'iavegasgui:doubleroulette_red_rolling_block', material: STICK, cmd: 5626106}
+  black: {item: 'iavegasgui:doubleroulette_black_rolling_block', material: STICK, cmd: 5626105}
+  green: {item: 'iavegasgui:doubleroulette_green_rolling_block', material: STICK, cmd: 5626107}
+  # Ô số 0-36 trên vòng: mặc định boxcasino:roulette_<số> (pack boxcasino).

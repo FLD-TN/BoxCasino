@@ -325,37 +325,53 @@ games:
     closed-refund: '&7Bạn đóng bảng khi chưa leo bậc nào, tiền cược được hoàn lại'
   roulette:
     name: '&#F78FB3Roulette'
-    description: '&#BFC7D5Đặt cửa, bi dừng ở số nào ăn số đó'
+    description: '&#BFC7D5Đặt Đỏ, Đen hoặc Xanh rồi quay'
     info:
       name: '&#F78FB3Roulette &8[&fLuật chơi&8]'
       lore:
-        - '&#BFC7D5Bánh xe 37 số: 0 xanh, 1-36 đỏ / đen'
+        - '&#BFC7D5Bánh xe 37 số: 18 đỏ, 18 đen, số 0 xanh'
         - ''
-        - '&#FFD1661. &7Bấm Bàn cược, đặt chip vào cửa'
-        - '&#FFD1662. &7Đặt nhiều cửa cùng lúc được'
+        - '&#FFD1661. &7Chọn mức cược'
+        - '&#FFD1662. &7Bấm ô Đỏ / Đen / Xanh bên phải'
         - '&#FFD1663. &7Bấm giữa vòng để quay'
         - ''
-        - '&#FFD166Đúng 1 số x36'
-        - '&#FFD166Đỏ / Đen, Chẵn / Lẻ x2'
-        - '&#FFD1661-18 / 19-36 x2 &8- &#FFD166Tá x3'
+        - '&#7CFC9A✔ &7Đỏ, Đen: x2'
+        - '&#7CFC9A✔ &7Xanh (số 0): x36'
+        - '&#FF6B6B✘ &7Ra số 0: Đỏ và Đen đều thua'
         - ''
-        - '&#FF6B6B✘ &7Ra số 0: chỉ cửa số 0 thắng'
-        - ''
+        - '&8Đặt nhiều ô cùng lúc được'
         - '&8ESC: bảng tự mở lại tới khi quay xong'
     color-red: '&#FF6B6BĐỏ'
     color-black: '&#9AA0A6Đen'
     color-green: '&#7CFC9AXanh'
-    spot-number: 'Số {number}'
     spot:
       red: '&#FF6B6BĐỏ'
       black: '&#9AA0A6Đen'
-      even: '&#8FD3FFChẵn'
-      odd: '&#FFB86BLẻ'
-      low: '&#A8E0631-18'
-      high: '&#FFE08219-36'
-      dozen1: '&#F7A1C4Tá 1-12'
-      dozen2: '&#E08CFFTá 13-24'
-      dozen3: '&#B39DFFTá 25-36'
+      green: '&#7CFC9AXanh'
+    bet-spot:
+      name: '{spot} &8[&#FFD166x{multiplier}&8]'
+      name-staked: '{spot} &8[&#FFD166{amount}&8]'
+      red:
+        lore:
+          - '&#BFC7D5Bi dừng ở số đỏ'
+      black:
+        lore:
+          - '&#BFC7D5Bi dừng ở số đen'
+      green:
+        lore:
+          - '&#BFC7D5Bi dừng ở số 0'
+      staked:
+        - ''
+        - '&#FFD166Thông tin:'
+        - '&7• Đã đặt: {amount}'
+        - '&7• Thắng nhận: {payout}'
+      hint:
+        - ''
+        - '&8[&#7CFC9AChuột trái để đặt {bet}&8]'
+      hint-staked:
+        - ''
+        - '&8[&#7CFC9AChuột trái để đổi thành {bet}&8]'
+        - '&8[&#FF8A8AChuột phải để gỡ&8]'
     ring:
       name: '&7Số {number} &8({color}&8)'
     ring-pointer:
@@ -372,108 +388,21 @@ games:
       name: '&#7CFC9AQuay ngay &8[{total}&8]'
       lore:
         - ''
-        - '&7• Tổng cược: {total}'
-        - ''
         - '&8[&#7CFC9AChuột trái để quay&8]'
     lever-empty:
-      name: '&7Chưa đặt cửa nào'
+      name: '&7Chưa đặt ô nào'
       lore:
-        - '&#BFC7D5Bấm Bàn cược bên phải'
-        - '&#BFC7D5để đặt chip trước'
-    stake-line: '&7• {spot}&7: {amount} &8(x{multiplier})'
-    stake-more: '&8và {count} cửa khác'
+        - '&#BFC7D5Bấm ô Đỏ / Đen / Xanh'
+        - '&#BFC7D5bên phải để đặt cược'
     history:
       name: '&fLần {index}: số {number} &8({color}&8)'
     history-empty:
       name: '&8Chưa có lần quay'
-    board-button:
-      name: '&#F78FB3Bàn cược'
-      lore:
-        - '&#BFC7D5Đặt chip vào các cửa'
-        - ''
-        - '&7• Mỗi chip: {chip}'
-        - ''
-        - '&8[&#7CFC9AChuột trái để mở&8]'
-    summary:
-      name: '&#FFD166Đang đặt &8[{total}&8]'
-    summary-empty:
-      name: '&7Chưa đặt cửa nào'
-    clear:
-      name: '&#FF8A8AXoá hết cửa'
-      lore:
-        - '&#BFC7D5Gỡ mọi chip đang đặt'
-        - ''
-        - '&8[&#FF8A8AChuột trái để xoá&8]'
-    repeat:
-      name: '&#8FD3FFĐặt lại ván trước'
-      lore:
-        - '&7• Ván trước: {total}'
-        - ''
-        - '&8[&#7CFC9AChuột trái để đặt lại&8]'
-      lore-none:
-        - '&8Chưa có ván trước'
-    board:
-      title: '&8Bàn cược Roulette'
-      number:
-        name: '&fSố {number} &8({color}&8)'
-      outside:
-        name: '{spot}'
-      spot-lore:
-        number:
-          - '&#BFC7D5Bi dừng đúng số này'
-        red:
-          - '&#BFC7D5Bi dừng ở số đỏ'
-        black:
-          - '&#BFC7D5Bi dừng ở số đen'
-        even:
-          - '&#BFC7D5Số chẵn 2, 4 ... 36'
-        odd:
-          - '&#BFC7D5Số lẻ 1, 3 ... 35'
-        low:
-          - '&#BFC7D5Số từ 1 tới 18'
-        high:
-          - '&#BFC7D5Số từ 19 tới 36'
-        dozen1:
-          - '&#BFC7D5Số từ 1 tới 12'
-        dozen2:
-          - '&#BFC7D5Số từ 13 tới 24'
-        dozen3:
-          - '&#BFC7D5Số từ 25 tới 36'
-      empty:
-        - ''
-        - '&7• Thắng nhận: &#FFD166x{multiplier}'
-      staked:
-        - ''
-        - '&#FFD166Thông tin:'
-        - '&7• Đã đặt: {amount}'
-        - '&7• Thắng nhận: {payout}'
-      hint:
-        - ''
-        - '&8[&#7CFC9AChuột trái để đặt {chip}&8]'
-      hint-staked:
-        - ''
-        - '&8[&#7CFC9AChuột trái để đặt thêm {chip}&8]'
-        - '&8[&#FF8A8AChuột phải để bớt 1 chip&8]'
-      chip:
-        name: '&#FFD166Mỗi chip: {chip}'
-        lore:
-          - '&#BFC7D5Mỗi lần bấm đặt 1 chip'
-          - ''
-          - '&8[&#7CFC9AChuột trái để đổi mức chip&8]'
-      undo:
-        name: '&#8FD3FFHoàn tác'
-        lore:
-          - '&#BFC7D5Gỡ chip vừa đặt gần nhất'
-          - ''
-          - '&8[&#7CFC9AChuột trái để hoàn tác&8]'
-      back:
-        name: '&7Quay lại vòng quay'
-    no-stakes: '&#FF6B6B✘ Hãy đặt chip vào ít nhất 1 cửa'
+    no-stakes: '&#FF6B6B✘ Hãy đặt cược vào ít nhất 1 ô'
     max-total: '&#FF6B6B✘ Tổng cược 1 ván tối đa {max}'
-    max-straight: '&#FF6B6B✘ Mỗi số chỉ đặt tối đa {max}'
+    max-green: '&#FF6B6B✘ Ô Xanh chỉ đặt tối đa {max}'
     no-money: '&#FF6B6B✘ Không đủ tiền &8(đang có {balance}&8)'
-    repeat-currency: '&#FF6B6B✘ Ván trước cược loại tiền khác'
-    cleared-currency: '&7Đã đổi loại tiền, các cửa đang đặt được gỡ'
+    cleared-currency: '&7Đã đổi loại tiền, các ô đang đặt được gỡ'
     title: '{color} {number}'
     won: '&#7CFC9A✔ Ra số {number} &8({color}&8) &#7CFC9A- bạn nhận {payout}'
     won-subtitle: '&#7CFC9A+{payout}'

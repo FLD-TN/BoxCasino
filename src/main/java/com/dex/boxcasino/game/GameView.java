@@ -93,11 +93,6 @@ public abstract class GameView extends CasinoView {
         return false;
     }
 
-    /** The bet amount menu opened over another GUI of this game (e.g. a betting board); it returns to that GUI. */
-    protected void openBetMenu(com.dex.boxcasino.gui.CasinoView over) {
-        over.openChild(new BetMenu(plugin, player, this));
-    }
-
     protected void onCurrencyChanged() {
     }
 
