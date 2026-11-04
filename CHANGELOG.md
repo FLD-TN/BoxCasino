@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.19.1 - 2026-11-04
+
+- File mặc định trong jar khớp với config đang dùng trên server (ServerFile/BoxCasino): `daily-profit-limit.MONEY`
+  mặc định 50.000.000$. `messages.yml` và `games/*.yml` trong jar đã chứa sẵn mọi chỗ sửa tay, chỉ thêm các dòng mới
+  (Roulette, Tên Lửa, Đua Ngựa). Xoá config.yml, messages.yml, games/ trên server (giữ data.db*, machines.yml, music-players.yml, music/) rồi chạy jar.
+
 ## 0.19.0 - 2026-11-04
 
 - **Vòng Quay thành Roulette thật (châu Âu, 1 số 0)**, cùng id `roulette`, cùng máy / icon menu / quyền.

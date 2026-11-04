@@ -20,7 +20,7 @@ play-limit:
 # Lời ròng tối đa mỗi ngày (tiền nhận - tiền cược). Lời tới mức này thì không đặt ván mới được tới 0h;
 # ván đang chơi vẫn trả đủ. 0 = tắt. Qua ngày mới (theo timezone) thì tính lại. Không còn giới hạn lỗ.
 daily-profit-limit:
-  MONEY: 20000000
+  MONEY: 50000000
   GEM: 5000
 
 # Đếm ngược trong chat (mỗi giây 1 dòng + tiếng tích).
