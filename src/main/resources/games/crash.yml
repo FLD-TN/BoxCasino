@@ -17,8 +17,6 @@ growth-percent: 1.5
 step-ticks: 2
 betting-seconds: 10
 result-seconds: 4
-# Các mốc tự rút (nút Tự rút xoay vòng qua: tắt, rồi các mốc này).
-auto-cashout: [1.5, 2, 3, 5, 10]
 # Thanh tiến trình (slots.progress): ô thứ i sáng lên khi hệ số chạm progress[i].
 progress: [1.2, 1.5, 2, 3, 5, 10, 25]
 # Màu theo hệ số (lịch sử, thanh tiến trình, ô trạng thái): dùng màu đầu tiên có hệ số < below.
@@ -41,7 +39,6 @@ slots:
   status: 4
   # Nút chính: đặt cược / rút tiền
   button: 22
-  auto: 49
   progress: [10, 11, 12, 13, 14, 15, 16]
   # 7 lần nổ gần nhất, mới nhất bên trái
   history: [37, 38, 39, 40, 41, 42, 43]
@@ -57,5 +54,4 @@ items:
   button-active: {item: 'iavegasgui:crash_button_active', material: STICK, cmd: 5617122}
   button-flying: {item: 'iavegasgui:crash_button_rolling', material: STICK, cmd: 5617123}
   button-end: {item: 'iavegasgui:crash_button_end', material: STICK, cmd: 5617124}
-  auto: {material: CLOCK}
   empty: {item: 'iavegasgui:empty_button', material: STICK, cmd: 5600000}

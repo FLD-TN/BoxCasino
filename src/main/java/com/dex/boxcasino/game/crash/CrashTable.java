@@ -33,15 +33,12 @@ final class CrashTable implements ChatRoom {
     static final class Entry {
         final Bet bet;
         final String name;
-        /** Auto cash-out target, 0 = off. */
-        double auto;
         /** Multiplier the player cashed out at, 0 = still flying (or lost). */
         double cashedAt;
 
-        Entry(Bet bet, String name, double auto) {
+        Entry(Bet bet, String name) {
             this.bet = bet;
             this.name = name;
-            this.auto = auto;
         }
     }
 
@@ -110,11 +107,11 @@ final class CrashTable implements ChatRoom {
     }
 
     /** Takes the stake; the first bet starts the countdown. False when refused (player told). */
-    boolean place(Player player, Currency currency, long amount, double auto) {
+    boolean place(Player player, Currency currency, long amount) {
         if (!acceptsBets() || entries.containsKey(player.getUniqueId())) return false;
         Bet bet = plugin.bets().place(player, game.id(), currency, amount, null);
         if (bet == null) return false;
-        entries.put(player.getUniqueId(), new Entry(bet, player.getName(), auto));
+        entries.put(player.getUniqueId(), new Entry(bet, player.getName()));
         if (phase == Phase.IDLE) {
             phase = Phase.BETTING;
             secondsLeft = game.bettingSeconds;
@@ -142,11 +139,6 @@ final class CrashTable implements ChatRoom {
         }
         refreshAll();
         return true;
-    }
-
-    void setAuto(UUID player, double auto) {
-        Entry e = entries.get(player);
-        if (e != null && e.cashedAt == 0) e.auto = auto;
     }
 
     /** Cash out at the current multiplier. False when not flying or already out. */
@@ -278,10 +270,6 @@ final class CrashTable implements ChatRoom {
     }
 
     private void flightStep() {
-        double reached = Math.min(multiplier, point);
-        for (Entry e : entries.values()) {
-            if (e.cashedAt == 0 && e.auto > 0 && e.auto <= reached) pay(e, e.auto);
-        }
         if (multiplier >= game.maxMultiplier && point >= game.maxMultiplier) {
             // top of the scale: everyone still in is paid the cap
             for (Entry e : entries.values()) if (e.cashedAt == 0) pay(e, game.maxMultiplier);

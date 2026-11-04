@@ -27,12 +27,10 @@ public final class CrashGame extends Game {
     int stepTicks;
     int bettingSeconds;
     int resultSeconds;
-    List<Double> autoOptions = List.of();
     List<Double> progress = List.of();
     final List<Color> colors = new ArrayList<>();
     int statusSlot;
     int buttonSlot;
-    int autoSlot;
     List<Integer> progressSlots = List.of();
     List<Integer> historySlots = List.of();
     ItemSpec statusItem;
@@ -40,7 +38,6 @@ public final class CrashGame extends Game {
     ItemSpec buttonActive;
     ItemSpec buttonFlying;
     ItemSpec buttonEnd;
-    ItemSpec autoItem;
     ItemSpec emptyItem;
     private CrashTable table;
 
@@ -59,10 +56,6 @@ public final class CrashGame extends Game {
         stepTicks = Math.max(1, yml.getInt("step-ticks", 2));
         bettingSeconds = Math.max(5, yml.getInt("betting-seconds", 10));
         resultSeconds = Math.max(2, yml.getInt("result-seconds", 4));
-        List<Double> auto = new ArrayList<>();
-        auto.add(0.0);
-        for (double d : yml.getDoubleList("auto-cashout")) if (d > 1 && !auto.contains(d)) auto.add(d);
-        autoOptions = List.copyOf(auto);
         progress = yml.getDoubleList("progress");
         colors.clear();
         for (Map<?, ?> m : yml.getMapList("colors")) {
@@ -73,7 +66,6 @@ public final class CrashGame extends Game {
         colors.sort((a, b) -> Double.compare(a.below(), b.below()));
         statusSlot = settings.slot("status", 4);
         buttonSlot = settings.slot("button", 22);
-        autoSlot = settings.slot("auto", 49);
         progressSlots = settings.slots("progress");
         historySlots = settings.slots("history");
         statusItem = settings.item("status");
@@ -81,7 +73,6 @@ public final class CrashGame extends Game {
         buttonActive = settings.item("button-active");
         buttonFlying = settings.item("button-flying");
         buttonEnd = settings.item("button-end");
-        autoItem = settings.item("auto");
         emptyItem = settings.item("empty");
         if (table == null) table = new CrashTable(plugin, this);
         return null;
@@ -129,10 +120,10 @@ public final class CrashGame extends Game {
         if (table != null) table.shutdown();
     }
 
-    /** Strategy: a random auto cash-out target among the configured ones (x2 when none). */
+    /** Strategy: cash out at a random one of a few typical targets. */
     @Override
     public double simulate(long rounds, RandomGenerator random) {
-        List<Double> targets = autoOptions.size() > 1 ? autoOptions.subList(1, autoOptions.size()) : List.of(2.0);
+        List<Double> targets = List.of(1.5, 2.0, 3.0, 5.0, 10.0);
         long bet = 1000;
         double paid = 0;
         for (long r = 0; r < rounds; r++) {

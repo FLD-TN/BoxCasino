@@ -39,6 +39,10 @@ class ConfigFilesBlockTest {
             for (int i = b[0]; i < b[1]; i++) {
                 if (lines.get(i).startsWith("    difficulty:") || lines.get(i).startsWith("    board-button:")) throw new AssertionError("old marker left in the jar block");
             }
+            int[] c = ConfigFiles.block(lines, "games", "crash");
+            for (int i = c[0]; i < c[1]; i++) {
+                if (lines.get(i).startsWith("    auto:")) throw new AssertionError("old auto texts left in the jar crash block");
+            }
         }
     }
 }

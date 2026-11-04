@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.21.0 - 2026-11-05
+
+- **Tên Lửa: bỏ nút Tự rút** (mốc tự rút tuỳ chỉnh). Người chơi tự bấm rút hoặc ESC khi đang bay; bay tới trần
+  `max-multiplier` thì vẫn tự trả ở mức trần như cũ.
+- `games/crash.yml`: `auto-cashout`, `slots.auto`, `items.auto` không dùng nữa, xoá được.
+- `messages.yml`: khối `games.crash` cũ (còn `auto:`) tự được thay bằng khối mới (sao lưu vào `old-configs/`).
+
 ## 0.20.0 - 2026-11-05
 
 - **Roulette gọn lại, 1 màn hình (hình nền Vegas)**: bỏ bàn cược riêng, bỏ cửa số lẻ / Tá / Chẵn Lẻ / 1-18 / 19-36,

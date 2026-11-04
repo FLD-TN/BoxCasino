@@ -943,7 +943,6 @@ games:
         - '&#7CFC9A✔ &7Rút kịp: cược x hệ số lúc rút'
         - '&#FF6B6B✘ &7Nổ mà chưa rút: mất cược'
         - ''
-        - '&8Đồng hồ: tự rút ở mốc chọn sẵn'
         - '&8ESC khi đang bay = rút ngay'
     status-idle:
       name: '&7Chưa ai cược'
@@ -967,14 +966,12 @@ games:
     player-in: '&7• &f{player} &8- {bet}'
     player-out: '&7• &f{player} &8- {bet} &#7CFC9Arút x{multiplier}'
     player-lost: '&7• &f{player} &8- {bet} &#FF6B6Bmất'
-    auto-off: 'tắt'
     button-bet:
       name: '&#7CFC9AĐặt cược'
       lore:
         - ''
         - '&#FFD166Thông tin:'
         - '&7• Cược: {bet}'
-        - '&7• Tự rút: &f{auto}'
         - ''
         - '&8[&#7CFC9AChuột trái để đặt cược&8]'
     button-wait:
@@ -982,8 +979,6 @@ games:
     button-placed:
       name: '&#FFD166Đã cược &8[{bet}&8]'
       lore:
-        - '&7• Tự rút: &f{auto}'
-        - ''
         - '&8[&#FF8A8AChuột phải để huỷ, hoàn tiền&8]'
     button-cashout:
       name: '&#7CFC9ARút tiền &8[&#FFD166x{multiplier}&8]'
@@ -1003,13 +998,6 @@ games:
       name: '&fNổ ở &#FFD166x{multiplier}'
     history-empty:
       name: '&8Chưa có chuyến bay'
-    auto:
-      name: '&#FF6F91Tự rút &8[&f{auto}&8]'
-      lore:
-        - '&#BFC7D5Tới mốc này là tự rút tiền'
-        - ''
-        - '&8[&#7CFC9AChuột trái để tăng mốc&8]'
-        - '&8[&#FF8A8AChuột phải để giảm mốc&8]'
     placed: '&#7CFC9A✔ Đã cược {bet} &#7CFC9Acho chuyến bay tới'
     cancelled: '&7Đã huỷ cược, tiền được hoàn lại'
     wait: '&#FF6B6B✘ Tên lửa đang bay, đợi chuyến sau nhé'

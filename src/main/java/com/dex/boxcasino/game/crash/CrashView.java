@@ -29,10 +29,6 @@ final class CrashView extends GameView {
         return table.entryOf(player.getUniqueId());
     }
 
-    private double auto() {
-        return memory.options.getOrDefault("crash.auto", 0.0);
-    }
-
     @Override
     protected boolean locked() {
         return mine() != null;
@@ -47,16 +43,6 @@ final class CrashView extends GameView {
     @Override
     public void onClick(int slot, ClickType click) {
         if (handlePanel(slot, click)) return;
-        if (slot == crash.autoSlot) {
-            List<Double> options = crash.autoOptions;
-            int i = options.indexOf(auto());
-            double next = options.get((Math.max(0, i) + (click.isRightClick() ? options.size() - 1 : 1)) % options.size());
-            memory.options.put("crash.auto", next);
-            table.setAuto(player.getUniqueId(), next);
-            sound(Sound.UI_BUTTON_CLICK);
-            refresh();
-            return;
-        }
         if (slot != crash.buttonSlot && slot != crash.statusSlot) return;
         CrashTable.Entry e = mine();
         CrashTable.Phase phase = table.phase();
@@ -64,7 +50,7 @@ final class CrashView extends GameView {
             if (!table.acceptsBets()) {
                 plugin.messages().send(player, "games.crash.wait");
                 reject();
-            } else if (mayStart() && table.place(player, currency(), amount(), auto())) {
+            } else if (mayStart() && table.place(player, currency(), amount())) {
                 sound(Sound.BLOCK_NOTE_BLOCK_PLING);
                 plugin.messages().send(player, "games.crash.placed", "bet", plugin.wallet().format(currency(), amount()));
             } else {
@@ -99,7 +85,6 @@ final class CrashView extends GameView {
         if (isClosed()) return;
         renderPanel();
         renderHistory();
-        renderAuto();
         refreshFlight();
     }
 
@@ -158,11 +143,10 @@ final class CrashView extends GameView {
         CrashTable.Entry e = mine();
         CrashTable.Phase phase = table.phase();
         String stake = plugin.wallet().format(currency(), amount());
-        String autoText = auto() > 0 ? "x" + Format.decimal(auto()) : m.raw("games.crash.auto-off");
         if (e == null) {
             if (table.acceptsBets()) {
                 set(crash.buttonSlot, crash.buttonActive, m.line("games.crash.button-bet.name"),
-                        m.lines("games.crash.button-bet.lore", "bet", stake, "auto", autoText));
+                        m.lines("games.crash.button-bet.lore", "bet", stake));
             } else {
                 set(crash.buttonSlot, phase == CrashTable.Phase.FLYING ? crash.buttonFlying : crash.buttonEnd,
                         m.line("games.crash.button-wait.name"), List.of());
@@ -172,7 +156,7 @@ final class CrashView extends GameView {
         String bet = plugin.wallet().format(e.bet.currency, e.bet.amount());
         switch (phase) {
             case BETTING -> set(crash.buttonSlot, crash.buttonIdle, m.line("games.crash.button-placed.name", "bet", bet),
-                    m.lines("games.crash.button-placed.lore", "auto", e.auto > 0 ? "x" + Format.decimal(e.auto) : m.raw("games.crash.auto-off")));
+                    m.lines("games.crash.button-placed.lore"));
             case FLYING -> {
                 if (e.cashedAt > 0) {
                     set(crash.buttonSlot, crash.buttonEnd, m.line("games.crash.button-out.name",
@@ -215,9 +199,4 @@ final class CrashView extends GameView {
         }
     }
 
-    private void renderAuto() {
-        Messages m = plugin.messages();
-        String current = auto() > 0 ? "x" + Format.decimal(auto()) : m.raw("games.crash.auto-off");
-        set(crash.autoSlot, crash.autoItem, m.line("games.crash.auto.name", "auto", current), m.lines("games.crash.auto.lore"));
-    }
 }

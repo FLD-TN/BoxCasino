@@ -44,6 +44,8 @@ public final class Messages {
         // Vòng Quay (0.18, "difficulty:") and the board Roulette (0.19, "board-button:") texts become the one-screen Roulette
         ConfigFiles.replaceBlock(plugin, "messages.yml", "games", "roulette", "    difficulty:");
         ConfigFiles.replaceBlock(plugin, "messages.yml", "games", "roulette", "    board-button:");
+        // 0.21.0: Tên Lửa lost its auto cash-out button ("auto:" texts)
+        ConfigFiles.replaceBlock(plugin, "messages.yml", "games", "crash", "    auto:");
         YamlConfiguration loaded = YamlConfiguration.loadConfiguration(file);
         try (InputStream in = plugin.getResource("messages.yml")) {
             if (in != null) {
