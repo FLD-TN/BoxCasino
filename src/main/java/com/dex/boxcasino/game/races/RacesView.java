@@ -114,22 +114,27 @@ final class RacesView extends GameView {
         Messages m = plugin.messages();
         RaceTable.Phase phase = table.phase();
         RaceTable.Entry mine = mine();
+        // The viewer's own horse (bet on, else chosen) glows with a gold outline the whole race.
+        int own = mine != null ? mine.horse() : selected;
         for (RacesGame.Horse h : races.horses) {
             int lane = races.laneSlots.get(h.index());
             int pos = table.position(h.index());
             for (int col = 0; col <= races.finishColumn; col++) {
                 if (col != pos) inventory.setItem(lane + col, null);
             }
+            boolean isOwn = h.index() == own;
             ItemSpec look;
-            if (phase == RaceTable.Phase.RACING) look = h.running();
+            if (phase == RaceTable.Phase.RACING) look = isOwn ? h.pickedRun() : h.running();
+            else if (isOwn) look = h.picked();
             else if (phase == RaceTable.Phase.RESULT) look = h.index() == table.winner() ? h.selected() : h.running();
-            else if (h.index() == selected) look = h.selected();
             else look = mine == null ? h.choose() : h.idle();
-            set(lane + pos, look, m.line("games.races.horse.name", "horse", String.valueOf(h.index() + 1)),
+            String nameKey = !isOwn ? "games.races.horse.name"
+                    : mine != null ? "games.races.horse.name-bet" : "games.races.horse.name-picked";
+            set(lane + pos, look, m.line(nameKey, "horse", String.valueOf(h.index() + 1)),
                     m.lines(phase == RaceTable.Phase.RESULT && h.index() == table.winner() ? "games.races.horse.lore-winner"
                                     : "games.races.horse.lore",
                             "bettors", String.valueOf(table.bettors(h.index())),
-                            "multiplier", Format.decimal(races.multiplier)));
+                            "multiplier", Format.decimal(races.multiplier)), isOwn);
         }
         for (int i = 0; i < races.flagSlots.size(); i++) {
             set(races.flagSlots.get(i), i % 2 == 0 ? races.flagA : races.flagB, m.line("games.races.finish.name"), List.of());

@@ -142,6 +142,20 @@ public abstract class GameView extends CasinoView {
         inventory.setItem(slot, plugin.items().make(spec, name, lore));
     }
 
+    /** Like {@link #set(int, ItemSpec, Component, List)}, with the enchantment glint when {@code glow}. */
+    protected void set(int slot, ItemSpec spec, Component name, List<Component> lore, boolean glow) {
+        if (slot < 0 || slot >= inventory.getSize() || spec.isNone()) return;
+        ItemStack item = plugin.items().make(spec, name, lore);
+        if (glow) {
+            org.bukkit.inventory.meta.ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                meta.setEnchantmentGlintOverride(true);
+                item.setItemMeta(meta);
+            }
+        }
+        inventory.setItem(slot, item);
+    }
+
     protected void set(int slot, ItemStack item) {
         if (slot >= 0 && slot < inventory.getSize()) inventory.setItem(slot, item);
     }

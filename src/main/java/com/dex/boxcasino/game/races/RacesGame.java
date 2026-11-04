@@ -59,8 +59,16 @@ public final class RacesGame extends Game {
             for (String key : hs.getKeys(false)) {
                 ConfigurationSection h = hs.getConfigurationSection(key);
                 if (h == null) continue;
+                ItemSpec selected = ItemSpec.of(h, "selected", ItemSpec.NONE);
+                ItemSpec running = ItemSpec.of(h, "running", ItemSpec.NONE);
+                // Gold-outlined pictures from the boxcasino pack; without ItemsAdder they fall back to the Vegas ones.
+                int n = horses.size() + 1;
+                ItemSpec picked = ItemSpec.of(h, "picked",
+                        new ItemSpec("boxcasino:race_horse_" + n + "_picked", selected.material(), selected.customModelData()));
+                ItemSpec pickedRun = ItemSpec.of(h, "picked-running",
+                        new ItemSpec("boxcasino:race_horse_" + n + "_picked_run", running.material(), running.customModelData()));
                 horses.add(new Horse(horses.size(), ItemSpec.of(h, "idle", ItemSpec.NONE), ItemSpec.of(h, "choose", ItemSpec.NONE),
-                        ItemSpec.of(h, "selected", ItemSpec.NONE), ItemSpec.of(h, "running", ItemSpec.NONE)));
+                        selected, running, picked, pickedRun));
             }
         }
         if (horses.size() < 2 || horses.size() != laneSlots.size()) return "need 2+ horses and one lane slot per horse";
@@ -119,6 +127,8 @@ public final class RacesGame extends Game {
         return paid / (rounds * (double) bet);
     }
 
-    record Horse(int index, ItemSpec idle, ItemSpec choose, ItemSpec selected, ItemSpec running) {
+    /** picked / pickedRun: the viewer's own horse (chosen or bet on), standing / running. */
+    record Horse(int index, ItemSpec idle, ItemSpec choose, ItemSpec selected, ItemSpec running, ItemSpec picked,
+                 ItemSpec pickedRun) {
     }
 }

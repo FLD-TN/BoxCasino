@@ -164,9 +164,44 @@ final class CrashTable implements ChatRoom {
         plugin.bets().settle(e.bet, payout);
         Player p = Bukkit.getPlayer(e.bet.player);
         if (p != null) {
-            plugin.messages().send(p, "games.crash.cashed", "multiplier", Format.decimal(at),
-                    "payout", plugin.wallet().format(e.bet.currency, payout));
-            if (plugin.gameSounds()) p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6f, 1.2f);
+            String payoutText = plugin.wallet().format(e.bet.currency, payout);
+            plugin.messages().send(p, "games.crash.cashed", "multiplier", Format.decimal(at), "payout", payoutText);
+            title(p, "games.crash.title-cashed", "games.crash.subtitle-cashed", "payout", payoutText,
+                    "multiplier", Format.decimal(at));
+            if (plugin.gameSounds()) p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.6f, 1.4f);
+        }
+    }
+
+    private static final net.kyori.adventure.title.Title.Times TITLE_TIMES = net.kyori.adventure.title.Title.Times.times(
+            java.time.Duration.ZERO, java.time.Duration.ofMillis(1200), java.time.Duration.ofMillis(300));
+
+    private void title(Player p, String titleKey, String subtitleKey, String... placeholders) {
+        p.showTitle(net.kyori.adventure.title.Title.title(plugin.messages().text(titleKey, placeholders),
+                plugin.messages().text(subtitleKey, placeholders), TITLE_TIMES));
+    }
+
+    /** Big text for everyone looking at the table. */
+    private void titleViewers(String titleKey, String subtitleKey, String... placeholders) {
+        for (CrashView v : new ArrayList<>(viewers)) title(v.player(), titleKey, subtitleKey, placeholders);
+    }
+
+    /** Live multiplier (and what the viewer would get now) above the hotbar, every step of the flight. */
+    private void actionBars() {
+        String mul = Format.decimal(multiplier);
+        for (CrashView v : new ArrayList<>(viewers)) {
+            Player p = v.player();
+            Entry e = entries.get(p.getUniqueId());
+            net.kyori.adventure.text.Component text;
+            if (e == null) {
+                text = plugin.messages().text("games.crash.actionbar-watch", "multiplier", mul);
+            } else if (e.cashedAt > 0) {
+                text = plugin.messages().text("games.crash.actionbar-out", "multiplier", mul, "at", Format.decimal(e.cashedAt),
+                        "payout", plugin.wallet().format(e.bet.currency, Payouts.payout(e.bet.amount(), e.cashedAt)));
+            } else {
+                text = plugin.messages().text("games.crash.actionbar-in", "multiplier", mul,
+                        "payout", plugin.wallet().format(e.bet.currency, Payouts.payout(e.bet.amount(), multiplier)));
+            }
+            p.sendActionBar(text);
         }
     }
 
@@ -193,6 +228,10 @@ final class CrashTable implements ChatRoom {
                     takeOff();
                 } else {
                     Countdown.start(plugin, entries.keySet(), secondsLeft, "games.crash.countdown");
+                    if (secondsLeft <= 3) {
+                        titleViewers("games.crash.title-countdown", "games.crash.subtitle-countdown",
+                                "seconds", String.valueOf(secondsLeft));
+                    }
                     refreshStatus();
                 }
             }
@@ -230,6 +269,7 @@ final class CrashTable implements ChatRoom {
             explode();
             return;
         }
+        titleViewers("games.crash.title-launch", "games.crash.subtitle-launch");
         // closed the table before take-off: out at once (x1.00), like ESC during the flight
         for (Map.Entry<UUID, Entry> me : entries.entrySet()) {
             if (!watching(me.getKey())) pay(me.getValue(), 1.0);
@@ -254,7 +294,12 @@ final class CrashTable implements ChatRoom {
             explode();
             return;
         }
-        if (step % 5 == 0) sound(Sound.BLOCK_NOTE_BLOCK_HAT);
+        // a tick that climbs in pitch with the multiplier (x1 low -> x10 and up high)
+        if (step % 4 == 0 && plugin.gameSounds()) {
+            float pitch = (float) Math.min(2.0, 0.6 + 1.4 * Math.log10(Math.max(1.0, multiplier)));
+            for (CrashView v : viewers) v.player().playSound(v.player().getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 0.6f, pitch);
+        }
+        actionBars();
         refreshFlight();
     }
 
@@ -270,6 +315,20 @@ final class CrashTable implements ChatRoom {
         history.addFirst(point);
         while (history.size() > Math.max(1, game.historySlots.size())) history.removeLast();
         sound(Sound.ENTITY_GENERIC_EXPLODE);
+        String mul = Format.decimal(point);
+        for (CrashView v : new ArrayList<>(viewers)) {
+            Player p = v.player();
+            Entry e = entries.get(p.getUniqueId());
+            if (e == null) {
+                title(p, "games.crash.title-crashed", "games.crash.subtitle-crashed", "multiplier", mul);
+            } else if (e.cashedAt > 0) {
+                title(p, "games.crash.title-crashed", "games.crash.subtitle-crashed-out", "multiplier", mul,
+                        "at", Format.decimal(e.cashedAt));
+            } else {
+                title(p, "games.crash.title-crashed", "games.crash.subtitle-crashed-lost", "multiplier", mul,
+                        "bet", plugin.wallet().format(e.bet.currency, e.bet.amount()));
+            }
+        }
         phase = Phase.CRASHED;
         secondsLeft = game.resultSeconds;
         ticks = 0;

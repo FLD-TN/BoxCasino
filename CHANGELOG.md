@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.18.0 - 2026-11-04
+
+- **Đua Ngựa**: thấy ngay mình đang chọn / cược con nào (3 hình ngựa của pack Vegas giống hệt nhau nên trước đây bấm
+  chọn không thấy gì đổi). Ngựa của mình **phát sáng + viền vàng** từ lúc chọn tới hết cuộc đua (cả lúc đang chạy),
+  tên hiện `[Đã chọn]` / `[Đang cược]`.
+  - Hình viền vàng ở pack riêng: `boxcasino:race_horse_<1-4>_picked` (đứng) và `_picked_run` (chạy, 4 khung hình).
+    Chưa cài lại pack thì vẫn phát sáng, chỉ chưa có viền. Đổi hình trong `games/races.yml`: `horses.<n>.picked`,
+    `horses.<n>.picked-running` (không cần thêm, mặc định có sẵn trong jar).
+- **Tên Lửa** dễ nhìn hơn (tỉ lệ không đổi, hoàn trả vẫn 96%):
+  - Đang bay: thanh chữ trên thanh công cụ hiện hệ số + số tiền nhận nếu rút ngay (đã rút thì hiện mức đã rút).
+  - Ô trạng thái hiện số trên item: giây còn lại trước khi cất cánh, rồi phần nguyên của hệ số khi bay.
+  - Chữ to giữa màn hình: đếm ngược 3-2-1, Cất cánh, `+tiền` khi rút, `Nổ ở x...` (kèm mất bao nhiêu / đã rút ở đâu).
+  - Tiếng tích cao dần theo hệ số, tiếng lên cấp khi rút.
+- `messages.yml`: thêm `games.races.horse.name-picked/name-bet`, `games.crash.actionbar-*`, `title-*`, `subtitle-*`
+  (tự lấy từ jar nếu thiếu). Không đổi config-version nào.
+
 ## 0.17.1 - 2026-10-27
 
 - Giờ Vàng có **thanh boss** cho cả server (ở đâu cũng thấy, không cần vào sòng): "+X% tiền lời - còn ...", cập nhật

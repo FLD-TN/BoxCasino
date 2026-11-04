@@ -140,9 +140,17 @@ final class CrashView extends GameView {
                 lore.add(m.line("games.crash.player-in", "player", e.name, "bet", bet));
             }
         }
-        set(crash.statusSlot, table.phase() == CrashTable.Phase.IDLE || table.phase() == CrashTable.Phase.BETTING
-                        ? crash.statusItem : crash.colorOf(table.multiplier()),
+        boolean waiting = table.phase() == CrashTable.Phase.IDLE || table.phase() == CrashTable.Phase.BETTING;
+        set(crash.statusSlot, waiting ? crash.statusItem : crash.colorOf(table.multiplier()),
                 m.line(key + ".name", "seconds", String.valueOf(Math.max(0, table.secondsLeft())), "multiplier", mul), lore);
+        // stack size readable without hovering: seconds left before take-off, whole multiplier while flying
+        var item = inventory.getItem(crash.statusSlot);
+        if (item != null) {
+            int count = table.phase() == CrashTable.Phase.BETTING ? table.secondsLeft()
+                    : waiting ? 1 : (int) Math.floor(table.multiplier());
+            item.setAmount(Math.max(1, Math.min(64, count)));
+            inventory.setItem(crash.statusSlot, item);
+        }
     }
 
     private void renderButton() {

@@ -401,6 +401,8 @@ games:
         - '&8ESC vẫn được trả thưởng'
     horse:
       name: '&#7BED9FNgựa số {horse}'
+      name-picked: '&#FFD166Ngựa số {horse} &8[&#FFD166Đã chọn&8]'
+      name-bet: '&#FFD166Ngựa số {horse} &8[&#7CFC9AĐang cược&8]'
       lore:
         - ''
         - '&7• Người cược: &f{bettors}'
@@ -988,6 +990,21 @@ games:
     lost: '&#FF6B6B✘ Tên lửa nổ ở &#FFD166x{multiplier} &7- mất {bet}'
     broadcast-start: '&#FF6F91Tên Lửa &7sẽ cất cánh sau &f{seconds} giây &8- &f{player} &7vừa đặt cược'
     countdown: '&#FF6F91Tên Lửa &7cất cánh sau &f{seconds}...'
+    # Thanh chữ trên thanh công cụ khi đang bay (người đang xem bàn)
+    actionbar-in: '&#FFD166x{multiplier} &8- &7Rút ngay nhận {payout}'
+    actionbar-out: '&#FFD166x{multiplier} &8- &#7CFC9AĐã rút ở x{at}, nhận {payout}'
+    actionbar-watch: '&#FFD166x{multiplier}'
+    # Chữ to giữa màn hình
+    title-countdown: '&#FF6F91{seconds}'
+    subtitle-countdown: '&7Tên lửa sắp cất cánh'
+    title-launch: '&#FF6F91Cất cánh'
+    subtitle-launch: '&7Bấm rút trước khi nổ'
+    title-cashed: '&#7CFC9A+{payout}'
+    subtitle-cashed: '&7Rút ở &#FFD166x{multiplier}'
+    title-crashed: '&#FF6B6BNổ ở x{multiplier}'
+    subtitle-crashed-lost: '&7Bạn mất {bet}'
+    subtitle-crashed-out: '&7Bạn đã rút ở &#FFD166x{at}'
+    subtitle-crashed: ''
 
   pot:
     name: '&#A8E063Góp Hũ'
@@ -1444,7 +1461,7 @@ jackpot:
   broadcast: '&#FFD166✔ JACKPOT &8- &f{player} &7vừa nổ hũ {amount} &7ở {game}'
 
 broadcast:
-  big-win: '&#FFD166Thắng lớn &8- &f{player} &7thắng {payout} &7ở {game} &8[&#FFD166x{multiplier}&8]'
+  big-win: '&#FFD166Thắng lớn!!! &b{player} &7vừa thắng {payout} &7ở {game}'
 
 exclude:
   title: '&8Tự khóa sòng bạc'
