@@ -63,6 +63,7 @@ public abstract class Game {
     /** Loads {@code games/<id>.yml}; returns an error text when the game must stay disabled. */
     public final String load() {
         ConfigFiles.ensure(plugin, "games/" + id + ".yml");
+        upgradeFile("games/" + id + ".yml");
         File file = new File(plugin.getDataFolder(), "games/" + id + ".yml");
         YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
         try (InputStream in = plugin.getResource("games/" + id + ".yml")) {
@@ -75,6 +76,10 @@ public abstract class Game {
         if (error == null && rtp() > 1.0) error = "RTP " + rtp() + " > 100%";
         enabled = settings.enabled && error == null;
         return error;
+    }
+
+    /** Targeted line upgrades of the server's game file (jar-only updates), before it is read. */
+    protected void upgradeFile(String path) {
     }
 
     /** Game-specific config. Returns an error text or null. */

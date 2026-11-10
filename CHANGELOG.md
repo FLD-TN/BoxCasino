@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.23.0 - 2026-11-10
+
+- **Tên Lửa đổi tên thành Cắt Dây**, khớp hình của pack (sợi dây căng + cây kéo). Chữ trong game đổi theo: dây căng
+  dần, bấm **cắt dây** để rút trước khi **dây đứt** (thay cho cất cánh / rút / nổ). Luật chơi, tỉ lệ không đổi.
+- **Ô đếm giờ có icon riêng (đồng hồ cát)**, không còn trùng cây kéo của nút cược / cắt dây. Item mới
+  `boxcasino:crash_timer` trong `pack/boxcasino` (nền nút x2 của pack, 16x16); thiếu ItemsAdder thì hiện đồng hồ.
+- Nâng cấp tự động (chỉ dòng còn y nguyên mặc định, có sao lưu vào `old-configs/`):
+  - `games/crash.yml`: dòng `status:` và `fallback-title`.
+  - `messages.yml`: khối `games.crash` còn tên `Tên Lửa` được thay bằng khối mới.
+- Cần copy `pack/boxcasino` vào ItemsAdder rồi `/iazip` để thấy icon đồng hồ cát.
+
 ## 0.22.0 - 2026-11-10
 
 - **Roulette: mỗi ván chỉ cược 1 ô, quay 1 lần.** Bấm ô khác thì cược chuyển sang ô đó (không đặt nhiều ô cùng lúc

@@ -46,6 +46,8 @@ public final class Messages {
         ConfigFiles.replaceBlock(plugin, "messages.yml", "games", "roulette", "    board-button:");
         // 0.21.0: Tên Lửa lost its auto cash-out button ("auto:" texts)
         ConfigFiles.replaceBlock(plugin, "messages.yml", "games", "crash", "    auto:");
+        // 0.23.0: Tên Lửa became Cắt Dây (the pack draws a rope and scissors); untouched default block only
+        ConfigFiles.replaceBlock(plugin, "messages.yml", "games", "crash", "    name: '&#FF6F91Tên Lửa'");
         // 0.22.0: Roulette takes one spot per round (only the untouched default lines change)
         ConfigFiles.replaceLine(plugin, "messages.yml", "        - '&8Đặt nhiều ô cùng lúc được'",
                 "        - '&8Mỗi ván chỉ đặt 1 ô, quay 1 lần'");

@@ -1,6 +1,7 @@
 package com.dex.boxcasino.game.crash;
 
 import com.dex.boxcasino.BoxCasinoPlugin;
+import com.dex.boxcasino.config.ConfigFiles;
 import com.dex.boxcasino.config.ItemSpec;
 import com.dex.boxcasino.game.Game;
 import com.dex.boxcasino.util.Payouts;
@@ -12,8 +13,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 /**
- * Tên Lửa (Vegas "Crash"): one flight shared by the whole server. The multiplier grows from x1.00 until the rocket
- * explodes; a player cashes out before that for bet × multiplier. The explosion point is drawn at take-off with
+ * Cắt Dây (Vegas "Crash", the pack draws a rope and scissors): one rope shared by the whole server. The multiplier
+ * grows from x1.00 until the rope snaps; a player cuts (cashes out) before that for bet × multiplier. The snap point
+ * is drawn at the start with
  * {@code P(point >= x) = rtp / x}, so every cash-out strategy returns {@code rtp}.
  */
 public final class CrashGame extends Game {
@@ -45,9 +47,18 @@ public final class CrashGame extends Game {
         super(plugin, "crash");
     }
 
+    /** 0.23.0: the game is Cắt Dây now, and the countdown cell got its own hourglass (it shared the scissors). */
+    @Override
+    protected void upgradeFile(String path) {
+        ConfigFiles.replaceLine(plugin, path,
+                "  status: {item: 'iavegasgui:crash_button_inactive', material: STICK, cmd: 5617121}",
+                "  status: {item: 'boxcasino:crash_timer', material: CLOCK, cmd: 0}");
+        ConfigFiles.replaceLine(plugin, path, "fallback-title: '&#FF6F91Tên Lửa'", "fallback-title: '&#FF6F91Cắt Dây'");
+    }
+
     @Override
     protected String loadGame(YamlConfiguration yml) {
-        rtp = yml.getDouble("rtp", 0.96);
+        rtp =yml.getDouble("rtp", 0.96);
         if (rtp <= 0 || rtp > 1) return "rtp must be in (0, 1]";
         maxMultiplier = yml.getDouble("max-multiplier", 100);
         if (maxMultiplier < 1.01) return "max-multiplier must be > 1";

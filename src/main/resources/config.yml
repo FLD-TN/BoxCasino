@@ -25,7 +25,7 @@ daily-profit-limit:
 
 # Đếm ngược trong chat (mỗi giây 1 dòng + tiếng tích).
 countdown:
-  # Mấy giây cuối trước khi ván bắt đầu: Xì Dách chia bài, Đua Ngựa xuất phát, Tên Lửa cất cánh, Góp Hũ quay,
+  # Mấy giây cuối trước khi ván bắt đầu: Xì Dách chia bài, Đua Ngựa xuất phát, Cắt Dây bắt đầu, Góp Hũ quay,
   # Xúc Xắc lắc. Báo cho người đang ngồi / đã cược. 0 = tắt.
   start-seconds: 5
   # Mấy giây cuối của lượt mình (Xì Dách, Oẳn Tù Tì, Cờ Caro), chỉ báo người chưa đi. 0 = tắt.
@@ -166,7 +166,7 @@ menu:
   fallback-title: '&#E056FDSòng Bạc'
   rows: 6
   # Bấm game trong menu: dịch chuyển tới máy gần nhất còn ghế trống của game đó và ngồi vào (GUI game tự mở).
-  # Máy không ghế (Đua Ngựa, Tên Lửa, Góp Hũ): tới trước máy gần nhất rồi mở game. Hết máy trống = báo ở chat.
+  # Máy không ghế (Đua Ngựa, Cắt Dây, Góp Hũ): tới trước máy gần nhất rồi mở game. Hết máy trống = báo ở chat.
   # Xúc Xắc / Oẳn Tù Tì / Cờ Caro chơi ở mọi nơi nên vẫn mở ngay. false = mở GUI game ngay như cũ.
   teleport-to-machine: true
   games:
@@ -210,7 +210,7 @@ broadcast:
   min-multiplier: 10
   # Kèo 1v1 mới mở: Xúc Xắc / Oẳn Tù Tì báo cả server (có nút [Nhận kèo]), Cờ Caro chỉ báo người trong sòng.
   challenges: true
-  # Đua Ngựa / Xì Dách / Tên Lửa / Góp Hũ bắt đầu đếm ngược: báo mọi người trong vùng sòng, kể cả người đang ngồi (chỉ chữ).
+  # Đua Ngựa / Xì Dách / Cắt Dây / Góp Hũ bắt đầu đếm ngược: báo mọi người trong vùng sòng, kể cả người đang ngồi (chỉ chữ).
   tables: true
   # Cùng một bàn chỉ báo lại sau số giây này (đặt rồi huỷ cược liên tục không spam chat).
   table-cooldown: 30
@@ -241,7 +241,7 @@ machines:
     # Xoay thêm model ghế (độ) nếu ghế quay lưng vào máy.
     yaw-offset: 0
     # Mỗi dòng 1 ghế: '<chair|stool> <front|back> <lệch ngang>'. front = phía admin đứng khi đặt máy.
-    # Máy không có dòng nào (Đua Ngựa, Tên Lửa, Góp Hũ) = không ghế, bấm máy mở game như cũ.
+    # Máy không có dòng nào (Đua Ngựa, Cắt Dây, Góp Hũ) = không ghế, bấm máy mở game như cũ.
     layouts:
       mines: ['chair front 0']
       plinko: ['chair front 0']

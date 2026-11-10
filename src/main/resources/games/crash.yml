@@ -1,16 +1,16 @@
-# Tên Lửa (Crash của Vegas) - một chuyến bay chung cho cả server. Bố cục khớp texture crash_gui của pack iavegasgui.
+# Cắt Dây (Crash của Vegas) - một sợi dây chung cho cả server. Bố cục khớp texture crash_gui của pack iavegasgui.
 # Không sửa dòng này (bản plugin mới có số cao hơn thì file cũ được chuyển vào old-configs/).
 config-version: 4
 enabled: true
 title: '&f:offset_-48:&f{img:iavegasgui:crash_gui}'
-fallback-title: '&#FF6F91Tên Lửa'
+fallback-title: '&#FF6F91Cắt Dây'
 rows: 6
 
-# Có người cược đầu tiên thì đếm ngược betting-seconds giây rồi cất cánh. Hệ số tăng từ x1.00 tới khi nổ.
-# Điểm nổ bốc lúc cất cánh: P(bay tới >= x) = rtp / x. Rút sớm hay muộn thì hoàn trả về lâu dài đều = rtp.
-#   rtp 0.96: ~5% nổ ngay ở x1.00, 48% bay tới x2, 9,6% tới x10, ~1% tới x100.
+# Có người cược đầu tiên thì đếm ngược betting-seconds giây rồi dây bắt đầu căng. Hệ số tăng từ x1.00 tới khi dây đứt.
+# Điểm đứt bốc lúc bắt đầu: P(tới >= x) = rtp / x. Rút sớm hay muộn thì hoàn trả về lâu dài đều = rtp.
+#   rtp 0.96: ~5% đứt ngay ở x1.00, 48% tới x2, 9,6% tới x10, ~1% tới x100.
 rtp: 0.96
-# Trần hệ số: bay tới đây là mọi người còn trên tên lửa tự rút ở mức này.
+# Trần hệ số: chạm mức này là mọi người chưa cắt tự được trả ở mức này.
 max-multiplier: 100
 # Mỗi bước (step-ticks tick) hệ số tăng growth-percent %. 1.5% / 2 tick: x2 sau ~5s, x10 ~15s, x100 ~31s.
 growth-percent: 1.5
@@ -35,12 +35,12 @@ slots:
   bet: 45
   currency: 53
   info: 44
-  # Ô trạng thái (đếm ngược / hệ số / nổ ở) và danh sách người đang bay
+  # Ô trạng thái (đếm giờ / hệ số / đứt ở) và danh sách người đang chơi
   status: 4
-  # Nút chính: đặt cược / rút tiền
+  # Nút chính: đặt cược / cắt dây (rút tiền)
   button: 22
   progress: [10, 11, 12, 13, 14, 15, 16]
-  # 7 lần nổ gần nhất, mới nhất bên trái
+  # 7 lần đứt gần nhất, mới nhất bên trái
   history: [37, 38, 39, 40, 41, 42, 43]
 
 items:
@@ -49,7 +49,8 @@ items:
   currency-money: {item: 'treasure:money_item', material: PAPER, cmd: 0}
   currency-gem: {item: 'treasure:gem_item', material: PAPER, cmd: 0}
   info: {item: 'iavegasgui:crash_info', material: STICK, cmd: 5617101}
-  status: {item: 'iavegasgui:crash_button_inactive', material: STICK, cmd: 5617121}
+  # Ô đếm giờ: đồng hồ cát (pack boxcasino), khác cây kéo của nút cược
+  status: {item: 'boxcasino:crash_timer', material: CLOCK, cmd: 0}
   button-idle: {item: 'iavegasgui:crash_button_inactive', material: STICK, cmd: 5617121}
   button-active: {item: 'iavegasgui:crash_button_active', material: STICK, cmd: 5617122}
   button-flying: {item: 'iavegasgui:crash_button_rolling', material: STICK, cmd: 5617123}

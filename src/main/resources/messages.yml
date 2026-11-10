@@ -929,42 +929,42 @@ games:
     partial: '&#FFD166(!) Rương cho &#FFD166x{multiplier} &7- nhận lại {payout} &7(cược {bet}&7)'
 
   crash:
-    name: '&#FF6F91Tên Lửa'
-    description: '&#BFC7D5Rút tiền trước khi tên lửa nổ'
+    name: '&#FF6F91Cắt Dây'
+    description: '&#BFC7D5Cắt dây trước khi dây đứt'
     info:
-      name: '&#FF6F91Tên Lửa &8[&fLuật chơi&8]'
+      name: '&#FF6F91Cắt Dây &8[&fLuật chơi&8]'
       lore:
-        - '&#BFC7D5Cả server bay chung 1 chuyến'
+        - '&#BFC7D5Cả server chơi chung 1 sợi dây'
         - ''
-        - '&#FFD1661. &7Đặt cược trước khi cất cánh'
-        - '&#FFD1662. &7Hệ số tăng dần từ x1,00'
-        - '&#FFD1663. &7Bấm rút trước khi nổ'
+        - '&#FFD1661. &7Đặt cược khi đang đếm giờ'
+        - '&#FFD1662. &7Dây căng dần, hệ số tăng từ x1,00'
+        - '&#FFD1663. &7Bấm cắt dây trước khi dây đứt'
         - ''
-        - '&#7CFC9A✔ &7Rút kịp: cược x hệ số lúc rút'
-        - '&#FF6B6B✘ &7Nổ mà chưa rút: mất cược'
+        - '&#7CFC9A✔ &7Cắt kịp: cược x hệ số lúc cắt'
+        - '&#FF6B6B✘ &7Dây đứt mà chưa cắt: mất cược'
         - ''
-        - '&8ESC khi đang bay = rút ngay'
+        - '&8ESC khi dây đang căng = cắt ngay'
     status-idle:
       name: '&7Chưa ai cược'
       lore:
         - '&#BFC7D5Cược đầu tiên sẽ bắt đầu'
-        - '&#BFC7D5đếm ngược chuyến bay'
+        - '&#BFC7D5đếm giờ ván mới'
     status-betting:
-      name: '&#FF6F91Cất cánh sau &f{seconds}s'
+      name: '&#FF6F91Bắt đầu sau &f{seconds}s'
       lore:
         - '&#7CFC9A✔ Vẫn còn cược được'
         - ''
         - '&#FFD166Người chơi:'
     status-flying:
-      name: '&#FF6F91Đang bay &8[&#FFD166x{multiplier}&8]'
+      name: '&#FF6F91Dây đang căng &8[&#FFD166x{multiplier}&8]'
       lore:
         - '&#FFD166Người chơi:'
     status-crashed:
-      name: '&#FF6B6BNổ ở &#FFD166x{multiplier}'
+      name: '&#FF6B6BĐứt ở &#FFD166x{multiplier}'
       lore:
         - '&#FFD166Người chơi:'
     player-in: '&7• &f{player} &8- {bet}'
-    player-out: '&7• &f{player} &8- {bet} &#7CFC9Arút x{multiplier}'
+    player-out: '&7• &f{player} &8- {bet} &#7CFC9Acắt x{multiplier}'
     player-lost: '&7• &f{player} &8- {bet} &#FF6B6Bmất'
     button-bet:
       name: '&#7CFC9AĐặt cược'
@@ -975,50 +975,50 @@ games:
         - ''
         - '&8[&#7CFC9AChuột trái để đặt cược&8]'
     button-wait:
-      name: '&7Đang bay, đợi chuyến sau'
+      name: '&7Dây đang căng, đợi ván sau'
     button-placed:
       name: '&#FFD166Đã cược &8[{bet}&8]'
       lore:
         - '&8[&#FF8A8AChuột phải để huỷ, hoàn tiền&8]'
     button-cashout:
-      name: '&#7CFC9ARút tiền &8[&#FFD166x{multiplier}&8]'
+      name: '&#7CFC9ACắt dây &8[&#FFD166x{multiplier}&8]'
       lore:
         - '&7• Nhận ngay: {payout}'
         - ''
-        - '&8[&#7CFC9AChuột trái để rút&8]'
+        - '&8[&#7CFC9AChuột trái để cắt dây&8]'
     button-out:
-      name: '&#7CFC9A✔ Đã rút ở &#FFD166x{multiplier}'
+      name: '&#7CFC9A✔ Đã cắt ở &#FFD166x{multiplier}'
     button-lost:
-      name: '&#FF6B6B✘ Chưa kịp rút'
+      name: '&#FF6B6B✘ Chưa kịp cắt'
     progress:
       name: '&8Mốc &7x{multiplier}'
     progress-lit:
       name: '&#FFD166Đã qua x{multiplier}'
     history:
-      name: '&fNổ ở &#FFD166x{multiplier}'
+      name: '&fĐứt ở &#FFD166x{multiplier}'
     history-empty:
-      name: '&8Chưa có chuyến bay'
-    placed: '&#7CFC9A✔ Đã cược {bet} &#7CFC9Acho chuyến bay tới'
+      name: '&8Chưa có ván nào'
+    placed: '&#7CFC9A✔ Đã cược {bet} &#7CFC9Acho ván tới'
     cancelled: '&7Đã huỷ cược, tiền được hoàn lại'
-    wait: '&#FF6B6B✘ Tên lửa đang bay, đợi chuyến sau nhé'
-    cashed: '&#7CFC9A✔ Rút ở &#FFD166x{multiplier} &#7CFC9A- bạn nhận {payout}'
-    lost: '&#FF6B6B✘ Tên lửa nổ ở &#FFD166x{multiplier} &7- mất {bet}'
-    broadcast-start: '&#FF6F91Tên Lửa &7sẽ cất cánh sau &f{seconds} giây &8- &f{player} &7vừa đặt cược'
-    countdown: '&#FF6F91Tên Lửa &7cất cánh sau &f{seconds}...'
-    # Thanh chữ trên thanh công cụ khi đang bay (người đang xem bàn)
-    actionbar-in: '&#FFD166x{multiplier} &8- &7Rút ngay nhận {payout}'
-    actionbar-out: '&#FFD166x{multiplier} &8- &#7CFC9AĐã rút ở x{at}, nhận {payout}'
+    wait: '&#FF6B6B✘ Dây đang căng, đợi ván sau nhé'
+    cashed: '&#7CFC9A✔ Cắt ở &#FFD166x{multiplier} &#7CFC9A- bạn nhận {payout}'
+    lost: '&#FF6B6B✘ Dây đứt ở &#FFD166x{multiplier} &7- mất {bet}'
+    broadcast-start: '&#FF6F91Cắt Dây &7bắt đầu sau &f{seconds} giây &8- &f{player} &7vừa đặt cược'
+    countdown: '&#FF6F91Cắt Dây &7bắt đầu sau &f{seconds}...'
+    # Thanh chữ trên thanh công cụ khi dây đang căng (người đang xem bàn)
+    actionbar-in: '&#FFD166x{multiplier} &8- &7Cắt ngay nhận {payout}'
+    actionbar-out: '&#FFD166x{multiplier} &8- &#7CFC9AĐã cắt ở x{at}, nhận {payout}'
     actionbar-watch: '&#FFD166x{multiplier}'
     # Chữ to giữa màn hình
     title-countdown: '&#FF6F91{seconds}'
-    subtitle-countdown: '&7Tên lửa sắp cất cánh'
-    title-launch: '&#FF6F91Cất cánh'
-    subtitle-launch: '&7Bấm rút trước khi nổ'
+    subtitle-countdown: '&7Dây sắp căng'
+    title-launch: '&#FF6F91Bắt đầu'
+    subtitle-launch: '&7Cắt dây trước khi dây đứt'
     title-cashed: '&#7CFC9A+{payout}'
-    subtitle-cashed: '&7Rút ở &#FFD166x{multiplier}'
-    title-crashed: '&#FF6B6BNổ ở x{multiplier}'
+    subtitle-cashed: '&7Cắt ở &#FFD166x{multiplier}'
+    title-crashed: '&#FF6B6BĐứt ở x{multiplier}'
     subtitle-crashed-lost: '&7Bạn mất {bet}'
-    subtitle-crashed-out: '&7Bạn đã rút ở &#FFD166x{at}'
+    subtitle-crashed-out: '&7Bạn đã cắt ở &#FFD166x{at}'
     subtitle-crashed: ''
 
   pot:
