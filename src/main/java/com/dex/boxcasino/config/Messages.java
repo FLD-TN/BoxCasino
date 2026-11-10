@@ -46,6 +46,13 @@ public final class Messages {
         ConfigFiles.replaceBlock(plugin, "messages.yml", "games", "roulette", "    board-button:");
         // 0.21.0: Tên Lửa lost its auto cash-out button ("auto:" texts)
         ConfigFiles.replaceBlock(plugin, "messages.yml", "games", "crash", "    auto:");
+        // 0.22.0: Roulette takes one spot per round (only the untouched default lines change)
+        ConfigFiles.replaceLine(plugin, "messages.yml", "        - '&8Đặt nhiều ô cùng lúc được'",
+                "        - '&8Mỗi ván chỉ đặt 1 ô, quay 1 lần'");
+        ConfigFiles.replaceLine(plugin, "messages.yml", "    no-stakes: '&#FF6B6B✘ Hãy đặt cược vào ít nhất 1 ô'",
+                "    no-stakes: '&#FF6B6B✘ Hãy chọn 1 ô Đỏ / Đen / Xanh để cược'");
+        ConfigFiles.replaceLine(plugin, "messages.yml", "    max-total: '&#FF6B6B✘ Tổng cược 1 ván tối đa {max}'",
+                "    max-total: '&#FF6B6B✘ Cược 1 ván tối đa {max}'");
         YamlConfiguration loaded = YamlConfiguration.loadConfiguration(file);
         try (InputStream in = plugin.getResource("messages.yml")) {
             if (in != null) {

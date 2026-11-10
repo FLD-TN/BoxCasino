@@ -22,8 +22,9 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
- * One player's Roulette table, one screen. Pick the bet amount, click Đỏ / Đen / Xanh to put that amount on it (click
- * again = new amount, right click = take it off), then spin. Money is taken at the spin, as one bet for all spots.
+ * One player's Roulette table, one screen. Pick the bet amount, click Đỏ / Đen / Xanh to put that amount on it (one
+ * spot per round: another spot moves the bet; click again = new amount, right click = take it off), then spin. Money
+ * is taken at the spin; one spin ends the round and takes the spot off.
  */
 final class RouletteView extends GameView {
 
@@ -63,12 +64,15 @@ final class RouletteView extends GameView {
         return sum;
     }
 
-    /** Puts the current bet amount on {@code spot} (replacing what was there). False when refused (player told). */
+    /**
+     * Puts the current bet amount on {@code spot}, the only spot of the round: a bet on another spot moves here.
+     * False when refused (player told).
+     */
     private boolean place(String spot) {
         Currency c = currency();
         GameSettings.Limits limits = gs.limits.get(c);
         long amount = amount();
-        long after = total() - stakes.getOrDefault(spot, 0L) + amount;
+        long after = amount;
         if (after > limits.max()) {
             plugin.messages().send(player, "games.roulette.max-total", "max", plugin.wallet().format(c, limits.max()));
             return false;
@@ -83,7 +87,8 @@ final class RouletteView extends GameView {
             plugin.messages().send(player, "games.roulette.no-money", "balance", plugin.wallet().format(c, balance));
             return false;
         }
-        if (stakes.getOrDefault(spot, 0L) == amount) return false;
+        if (stakes.size() == 1 && stakes.getOrDefault(spot, 0L) == amount) return false;
+        stakes.clear();
         stakes.put(spot, amount);
         return true;
     }
@@ -200,7 +205,8 @@ final class RouletteView extends GameView {
         while (history.size() > Math.max(1, roulette.historySlots.size())) history.removeLast();
         bet = null;
         running = Map.of();
-        // the bets stay for the next spin
+        // one spin ends the round: the spot is taken off, the next round starts empty
+        stakes.clear();
         if (!visible) return;
         sound(profit ? Sound.ENTITY_PLAYER_LEVELUP : payout > 0 ? Sound.ENTITY_EXPERIENCE_ORB_PICKUP : Sound.BLOCK_NOTE_BLOCK_BASS);
         player.showTitle(net.kyori.adventure.title.Title.title(m.text("games.roulette.title", ph),

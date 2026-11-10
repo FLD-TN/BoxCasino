@@ -60,6 +60,36 @@ public final class ConfigFiles {
         }
     }
 
+    /**
+     * Smallest targeted upgrade: every line of the server's file that is exactly {@code oldLine} (trailing spaces
+     * ignored) becomes {@code newLine}. Lines the owner changed are left alone. A copy goes to {@code old-configs/}.
+     */
+    public static void replaceLine(JavaPlugin plugin, String path, String oldLine, String newLine) {
+        File file = new File(plugin.getDataFolder(), path);
+        if (!file.exists()) return;
+        try {
+            String server = Files.readString(file.toPath(), StandardCharsets.UTF_8);
+            String nl = server.contains("\r\n") ? "\r\n" : "\n";
+            java.util.List<String> lines = new java.util.ArrayList<>(java.util.Arrays.asList(server.split("\r?\n", -1)));
+            boolean changed = false;
+            for (int i = 0; i < lines.size(); i++) {
+                if (lines.get(i).stripTrailing().equals(oldLine)) {
+                    lines.set(i, newLine);
+                    changed = true;
+                }
+            }
+            if (!changed) return;
+            File backup = new File(plugin.getDataFolder(), "old-configs/" + path.replace(".yml", "") + "-line-"
+                    + LocalDateTime.now().format(STAMP) + ".yml");
+            Files.createDirectories(backup.getParentFile().toPath());
+            if (!backup.exists()) Files.copy(file.toPath(), backup.toPath());
+            Files.writeString(file.toPath(), String.join(nl, lines), StandardCharsets.UTF_8);
+            plugin.getLogger().info(path + ": updated line '" + newLine.strip() + "'");
+        } catch (IOException ex) {
+            plugin.getLogger().severe("Could not update a line in " + path + ": " + ex.getMessage());
+        }
+    }
+
     /** [start, end) of the lines of {@code parent.key}, or null. The block ends at the next line indented 2 or less. */
     static int[] block(java.util.List<String> lines, String parent, String key) {
         int p = -1;

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.22.0 - 2026-11-10
+
+- **Roulette: mỗi ván chỉ cược 1 ô, quay 1 lần.** Bấm ô khác thì cược chuyển sang ô đó (không đặt nhiều ô cùng lúc
+  nữa). Quay xong là hết ván: ô đang đặt được gỡ, ván sau bấm chọn lại.
+- `messages.yml`: 3 dòng cũ của Roulette (`Đặt nhiều ô cùng lúc được`, `no-stakes`, `max-total`) tự đổi sang chữ mới
+  nếu còn y nguyên mặc định; dòng đã sửa tay giữ nguyên (sao lưu vào `old-configs/`).
+
 ## 0.21.0 - 2026-11-05
 
 - **Tên Lửa: bỏ nút Tự rút** (mốc tự rút tuỳ chỉnh). Người chơi tự bấm rút hoặc ESC khi đang bay; bay tới trần
