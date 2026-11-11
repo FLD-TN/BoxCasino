@@ -1,7 +1,6 @@
 # BoxCasino
 
 Sòng bạc của server BoxPvP. Cược bằng **Tiền (Vault)** hoặc **Gem (BoxCore)**, không dùng tiền thật.
-Spec đầy đủ: [BOXCASINO_SPEC.md](BOXCASINO_SPEC.md). Ghi chú về plugin Vegas: [VEGAS_NOTES.md](VEGAS_NOTES.md).
 
 Bản hiện tại: **0.7.3** - Dò Mìn (`mines`), Kim Tự Tháp (`plinko`), Leo Thang (`stairs`), Vòng Quay (`roulette`),
 Đua Ngựa chung server (`races`), Xì Dách 3 người vs nhà cái (`xidach`), và PvP 1v1: Xúc Xắc (`dice`),
@@ -10,12 +9,8 @@ Oẳn Tù Tì (`rps`), Cờ Caro (`tictactoe`). Có Hũ Jackpot, bảng xếp h�
 ## Cài đặt
 
 1. Cần có: Paper 1.21.1, **Vault** + plugin kinh tế, **BoxCore ≥ 1.3.0**. Nên có: WorldGuard, ItemsAdder, PlaceholderAPI.
-2. Pack: dùng **pack đã sửa trong `BoxCasino/pack/`** (chữ CASINO / NHÀ CÁI), không dùng pack gốc của Vegas.
-   - Chép `pack/iavegasgui` (GUI), `pack/iavegastables` (máy chơi) và `pack/boxcasino` (nút trò chuyện) vào
-     `plugins/ItemsAdder/contents/`.
-   - Nếu đã cài `iavegasgui` gốc trước đó: xoá thư mục cũ rồi chép thư mục mới vào.
-   - Chạy `/ia zip`, thoát game vào lại để nhận pack.
-   (Không cần cài plugin Vegas.)
+2. Pack: resource pack (ItemsAdder) của server, không có trong repo. Chép vào `plugins/ItemsAdder/contents/`,
+   chạy `/ia zip`, thoát game vào lại để nhận pack.
 3. Chép `build/libs/BoxCasino-0.7.3.jar` vào `plugins/` (xoá jar cũ), khởi động server.
    Nâng cấp từ bản cũ: file config cũ được chuyển vào `plugins/BoxCasino/old-configs/` và tạo file mới (xem CHANGELOG).
 4. Tạo vùng WorldGuard tên `casino` bao quanh sòng (đổi tên trong `config.yml` > `access.regions`).
@@ -94,3 +89,16 @@ Quyền: `boxcasino.use`, `boxcasino.game.<game>` (mặc định có), `boxcasin
 - Đóng GUI giữa ván không bao giờ bị xử thua: Dò Mìn / Leo Thang tự rút (chưa mở ô nào thì hoàn tiền),
   Plinko / Vòng Quay trả kết quả luôn, Đua Ngựa vẫn giữ cược đến khi đua xong.
 - Gem chỉ cộng được khi người chơi online: nếu không cộng được thì lưu lại, trả khi người đó vào lại server.
+
+## Build
+
+```
+./gradlew build
+```
+
+Repo chỉ có mã nguồn, không chứa file jar nào (trừ `gradle/wrapper/gradle-wrapper.jar` chuẩn của Gradle).
+Trước khi build, tự đặt các jar sau vào thư mục `libs/` ở gốc repo:
+
+- `boombox-api-3.6.14.jar` - API của plugin Boombox
+- `boxcore-api-1.3.0.jar` - build từ [BoxCore](https://github.com/FLD-TN/BoxCore) (`boxcore-api/build/libs/`)
+- `znpcsplus-api-2.1.0.jar` - API của plugin ZNPCsPlus
